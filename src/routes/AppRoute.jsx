@@ -1,14 +1,14 @@
 
 // Import
-const { Navigate, createBrowserRouter, RouterProvider } = require("react-router-dom");
+import { Navigate, createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // Import Layouts
-import PageLayout from "@/layouts/PageLayout";
+import PageLayout from "../layouts/PageLayout";
 
 
 // Import Pages
-const { default: Home } = require("@/pages/Home");
-const { default: Register } = require("@/pages/Register");
+import Home from "../pages/Home";
+import Register from "../pages/Register";
 
 
 // Import Store
@@ -24,7 +24,8 @@ const router = createBrowserRouter([
         { path: "/register", element: <Register /> },
         { path: "*", element: <Navigate to="/" /> },
       ],
-    }])
+    }
+  ])
 
 // Export AppRoute
 const AppRoute = () => {
