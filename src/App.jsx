@@ -1,9 +1,12 @@
 import React from 'react'
-import Booking from './pages/Booking'
+import AppRoute from './routes/AppRoute'
+
 
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <AppRoute />
+    </div>
   )
 }
 
