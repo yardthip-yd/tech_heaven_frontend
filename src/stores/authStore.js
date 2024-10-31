@@ -43,6 +43,33 @@ const authStore = (set, get) => ({
       console.log(error);
     }
   },
+  actionLoginGoogle : async (codeResponse) => {
+    const res = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${codeResponse.access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${codeResponse.access_token}`,
+        },
+      }
+    )
+    const result = await authApi.loginGoogle(res.data)
+    console.log(result, "Check result")
+    set({
+      user: result.data.payload,
+      token: result.data.token,
+    });
+    return result
+  },
+  actionSendResetPassLink: async (body) => {
+
+    console.log("Sending reset link to email:", email); 
+
+    const response = await authApi.forgotPassword(body);
+    set({ email });
+
+    console.log("Response from sending reset link:", response.data)
+
+    return response.data;
+}
 });
 
 const userPersist = {

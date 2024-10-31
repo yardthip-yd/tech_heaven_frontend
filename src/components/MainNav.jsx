@@ -82,6 +82,11 @@ const MainNav = () => {
                 onClose={() => setIsDialogOpen(false)}
                 onLogin={hdlLogin}
             />
+            {/* Show Cart Dialog */}
+            <CartModal
+                isOpen={isCartOpen}
+                onClose={() => setIsCartOpen(false)}
+            />
         </div>
     )
 }
