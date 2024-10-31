@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { CartIcon } from './ui/Icon'
+import { Link } from 'react-router-dom';
 import LoginModal from './auth/LoginModal';
 import UserDropdown from './auth/UserDropdown';
-import { Link } from 'react-router-dom';
+import CartModal from './cart/CartModal';
 
 const MainNav = () => {
     // State for Login
@@ -11,6 +12,9 @@ const MainNav = () => {
 
     // State incase user is Admin
     const [isAdmin, setIsAdmin] = useState(false);
+
+    // State for open cart
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
     // Fn when click UserIcon
     const hdlLoginIconClick = () => {
@@ -65,7 +69,9 @@ const MainNav = () => {
                         )}
                     </li>
                     <li>
-                        <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+                        <div onClick={() => setIsCartOpen(true)} className="cursor-pointer">
+                            <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+                        </div>
                     </li>
                 </ul>
             </div>
