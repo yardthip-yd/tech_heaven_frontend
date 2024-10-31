@@ -9,7 +9,7 @@ import PageLayout from "../layouts/PageLayout";
 // Import Pages
 import Home from "../pages/Home";
 import Register from "../pages/Register";
-
+import Booking from "../pages/Booking";
 
 // Import Store
 
@@ -23,6 +23,7 @@ const router = createBrowserRouter([
         { index: true, element: <Home /> },
         { path: "/register", element: <Register /> },
         { path: "*", element: <Navigate to="/" /> },
+        { path: "/booking", element: <Booking /> },
       ],
     }
   ])

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
   return (
     <div>
-      <GoogleOAuthProvider clientId='1083390196430-ikv6kj4bj4le7496hrvp9am2esq78sk4.apps.googleusercontent.com'>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_API_GOOGLE_CLIENT_ID}>
       <ToastContainer
         position="top-right"
         autoClose={1000}
