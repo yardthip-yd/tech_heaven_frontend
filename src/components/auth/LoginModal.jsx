@@ -22,6 +22,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
     const [loading, setLoading] = useState(false);
     const actionLoginGoogle = useAuthStore((state) => state.actionLoginGoogle);
     const actionLogin = useAuthStore((state) => state.actionLogin);
+
     const hdlLoginGoogle = useGoogleLogin({
         onSuccess: async (codeResponse) => {
             try {
@@ -39,6 +40,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
             console.log(err);
         },
     });
+
     // State for input
     const [input, setInput] = useState({
         email: "",
@@ -56,21 +58,28 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         try {
             e.preventDefault()
             onLogin()
-
+            setLoading(true);
             // Validation 
             // Check user fill information or not?
             if (!(input.email.trim() && input.password.trim())) {
+                setLoading(false);
                 return toast.info("Please fill all informations")
             }
 
-            // Send information input
-            const result = await actionLogin(input)
-
-            // console.log("Login Successful!")
-            toast.success("Login Successful!")
-            onClose();
-            navigate(`/`);
-
+            try {
+                // Send information input
+                const result = await actionLogin(input)
+                // console.log("Login Successful!")
+                toast.success("Login Successful!")
+                onClose();
+                navigate(`/`);
+            } catch (err) {
+                const errMsg = err.response?.data?.error || err.message;
+                toast.error("Login not successful: " + errMsg);
+            } finally {
+                setLoading(false);
+            }
+            
         } catch (err) {
             const errMsg = err.response?.data?.error || err.message
             // console.log("Login not success", errMsg)
