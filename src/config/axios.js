@@ -2,12 +2,11 @@ import { getAccessToken, removeAccessToken } from "@/utils/local-storage";
 import axios from "axios";
 
 // import { getAccessToken, removeAccessToken } from '../utils/local-storage';
-getAccessToken();
-
 axios.defaults.baseURL = import.meta.env.VITE_API;
 
 axios.interceptors.request.use(
   (config) => {
+    console.log("config", config);
     const accessToken = getAccessToken();
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;

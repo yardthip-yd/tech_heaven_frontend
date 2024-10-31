@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 function ProtectRoute({ element, allow }) {
-  const [isAllowed, setIsAllowed] = useState(false);
-  const navigate = useNavigate();
+  const [isAllowed, setIsAllowed] = useState(null);
   const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
 
@@ -13,7 +12,9 @@ function ProtectRoute({ element, allow }) {
     try {
       const resp = await authApi.getMe();
       console.log("resp", resp);
-      if (allow.includes(resp.data.role)) {
+      console.log(resp.data.user.role);
+      if (allow.includes(resp.data.user.role)) {
+        console.log("allow", allow);
         setIsAllowed(true);
       } else {
         setIsAllowed(false);
@@ -28,7 +29,7 @@ function ProtectRoute({ element, allow }) {
   }, []);
 
   if (isAllowed == null) return <div>Loading...</div>;
-  if (!isAllowed) return <Navigate to="/login" />;
+  if (!isAllowed) return <Navigate to="/" />;
 
   return element;
 }

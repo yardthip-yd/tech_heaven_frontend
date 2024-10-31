@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/admin",
+    path: "admin",
     // element: <AdminLayout />,
     element: <ProtectRoute element={<AdminLayout />} allow={["ADMIN"]} />,
     children: [

@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CartIcon } from "../ui/Icon";
 import LoginModal from "../auth/LoginModal";
 import UserDropdown from "../auth/UserDropdown";
+import useAuthStore from "../../stores/authStore";
 
 const AdminNav = () => {
+  const currentUser = useAuthStore((state) => state.user);
+
   // State for Login
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -24,6 +27,12 @@ const AdminNav = () => {
     setIsDialogOpen(false);
     setIsAdmin(userRole === "Admin");
   };
+
+  useEffect(() => {
+    if (currentUser) {
+      setIsLoggedIn(true);
+    }
+  }, [currentUser]);
 
   return (
     <div className="flex h-12 w-full items-center px-8 justify-between">

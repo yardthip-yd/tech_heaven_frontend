@@ -1,82 +1,90 @@
-import { useState } from 'react'
-import { CartIcon } from './ui/Icon'
-import LoginModal from './auth/LoginModal';
-import UserDropdown from './auth/UserDropdown';
+import { useEffect, useState } from "react";
+import { CartIcon } from "./ui/Icon";
+import LoginModal from "./auth/LoginModal";
+import UserDropdown from "./auth/UserDropdown";
+import useAuthStore from "../stores/authStore";
 
 const MainNav = () => {
-    // State for Login
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const currentUser = useAuthStore((state) => state.user);
 
-    // State incase user is Admin
-    const [isAdmin, setIsAdmin] = useState(false);
+  // State for Login
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    // Fn when click UserIcon
-    const hdlLoginIconClick = () => {
-        setIsDialogOpen(true);
-    };
+  // State incase user is Admin
+  const [isAdmin, setIsAdmin] = useState(false);
 
-    // Fn Mockup will change after we have admin
-    const hdlLogin = () => {
-        const userRole = "Admin";
+  // Fn when click UserIcon
+  const hdlLoginIconClick = () => {
+    setIsDialogOpen(true);
+  };
 
-        setIsLoggedIn(true);
-        setIsDialogOpen(false);
-        setIsAdmin(userRole === "Admin");
-    };
+  // Fn Mockup will change after we have admin
+  const hdlLogin = () => {
+    const userRole = "Admin";
 
-    return (
-        <div className="flex h-12 w-full items-center px-8 justify-between">
+    setIsLoggedIn(true);
+    setIsDialogOpen(false);
+    setIsAdmin(userRole === "Admin");
+  };
 
-            {/* Logo */}
-            <a className="text-2xl font-bold">LOGO</a>
+  useEffect(() => {
+    if (currentUser) {
+      setIsLoggedIn(true);
+    }
+  }, [currentUser]);
 
-            {/* NavBar  */}
-            <div>
-                <ul className="flex items-center gap-4">
-                    <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-                        <p>HOME</p>
-                    </li>
-                    <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-                        <p>STORE</p>
-                    </li>
-                    <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-                        <p>BOOKING</p>
-                    </li>
-                    <li>
-                        {!isLoggedIn && (
-                            <button
-                            onClick={hdlLoginIconClick}
-                            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
-                        >
-                            LOGIN
-                        </button>
-                        )}
+  return (
+    <div className="flex h-12 w-full items-center px-8 justify-between">
+      {/* Logo */}
+      <a className="text-2xl font-bold">LOGO</a>
 
-                        {isLoggedIn && (
-                            <UserDropdown
-                                setIsDialogOpen={setIsDialogOpen}
-                                setIsLoggedIn={setIsLoggedIn}
-                                isLoggedIn={isLoggedIn}
-                                isAdmin={isAdmin}
-                                setIsAdmin={setIsAdmin}
-                            />
-                        )}
-                    </li>
-                    <li>
-                        <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
-                    </li>
-                </ul>
-            </div>
+      {/* NavBar  */}
+      <div>
+        <ul className="flex items-center gap-4">
+          <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
+            <p>HOME</p>
+          </li>
+          <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
+            <p>STORE</p>
+          </li>
+          <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
+            <p>BOOKING</p>
+          </li>
+          <li>
+            {!isLoggedIn && (
+              <button
+                onClick={hdlLoginIconClick}
+                className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+              >
+                LOGIN
+              </button>
+            )}
 
-            {/* Show Dialog Login */}
-            <LoginModal
-                isOpen={isDialogOpen}
-                onClose={() => setIsDialogOpen(false)}
-                onLogin={hdlLogin}
-            />
-        </div>
-    )
-}
+            {isLoggedIn && (
+              <UserDropdown
+                setIsDialogOpen={setIsDialogOpen}
+                setIsLoggedIn={setIsLoggedIn}
+                isLoggedIn={isLoggedIn}
+                isAdmin={isAdmin}
+                setIsAdmin={setIsAdmin}
+              />
+            )}
+          </li>
+          <li>
+            <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+          </li>
+        </ul>
+      </div>
 
-export default MainNav
+      {/* Show Dialog Login */}
+      <LoginModal
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onLogin={hdlLogin}
+      />
+    </div>
+  );
+};
+
+export default MainNav;
