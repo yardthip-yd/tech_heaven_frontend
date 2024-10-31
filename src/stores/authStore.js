@@ -59,15 +59,20 @@ const authStore = (set, get) => ({
     return result
   },
   actionSendResetPassLink: async (body) => {
-
-    console.log("Sending reset link to email:", email); 
+    try {
+      
+    console.log("Sending reset link to email:", body); 
 
     const response = await authApi.forgotPassword(body);
-    set({ email });
+    
 
     console.log("Response from sending reset link:", response.data)
 
     return response.data;
+    } catch (err) {
+      console.log(err)
+    }
+
 }
 });
 
