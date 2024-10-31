@@ -17,6 +17,7 @@ import Dashboard from "../pages/admin/Dashboard";
 import UserManage from "../pages/admin/UserManage";
 import ProtectRoute from "./ProtectRoute";
 import Store from "@/pages/Store";
+import ResetPassword from "@/pages/ResetPassword";
 
 // Import Store
 
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "/register", element: <Register /> },
+      { path: "/reset-password/:token", element: <ResetPassword /> },
       { path: "/store", element: <Store /> },
       { path: "/booking", element: <Booking /> },
       { path: "*", element: <Navigate to="/" /> },
