@@ -1,4 +1,4 @@
-import { createBooking, getAllBookings } from "../API/booking-api";
+import { createBooking, getAllBookings, updateBooking, getBookingByUserId } from "../API/booking-api";
 import { create } from "zustand";
 
 const useBookingStore = create((set) => ({
@@ -18,6 +18,24 @@ const useBookingStore = create((set) => ({
       const result = await getAllBookings(count);
       console.log(result);
       set({ booking: result.data });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  actionGetBookingByUserId: async (token, id) => {
+    try {
+      const result = await getBookingByUserId(token, id);
+      console.log(result);
+      set({ booking: result.data });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  actionUpdateBooking: async (token, id, data) => {
+    try {
+      const result = await updateBooking(token, id, data);
+      console.log(result);
+      set({ booking: result.data.updated });
     } catch (err) {
       console.log(err);
     }
