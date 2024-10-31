@@ -62,23 +62,23 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         }
     }
 
-        // State for controlling modal visibility (Reset Password)
-        const [isModalOpen, setIsModalOpen] = useState(false);
+    // State for controlling modal visibility (Reset Password)
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-        // Fn to open the modal
-        const openModal = () => {
-            setIsModalOpen(true);
-        };
-    
-        // Fn to close the modal
-        const closeModal = () => {
-            setIsModalOpen(false);
-        };
-    
-        // Fn to handle reset success navigate to login
-        const hdlResetSuccess = () => {
-            setIsModalOpen(false);
-        };
+    // Fn to open the modal
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    // Fn to close the modal
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    // Fn to handle reset success navigate to login
+    const hdlResetSuccess = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <>

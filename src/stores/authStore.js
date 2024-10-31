@@ -1,8 +1,7 @@
 import authApi from "@/API/auth-api";
 import { create } from "zustand";
-
 import { createJSONStorage, persist } from "zustand/middleware";
-
+import axios from "../config/axios";
 const authStore = (set, get) => ({
   token: null,
   user: null,
@@ -77,7 +76,7 @@ const userPersist = {
   storage: createJSONStorage(() => localStorage),
 };
 
-const useAuthStore = create(persist(authStore, userPersist));
+const useAuthStore = create(persist(authStore,userPersist))
 
 // const useAuthStore = create(
 //   persist(
