@@ -1,44 +1,57 @@
-
 // Import
-import { Navigate, createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  Navigate,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 // Import Layouts
 import PageLayout from "../layouts/PageLayout";
-
 
 // Import Pages
 import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Booking from "../pages/Booking";
+import AdminLayout from "../layouts/AdminLayout";
+import Dashboard from "../pages/admin/Dashboard";
+import UserManage from "../pages/admin/UserManage";
+import ProtectRoute from "./ProtectRoute";
 
 // Import Store
 
-
 // Routing
 const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <PageLayout />,
-      children: [
-        { index: true, element: <Home /> },
-        { path: "/register", element: <Register /> },
-        { path: "*", element: <Navigate to="/" /> },
-        { path: "/booking", element: <Booking /> },
-      ],
-    }
-  ])
+  {
+    path: "/",
+    element: <PageLayout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "/register", element: <Register /> },
+      { path: "*", element: <Navigate to="/" /> },
+      { path: "/booking", element: <Booking /> },
+    ],
+  },
+  {
+    path: "/admin",
+    // element: <AdminLayout />,
+    element: <ProtectRoute element={<AdminLayout />} allow={["ADMIN"]} />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "/usermng", element: <UserManage /> },
+    ],
+  },
+]);
 
 // Export AppRoute
 const AppRoute = () => {
-    return (
-      <div>
-        <RouterProvider router={router} />
-      </div>
-    );
-  };
-  
-  export default AppRoute;
+  return (
+    <div>
+      <RouterProvider router={router} />
+    </div>
+  );
+};
 
+export default AppRoute;
 
 // // Routing
 
@@ -66,11 +79,10 @@ const AppRoute = () => {
 //     },
 // ])
 
-
 // // Export AppRoute
 
 // const AppRoute = () => {
-    
+
 //     // State for use authStore
 //     const user = useAuthStore((state) => state.user)
 
