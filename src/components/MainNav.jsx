@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { CartIcon } from './ui/Icon'
 import LoginModal from './auth/LoginModal';
 import UserDropdown from './auth/UserDropdown';
+import { Link } from 'react-router-dom';
 
 const MainNav = () => {
     // State for Login
@@ -40,9 +41,9 @@ const MainNav = () => {
                     <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
                         <p>STORE</p>
                     </li>
-                    <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
+                    <Link to="/booking" className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
                         <p>BOOKING</p>
-                    </li>
+                    </Link>
                     <li>
                         {!isLoggedIn && (
                             <button
