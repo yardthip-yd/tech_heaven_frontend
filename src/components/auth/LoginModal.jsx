@@ -12,7 +12,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import useAuthStore from "@/stores/authStore";
+
 
 // Import Reset Password
 import ForgotPassModal from "./ForgotPassModal";
@@ -22,7 +22,25 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
     const [loading, setLoading] = useState(false);
     const actionLoginGoogle = useAuthStore((state) => state.actionLoginGoogle);
     const actionLogin = useAuthStore((state) => state.actionLogin);
-    
+
+    const hdlLoginGoogle = useGoogleLogin({
+        onSuccess: async (codeResponse) => {
+            try {
+                const res = await actionLoginGoogle(codeResponse);
+                // setUser(res);
+                // console.log("asdadads")
+                console.log("check res function --> ", res);
+                onLogin()
+                navigate("/");
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        onError: (err) => {
+            console.log(err);
+        },
+    });
+
     // State for input
     const [input, setInput] = useState({
         email: "",
@@ -40,21 +58,28 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         try {
             e.preventDefault()
             onLogin()
-
+            setLoading(true);
             // Validation 
             // Check user fill information or not?
             if (!(input.email.trim() && input.password.trim())) {
+                setLoading(false);
                 return toast.info("Please fill all informations")
             }
 
-            // Send information input
-            const result = await actionLogin(input)
-
-            // console.log("Login Successful!")
-            toast.success("Login Successful!")
-            onClose();
-            navigate(`/`);
-
+            try {
+                // Send information input
+                const result = await actionLogin(input)
+                // console.log("Login Successful!")
+                toast.success("Login Successful!")
+                onClose();
+                navigate(`/`);
+            } catch (err) {
+                const errMsg = err.response?.data?.error || err.message;
+                toast.error("Login not successful: " + errMsg);
+            } finally {
+                setLoading(false);
+            }
+            
         } catch (err) {
             const errMsg = err.response?.data?.error || err.message
             // console.log("Login not success", errMsg)
@@ -90,14 +115,14 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
                             Welcome! Sign in to your account. We are so happy to have you here.
                         </DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleLogin} className="space-y-4">
+                    <form onSubmit={hdlLogin} className="space-y-4">
                         <input
                             type="text"
                             placeholder="Email"
                             className="input input-bordered w-full bg-slate-50 border-none p-2"
                             name="email"
                             value={input.email}
-                            onChange={handleChange}
+                            onChange={hdlChange}
                             required
                         />
                         <input
@@ -106,7 +131,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
                             className="input input-bordered w-full bg-slate-50 border-none p-2"
                             name="password"
                             value={input.password}
-                            onChange={handleChange}
+                            onChange={hdlChange}
                             required
                         />
                         <button
