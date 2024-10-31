@@ -14,11 +14,20 @@ export const setAccessToken = (token) =>
   localStorage.setItem(ACCESS_TOKEN, token);
 // localStorage.setItem('user', token)
 
-export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN);
+export const getAccessToken = () => {
+  const state = JSON.parse(localStorage.getItem("state"));
+  console.log(state.state);
+  return state.state.token;
+};
 
 // getAccessToken()
 
-export const removeAccessToken = () => localStorage.removeItem(ACCESS_TOKEN);
+export const removeAccessToken = () => {
+  const state = JSON.parse(localStorage.getItem("state"));
+  delete state.state.token;
+  // localStorage.removeItem(ACCESS_TOKEN)
+  localStorage.setItem("state", state);
+};
 
 export const setAccessTokenAdmin = (token) =>
   localStorage.setItem(ACCESS_TOKEN_ADMIN, token);
