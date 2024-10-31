@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { CartIcon } from "./ui/Icon";
-import LoginModal from "./auth/LoginModal";
-import UserDropdown from "./auth/UserDropdown";
+import { CartIcon } from "../ui/Icon";
+import LoginModal from "../auth/LoginModal";
+import UserDropdown from "../auth/UserDropdown";
 
 const AdminNav = () => {
   // State for Login

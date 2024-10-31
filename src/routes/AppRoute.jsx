@@ -37,7 +37,7 @@ const router = createBrowserRouter([
     element: <ProtectRoute element={<AdminLayout />} allow={["ADMIN"]} />,
     children: [
       { index: true, element: <Dashboard /> },
-      { path: "/usermng", element: <UserManage /> },
+      { path: "usermng", element: <UserManage /> },
     ],
   },
 ]);
