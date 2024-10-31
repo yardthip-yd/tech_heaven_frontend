@@ -17,7 +17,6 @@ import Dashboard from "../pages/admin/Dashboard";
 import UserManage from "../pages/admin/UserManage";
 import ProtectRoute from "./ProtectRoute";
 import Store from "@/pages/Store";
-import Booking from "@/pages/Booking";
 
 // Import Store
 
