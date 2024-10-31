@@ -40,16 +40,11 @@ const FormBooking = () => {
   const hdlSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(data)
       await actionCreateBooking(token, data);
-
+      console.log(data)
+      
       actionGetAllBookings();
-      setData({
-        bookingDate: null,
-        status: "",
-        type: "",
-        notes: "",
-      });
+      setData(data);
       toast.success("Booking created successfully!");
     } catch (err) {
       const errMessage = err.response?.data?.error || err.message;
