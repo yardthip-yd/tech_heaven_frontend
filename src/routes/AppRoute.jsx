@@ -9,6 +9,8 @@ import PageLayout from "../layouts/PageLayout";
 // Import Pages
 import Home from "../pages/Home";
 import Register from "../pages/Register";
+import Store from "@/pages/Store";
+import Booking from "@/pages/Booking";
 
 
 // Import Store
@@ -22,6 +24,7 @@ const router = createBrowserRouter([
       children: [
         { index: true, element: <Home /> },
         { path: "/register", element: <Register /> },
+        { path: "/store", element: <Store /> },
         { path: "*", element: <Navigate to="/" /> },
       ],
     }
