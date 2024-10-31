@@ -1,15 +1,7 @@
-import React, { useState } from 'react'
-import { CartIcon, UserIcon } from './ui/Icon'
-import LoginModal from './LoginModal';
-
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { useState } from 'react'
+import { CartIcon } from './ui/Icon'
+import LoginModal from './auth/LoginModal';
+import UserDropdown from './auth/UserDropdown';
 
 const MainNav = () => {
     // State for Login
@@ -20,10 +12,8 @@ const MainNav = () => {
     const [isAdmin, setIsAdmin] = useState(false);
 
     // Fn when click UserIcon
-    const hdlUserIconClick = () => {
-        if (!isLoggedIn) {
-            setIsDialogOpen(true);
-        }
+    const hdlLoginIconClick = () => {
+        setIsDialogOpen(true);
     };
 
     // Fn Mockup will change after we have admin
@@ -54,42 +44,24 @@ const MainNav = () => {
                         <p>BOOKING</p>
                     </li>
                     <li>
-                        {/* <UserIcon
-                            onClick={hdlUserIconClick}
-                            className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" /> */}
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <div onClick={hdlUserIconClick} className="cursor-pointer">
-                                    <UserIcon className="w-5 h-5" />
-                                </div>
-                            </DropdownMenuTrigger>
+                        {!isLoggedIn && (
+                            <button
+                            onClick={hdlLoginIconClick}
+                            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+                        >
+                            LOGIN
+                        </button>
+                        )}
 
-                            {/* แสดง DropdownMenuContent หากผู้ใช้ login แล้ว */}
-                            {isLoggedIn && (
-                                <DropdownMenuContent>
-                                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => alert("Profile clicked")}>
-                                        Profile
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => alert("Billing clicked")}>
-                                        Wishlist
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => alert("Billing clicked")}>
-                                        Purchase
-                                    </DropdownMenuItem>
-                                    {isAdmin && (
-                                        <DropdownMenuItem onClick={() => alert("Dashboard clicked")}>
-                                            Dashboard
-                                        </DropdownMenuItem>
-                                    )}
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={() => alert("Logout clicked")}>
-                                        Logout
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            )}
-                        </DropdownMenu>
+                        {isLoggedIn && (
+                            <UserDropdown
+                                setIsDialogOpen={setIsDialogOpen}
+                                setIsLoggedIn={setIsLoggedIn}
+                                isLoggedIn={isLoggedIn}
+                                isAdmin={isAdmin}
+                                setIsAdmin={setIsAdmin}
+                            />
+                        )}
                     </li>
                     <li>
                         <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
