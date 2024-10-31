@@ -16,6 +16,8 @@ import AdminLayout from "../layouts/AdminLayout";
 import Dashboard from "../pages/admin/Dashboard";
 import UserManage from "../pages/admin/UserManage";
 import ProtectRoute from "./ProtectRoute";
+import Store from "@/pages/Store";
+import Booking from "@/pages/Booking";
 
 // Import Store
 
@@ -27,8 +29,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "/register", element: <Register /> },
-      { path: "*", element: <Navigate to="/" /> },
+      { path: "/store", element: <Store /> },
       { path: "/booking", element: <Booking /> },
+      { path: "*", element: <Navigate to="/" /> },
     ],
   },
   {

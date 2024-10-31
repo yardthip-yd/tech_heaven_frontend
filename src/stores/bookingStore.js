@@ -3,8 +3,9 @@ import { create } from "zustand";
 
 const useBookingStore = create((set) => ({
   booking: [],
-  actionCreateBooking: async (data, token) => {
+  actionCreateBooking: async (token, data) => {
     try {
+      console.log(data)
       const result = await createBooking(token, data);
       console.log(result);
       set((state) => ({ booking: [...state.booking, result.data.created] }));

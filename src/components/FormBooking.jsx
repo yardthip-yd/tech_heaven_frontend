@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import useBookingStore from "../stores/bookingStore";
 import { toast } from "react-toastify";
-import TextareaAutosize from "react-textarea-autosize";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useAuthStore from "@/stores/authStore";
@@ -9,11 +8,12 @@ import useAuthStore from "@/stores/authStore";
 const FormBooking = () => {
   const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
-  const { actionCreateBooking } = useBookingStore();
+  const actionCreateBooking = useBookingStore((state) => state.actionCreateBooking);
+  const actionGetAllBookings = useBookingStore((state) => state.actionGetAllBookings);
   
   const [data, setData] = useState({
-    bookingDate: null, // Initialize with null
-    status: "",
+    bookingDate: null,
+    status: "PENDING",
     type: "",
     notes: "",
   });
@@ -29,7 +29,7 @@ const FormBooking = () => {
   const hdlDateChange = (date) => {
     setData((prev) => ({
       ...prev,
-      bookingDate: date, // Update bookingDate with Date object
+      bookingDate: date,
     }));
   };
 
@@ -40,17 +40,12 @@ const FormBooking = () => {
   const hdlSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Call the action to create the booking
       await actionCreateBooking(token, data);
-
-      // Reset the data state
-      setData({
-        bookingDate: null, // Reset bookingDate
-        status: "",
-        type: "",
-        notes: "",
-      });
-      toast.success("Booking created successfully!"); // Optional success message
+      console.log(data)
+      
+      actionGetAllBookings();
+      setData(data);
+      toast.success("Booking created successfully!");
     } catch (err) {
       const errMessage = err.response?.data?.error || err.message;
       console.log(errMessage);
@@ -83,11 +78,11 @@ const FormBooking = () => {
             <DatePicker
               name="bookingDate"
               selected={data.bookingDate}
-              onChange={hdlDateChange} // Use separate handler for date change
+              onChange={hdlDateChange}
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={30}
-              dateFormat="yyyy-MM-dd'T'HH:mm:ss" // Corrected format
+              dateFormat="yyyy-MM-dd'T'HH:mm:ss"
               className="border border-gray-400 w-full h-full mt-2 px-2"
             />
           </div>
