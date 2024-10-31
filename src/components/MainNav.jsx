@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { CartIcon } from './ui/Icon'
+import { Link } from 'react-router-dom';
 import LoginModal from './auth/LoginModal';
 import UserDropdown from './auth/UserDropdown';
-import { Link } from 'react-router-dom';
+import CartModal from './cart/CartModal';
 
 const MainNav = () => {
     // State for Login
@@ -11,6 +12,9 @@ const MainNav = () => {
 
     // State incase user is Admin
     const [isAdmin, setIsAdmin] = useState(false);
+
+    // State for open cart
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
     // Fn when click UserIcon
     const hdlLoginIconClick = () => {
@@ -35,23 +39,23 @@ const MainNav = () => {
             {/* NavBar  */}
             <div>
                 <ul className="flex items-center gap-4">
-                    <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-                        <p>HOME</p>
-                    </li>
-                    <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-                        <p>STORE</p>
-                    </li>
-                    <Link to="/booking" className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-                        <p>BOOKING</p>
+                    <Link to={"/"} className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
+                        HOME
+                    </Link>
+                    <Link to={"/store"} className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
+                        STORE
+                    </Link>
+                    <Link to={"/booking"} className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
+                        BOOKING
                     </Link>
                     <li>
                         {!isLoggedIn && (
                             <button
-                            onClick={hdlLoginIconClick}
-                            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
-                        >
-                            LOGIN
-                        </button>
+                                onClick={hdlLoginIconClick}
+                                className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+                            >
+                                LOGIN
+                            </button>
                         )}
 
                         {isLoggedIn && (
@@ -65,7 +69,9 @@ const MainNav = () => {
                         )}
                     </li>
                     <li>
-                        <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+                        <div onClick={() => setIsCartOpen(true)} className="cursor-pointer">
+                            <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+                        </div>
                     </li>
                 </ul>
             </div>
