@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Authvdo from "@/assets/video/auth.mp4";
 import useAuthStore from "@/stores/authStore";
-import LoginModal from "@/components/LoginModal";
+import LoginModal from "@/components/auth/LoginModal";
 
 const Register = () => {
     // State from Stores

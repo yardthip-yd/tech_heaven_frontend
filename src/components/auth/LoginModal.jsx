@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
 
-import useAuthStore from "@/stores/authStore";
-
 import {
     Dialog,
     DialogContent,
@@ -13,7 +11,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-
+import useAuthStore from "@/stores/authStore";
 
 const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
