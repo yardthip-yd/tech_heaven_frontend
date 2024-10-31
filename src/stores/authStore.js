@@ -10,18 +10,22 @@ const useAuthStore = create(
             user: null,
             actionRegister: async (input) => {
                 // get input from outside
+                try {
+                    const result = await axios.post(
+                        "http://localhost:8000/auth/register",
+                        input
+                    );
+                    console.log("Register in Zustand", result.data.message)
 
-                const result = await axios.post(
-                    "http://localhost:8000/register",
-                    input
-                );
-                // console.log("Register in Zustand", result.data.message)
+                } catch(error) {
+                    console.log(error)
+                }
             },
             actionLogin: async (input) => {
                 // get input from outside
 
                 const result = await axios.post(
-                    "http://localhost:8000/login",
+                    "http://localhost:8000/auth/login",
                     input
                 );
                 // console.log("Login in Zustand", result.data)
