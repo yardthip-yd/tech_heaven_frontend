@@ -4,7 +4,15 @@ import ChatActive from "./ChatActive";
 
 function ChatButtonContainer() {
   const [active, setActive] = useState(false);
-  return <>{active ? <ChatActive /> : <ChatButton />}</>;
+  return (
+    <>
+      {active ? (
+        <ChatActive setActive={setActive} />
+      ) : (
+        <ChatButton setActive={setActive} />
+      )}
+    </>
+  );
 }
 
 export default ChatButtonContainer;
