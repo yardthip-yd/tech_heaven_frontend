@@ -1,7 +1,7 @@
 import { createBooking, getAllBookings, updateBooking, getBookingByUserId } from "../API/booking-api";
 import { create } from "zustand";
 
-const useBookingStore = create((set) => ({
+const useBookingStore = create((set, get) => ({
   booking: [],
   actionCreateBooking: async (token, data) => {
     try {
@@ -13,9 +13,11 @@ const useBookingStore = create((set) => ({
       console.log(err);
     }
   },
-  actionGetAllBookings: async (count) => {
+  actionGetAllBookings: async () => {
     try {
-      const result = await getAllBookings(count);
+      const booking = get()
+      const total = booking.length
+      const result = await getAllBookings();
       console.log(result);
       set({ booking: result.data });
     } catch (err) {
@@ -35,7 +37,11 @@ const useBookingStore = create((set) => ({
     try {
       const result = await updateBooking(token, id, data);
       console.log(result);
-      set({ booking: result.data.updated });
+      set((state) => ({
+        booking: state.booking.map((item) =>
+          item.id === id ? { ...item, ...result } : item
+        ),
+      }));
     } catch (err) {
       console.log(err);
     }

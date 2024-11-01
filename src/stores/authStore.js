@@ -57,7 +57,18 @@ const authStore = (set, get) => ({
       token: result.data.token,
     });
     return result
-  }
+  },
+  actionSendResetPassLink: async (body) => {
+
+    console.log("Sending reset link to email:", email); 
+
+    const response = await authApi.forgotPassword(body);
+    set({ email });
+
+    console.log("Response from sending reset link:", response.data)
+
+    return response.data;
+}
 });
 
 const userPersist = {

@@ -1,44 +1,67 @@
-
 // Import
-import { Navigate, createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  Navigate,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 // Import Layouts
 import PageLayout from "../layouts/PageLayout";
 
-
 // Import Pages
 import Home from "../pages/Home";
 import Register from "../pages/Register";
-import Booking from "../pages/Booking";
+import Booking from "../pages/user/Booking";
+import AdminLayout from "../layouts/AdminLayout";
+import Dashboard from "../pages/admin/Dashboard";
+import UserManage from "../pages/admin/UserManage";
+import ProtectRoute from "./ProtectRoute";
+import Store from "@/pages/Store";
+import ResetPassword from "@/pages/ResetPassword";
+import BookingManage from "@/pages/admin/BookingManage";
+import OrderManage from "@/pages/admin/OrderManage";
+import Payment from "@/pages/user/Payment";
 
 // Import Store
 
-
 // Routing
 const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <PageLayout />,
-      children: [
-        { index: true, element: <Home /> },
-        { path: "/register", element: <Register /> },
-        { path: "*", element: <Navigate to="/" /> },
-        { path: "/booking", element: <Booking /> },
-      ],
-    }
-  ])
+  {
+    path: "/",
+    element: <PageLayout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "/register", element: <Register /> },
+      { path: "/reset-password/:token", element: <ResetPassword /> },
+      { path: "/store", element: <Store /> },
+      { path: "/booking", element: <Booking /> },
+      { path: "/payment", element: <Payment /> },
+      { path: "*", element: <Navigate to="/" /> },
+    ],
+  },
+  {
+    path: "admin",
+    // element: <AdminLayout />,
+    element: <ProtectRoute element={<AdminLayout />} allow={["ADMIN"]} />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "usermng", element: <UserManage /> },
+      { path: "bookingsmng", element: <BookingManage /> },
+      { path: "ordermng", element: <OrderManage /> },
+    ],
+  },
+]);
 
 // Export AppRoute
 const AppRoute = () => {
-    return (
-      <div>
-        <RouterProvider router={router} />
-      </div>
-    );
-  };
-  
-  export default AppRoute;
+  return (
+    <div>
+      <RouterProvider router={router} />
+    </div>
+  );
+};
 
+export default AppRoute;
 
 // // Routing
 
@@ -66,11 +89,10 @@ const AppRoute = () => {
 //     },
 // ])
 
-
 // // Export AppRoute
 
 // const AppRoute = () => {
-    
+
 //     // State for use authStore
 //     const user = useAuthStore((state) => state.user)
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import FormBooking from "../components/FormBooking";
-import Bookinglist from "../components/Bookinglist";
+import FormBooking from "../../components/user/FormBooking";
+import Bookinglist from "../../components/user/Bookinglist";
 
 const Booking = () => {
   const [showFormBooking, setShowFormBooking] = useState(false);
@@ -28,8 +28,9 @@ const Booking = () => {
         </button>
       </div>
       <div>
-        {showFormBooking && <FormBooking />}
-        {showBooking && <Bookinglist />}
+        {/* {showFormBooking && <FormBooking />}
+        {showBooking && <Bookinglist />} */}
+        {!showFormBooking ? <Bookinglist /> : <FormBooking />}
       </div>
     </div>
   );

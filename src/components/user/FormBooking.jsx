@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useBookingStore from "../stores/bookingStore";
+import useBookingStore from "../../stores/bookingStore";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -40,16 +40,11 @@ const FormBooking = () => {
   const hdlSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(data)
       await actionCreateBooking(token, data);
-
+      console.log(data)
+      
       actionGetAllBookings();
-      setData({
-        bookingDate: null,
-        status: "",
-        type: "",
-        notes: "",
-      });
+      setData(data);
       toast.success("Booking created successfully!");
     } catch (err) {
       const errMessage = err.response?.data?.error || err.message;
@@ -63,6 +58,7 @@ const FormBooking = () => {
       <div className="flex flex-col justify-center items-center">
         <div className="w-1/2 h-auto gap-6 px-14 py-6 border flex flex-col justify-start items-center">
           <h1 className="text-3xl font-bold my-6">Booking Form</h1>
+          <h2 className="text-xl w-full text-left">{user.firstName} {user.lastName}</h2>
           <div className="flex flex-row justify-between w-full">
             <textarea
               name="notes"
