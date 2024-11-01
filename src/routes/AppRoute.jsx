@@ -18,6 +18,8 @@ import UserManage from "../pages/admin/UserManage";
 import ProtectRoute from "./ProtectRoute";
 import Store from "@/pages/Store";
 import ResetPassword from "@/pages/ResetPassword";
+import Product from "@/pages/admin/Product";
+import Category from "@/pages/admin/Category";
 import BookingManage from "@/pages/admin/BookingManage";
 import OrderManage from "@/pages/admin/OrderManage";
 import Payment from "@/pages/user/Payment";
@@ -49,6 +51,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: "usermng", element: <UserManage /> },
+      { path: "product", element: <Product /> },
+      { path: "category", element: <Category /> },
       { path: "bookingsmng", element: <BookingManage /> },
       { path: "ordermng", element: <OrderManage /> },
     ],
