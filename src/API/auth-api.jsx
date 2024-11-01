@@ -10,5 +10,5 @@ authApi.login = async (body) => await axios.post("/auth/login", body);
 authApi.getMe = async () => await axios.get("/auth/getme");
 
 authApi.forgotPassword = async (body) => await axios.post("/auth/forgotPassword", body);
-
+authApi.resetPassword = async(body) => await axios.put("/auth/resetPassword/",body)
 export default authApi;

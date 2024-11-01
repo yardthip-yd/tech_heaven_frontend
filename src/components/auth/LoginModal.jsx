@@ -55,37 +55,30 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
 
     // Fn handleLogin for register success
     const hdlLogin = async (e) => {
-        try {
-            e.preventDefault()
-            onLogin()
-            setLoading(true);
-            // Validation 
-            // Check user fill information or not?
-            if (!(input.email.trim() && input.password.trim())) {
-                setLoading(false);
-                return toast.info("Please fill all informations")
-            }
+        e.preventDefault();
 
-            try {
-                // Send information input
-                const result = await actionLogin(input)
-                // console.log("Login Successful!")
-                toast.success("Login Successful!")
-                onClose();
-                navigate(`/`);
-            } catch (err) {
-                const errMsg = err.response?.data?.error || err.message;
-                toast.error("Login not successful: " + errMsg);
-            } finally {
-                setLoading(false);
-            }
-            
-        } catch (err) {
-            const errMsg = err.response?.data?.error || err.message
-            // console.log("Login not success", errMsg)
-            toast.error("Login not success", errMsg)
+        // Basic input validation
+        if (!input.email || !input.password) {
+            return toast.info("Please fill in all fields.");
         }
-    }
+
+        // Start loading state
+        setLoading(true);
+        try {
+            const result = await actionLogin(input);
+            toast.success("Login Successful!");
+            onClose();
+            navigate(`/`);
+        } catch (err) {
+            console.log(err)
+            const errMsg = err.response?.data?.message;
+            toast.error("Email or Password is not Valid. Please check or register.",errMsg);
+           
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     // State for controlling modal visibility (Reset Password)
     const [isModalOpen, setIsModalOpen] = useState(false);

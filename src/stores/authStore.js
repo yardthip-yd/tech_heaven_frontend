@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import axios from "../config/axios";
 const authStore = (set, get) => ({
-  token: null,
+ token : null,
   user: null,
   actionRegister: async (input) => {
     // get input from outside
@@ -73,6 +73,15 @@ const authStore = (set, get) => ({
       console.log(err)
     }
 
+},
+actionResetPassword : async (body) => {
+  try {
+    const response = await authApi.resetPassword(body)
+    console.log(response.data)
+    return response.data
+  } catch (err) {
+    console.log(err)
+  }
 }
 });
 
