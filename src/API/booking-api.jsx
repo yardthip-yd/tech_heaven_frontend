@@ -12,8 +12,16 @@ export const createBooking = async (token, data) => {
   );
 };
 
-export const getAllBookings = async (count = 20) => {
-  return await axios.get("http://localhost:8000/booking/get-all-bookings/"+count)
+export const getAllBookings = async () => {
+  return await axios.get("http://localhost:8000/booking/get-all-bookings/")
+}
+
+export const getBookingByUserId = async (token) => {
+    return await axios.get("http://localhost:8000/booking/get-booking-by-user-id/", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 }
 
 export const updateBooking = async (token, id, data) => {

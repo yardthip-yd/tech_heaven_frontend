@@ -26,6 +26,14 @@ function AdminSidebar() {
               <UserRoundCog />
               <Link to={"/admin/usermng"}>User Manage</Link>
             </SidebarMenuItem>
+            <SidebarMenuItem className="py-2 flex flex-row gap-2">
+              <UserRoundCog />
+              <Link to={"/admin/bookingsmng"}>Bookings Manage</Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem className="py-2 flex flex-row gap-2">
+              <UserRoundCog />
+              <Link to={"/admin/ordermng"}>Order Manage</Link>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
