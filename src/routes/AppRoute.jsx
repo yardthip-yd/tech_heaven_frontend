@@ -30,7 +30,8 @@ import UserLayout from "@/layouts/UserLayout";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <PageLayout />,
+    // element: <PageLayout />,
+    element: <ProtectRoute element={<PageLayout />} allow={["ALL"]} />,
     children: [
       { index: true, element: <Home /> },
       { path: "/register", element: <Register /> },
