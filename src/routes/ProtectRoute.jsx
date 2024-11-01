@@ -9,7 +9,6 @@ function ProtectRoute({ element, allow }) {
   const getCurrentUser = useAuthStore((state) => state.getCurrentUser);
 
   const checkRole = async () => {
-
     if (!token) {
       setIsAllowed(false);
       return;

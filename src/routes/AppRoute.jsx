@@ -23,6 +23,8 @@ import OrderManage from "@/pages/admin/OrderManage";
 import Payment from "@/pages/user/Payment";
 import UserAccount from "@/pages/UserAccount";
 import UserLayout from "@/layouts/UserLayout";
+import useAuthStore from "@/stores/authStore";
+import { useEffect } from "react";
 
 // Import Store
 
@@ -30,8 +32,8 @@ import UserLayout from "@/layouts/UserLayout";
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: <PageLayout />,
-    element: <ProtectRoute element={<PageLayout />} allow={["ALL"]} />,
+    element: <PageLayout />,
+    // element: <ProtectRoute element={<PageLayout />} allow={["ALL"]} />,
     children: [
       { index: true, element: <Home /> },
       { path: "/register", element: <Register /> },
@@ -56,15 +58,28 @@ const router = createBrowserRouter([
   {
     path: "user",
     // element: <UserLayout />,
-    element: <ProtectRoute element={<UserLayout />} allow={["USER", "ADMIN"]} />,
-    children: [
-      { index: true, element: <UserAccount /> },
-    ],
+    element: (
+      <ProtectRoute element={<UserLayout />} allow={["USER", "ADMIN"]} />
+    ),
+    children: [{ index: true, element: <UserAccount /> }],
   },
 ]);
 
 // Export AppRoute
 const AppRoute = () => {
+  const token = useAuthStore((state) => state.token);
+  const getCurrentUser = useAuthStore((state) => state.getCurrentUser);
+
+  const fetchUser = async () => {
+    await getCurrentUser();
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchUser();
+    }
+  }, [token]);
+
   return (
     <div>
       <RouterProvider router={router} />
