@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { CartIcon } from "./ui/Icon";
 import LoginModal from "./auth/LoginModal";
 import UserDropdown from "./auth/UserDropdown";
 import useAuthStore from "../stores/authStore";
 import { Link } from "react-router-dom";
-import CartModal from "./cart/CartModal";
+import CartSidebar from "./cart/CartSidebar";
 
 const MainNav = () => {
   const currentUser = useAuthStore((state) => state.user);
@@ -15,28 +14,27 @@ const MainNav = () => {
 
   // State incase user is Admin
   const [isAdmin, setIsAdmin] = useState(false);
-  // State for open cart
-  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Fn when click UserIcon
   const hdlLoginIconClick = () => {
     setIsDialogOpen(true);
   };
 
-  // Fn Mockup will change after we have admin
+  // Fn handle login
   const hdlLogin = () => {
-    const userRole = "Admin";
-
-    setIsLoggedIn(true);
-    setIsDialogOpen(false);
-    setIsAdmin(userRole === "Admin");
-  };
+    if (currentUser) {
+        setIsLoggedIn(true);
+        setIsDialogOpen(false);
+        setIsAdmin(currentUser.role === "ADMIN");
+    }
+};
 
   useEffect(() => {
     if (currentUser) {
-      setIsLoggedIn(true);
+        setIsLoggedIn(true);
+        console.log("Current user:", currentUser);
     }
-  }, [currentUser]);
+}, [currentUser]);
 
   return (
     <div className="flex h-12 w-full items-center px-8 justify-between">
@@ -85,9 +83,7 @@ const MainNav = () => {
             )}
           </li>
           <li>
-            <div onClick={() => setIsCartOpen(true)} className="cursor-pointer">
-              <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
-            </div>
+            <CartSidebar />
           </li>
         </ul>
       </div>
@@ -98,8 +94,6 @@ const MainNav = () => {
         onClose={() => setIsDialogOpen(false)}
         onLogin={hdlLogin}
       />
-      {/* Show Cart Dialog */}
-      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
   );
 };

@@ -15,9 +15,7 @@ function AdminLayout() {
         <SidebarProvider>
           <div className="flex flex-1">
             {/* Sidebar*/}
-            <div className="w-64 h-full">
-              <AdminSideBar />
-            </div>
+            <AdminSideBar />
 
             {/* Content area */}
             <div className="flex-1 p-4 overflow-auto">
