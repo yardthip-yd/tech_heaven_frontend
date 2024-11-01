@@ -21,6 +21,8 @@ import ResetPassword from "@/pages/ResetPassword";
 import BookingManage from "@/pages/admin/BookingManage";
 import OrderManage from "@/pages/admin/OrderManage";
 import Payment from "@/pages/user/Payment";
+import UserAccount from "@/pages/UserAccount";
+import UserLayout from "@/layouts/UserLayout";
 
 // Import Store
 
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
       { path: "usermng", element: <UserManage /> },
       { path: "bookingsmng", element: <BookingManage /> },
       { path: "ordermng", element: <OrderManage /> },
+    ],
+  },
+  {
+    path: "user",
+    // element: <UserLayout />,
+    element: <ProtectRoute element={<UserLayout />} allow={["USER", "ADMIN"]} />,
+    children: [
+      { index: true, element: <UserAccount /> },
     ],
   },
 ]);
