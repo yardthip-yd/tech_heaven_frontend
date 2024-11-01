@@ -35,9 +35,11 @@ const authStore = (set, get) => ({
   getCurrentUser: async () => {
     try {
       const result = await authApi.getMe();
+      // console.log(result);
       set({
         user: result.data.user,
       });
+      return result.data.user;
     } catch (error) {
       console.log(error);
     }

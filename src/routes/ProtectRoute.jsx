@@ -6,14 +6,17 @@ import { Navigate, useNavigate } from "react-router-dom";
 function ProtectRoute({ element, allow }) {
   const [isAllowed, setIsAllowed] = useState(null);
   const token = useAuthStore((state) => state.token);
-  const user = useAuthStore((state) => state.user);
+  const getCurrentUser = useAuthStore((state) => state.getCurrentUser);
 
   const checkRole = async () => {
     try {
-      const resp = await authApi.getMe();
-      console.log("resp", resp);
-      console.log(resp.data.user.role);
-      if (allow.includes(resp.data.user.role)) {
+      const resp = await getCurrentUser();
+      // console.log("resp", resp);
+      console.log(resp.role);
+      if (allow.includes("ALL")) {
+        console.log(allow);
+        setIsAllowed(true);
+      } else if (allow.includes(resp.role)) {
         console.log("allow", allow);
         setIsAllowed(true);
       } else {
@@ -26,7 +29,7 @@ function ProtectRoute({ element, allow }) {
 
   useEffect(() => {
     checkRole();
-  }, []);
+  }, [token]);
 
   if (isAllowed == null) return <div>Loading...</div>;
   if (!isAllowed) return <Navigate to="/" />;
