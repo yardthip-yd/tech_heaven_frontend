@@ -18,6 +18,8 @@ import UserManage from "../pages/admin/UserManage";
 import ProtectRoute from "./ProtectRoute";
 import Store from "@/pages/Store";
 import ResetPassword from "@/pages/ResetPassword";
+import UserAccount from "@/pages/UserAccount";
+import UserLayout from "@/layouts/UserLayout";
 
 // Import Store
 
@@ -42,6 +44,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: "usermng", element: <UserManage /> },
+    ],
+  },
+  {
+    path: "user",
+    // element: <UserLayout />,
+    element: <ProtectRoute element={<UserLayout />} allow={["USER", "ADMIN"]} />,
+    children: [
+      { index: true, element: <UserAccount /> },
     ],
   },
 ]);
