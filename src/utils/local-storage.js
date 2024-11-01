@@ -1,3 +1,5 @@
+import useAuthStore from "@/stores/authStore";
+
 const ACCESS_TOKEN = "ACCESS_TOKEN";
 const ACCESS_TOKEN_ADMIN = "ACCESS_TOKEN_ADMIN";
 
@@ -10,23 +12,17 @@ const NUMBER_VOUCHER = "NUMBER_VOUCHER";
 
 //setAccessToken()
 
-export const setAccessToken = (token) =>
-  localStorage.setItem(ACCESS_TOKEN, token);
-// localStorage.setItem('user', token)
-
 export const getAccessToken = () => {
-  const state = JSON.parse(localStorage.getItem("state"));
-  console.log(state.state);
-  return state.state.token;
+  const token = useAuthStore((state) => state.token);
+  console.log(token);
+  return token;
 };
 
 // getAccessToken()
 
 export const removeAccessToken = () => {
-  const state = JSON.parse(localStorage.getItem("state"));
-  delete state.state.token;
-  // localStorage.removeItem(ACCESS_TOKEN)
-  localStorage.setItem("state", state);
+  const removeToken = useAuthStore((state) => state.removeToken);
+  removeToken();
 };
 
 export const setAccessTokenAdmin = (token) =>

@@ -42,31 +42,33 @@ const authStore = (set, get) => ({
       console.log(error);
     }
   },
-  actionLoginGoogle : async (codeResponse) => {
-    const res = await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${codeResponse.access_token}`,
+  actionLoginGoogle: async (codeResponse) => {
+    const res = await axios.get(
+      `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${codeResponse.access_token}`,
       {
         headers: {
           Authorization: `Bearer ${codeResponse.access_token}`,
         },
       }
-    )
-    const result = await authApi.loginGoogle(res.data)
-    console.log(result, "Check result")
+    );
+    const result = await authApi.loginGoogle(res.data);
+    console.log(result, "Check result");
     set({
       user: result.data.payload,
       token: result.data.token,
     });
-    return result
+    return result;
   },
   actionSendResetPassLink: async (body) => {
     try {
       
     console.log("Sending reset link to email:", body); 
+  
 
     const response = await authApi.forgotPassword(body);
     
 
-    console.log("Response from sending reset link:", response.data)
+    console.log("Response from sending reset link:", response.data);
 
     return response.data;
     } catch (err) {
@@ -83,62 +85,18 @@ actionResetPassword : async (body) => {
     console.log(err)
   }
 }
+  ,
+  removeToken: () => {
+    set({ token: null });
+  },
 });
 
 const userPersist = {
-  name: "state",
+  name: "accessToken",
   storage: createJSONStorage(() => localStorage),
+  partialize: (state) => ({ token: state.token }),
 };
 
-const useAuthStore = create(persist(authStore,userPersist))
-
-// const useAuthStore = create(
-//   persist(
-//     (set) => ({
-//       token: null,
-//       user: null,
-//       actionRegister: async (input) => {
-//         // get input from outside
-//         try {
-//           const result = await axios.post(
-//             "http://localhost:8000/auth/register",
-//             input
-//           );
-//           console.log("Register in Zustand", result.data.message);
-//         } catch (error) {
-//           console.log(error);
-//         }
-//       },
-//       actionLogin: async (input) => {
-//         // get input from outside
-
-//         const result = await axios.post(
-//           "http://localhost:8000/auth/login",
-//           input
-//         );
-//         // console.log("Login in Zustand", result.data)
-
-//         set({
-//           token: result.data.token,
-//           user: result.data.user,
-//         });
-
-//         return result.data;
-//       },
-//       actionLogout: () => {
-//         localStorage.clear();
-//         set({
-//           token: null,
-//           user: null,
-//         });
-//       },
-//     }),
-//     // data will store in local storage
-//     {
-//       name: "state",
-//       storage: createJSONStorage(() => localStorage),
-//     }
-//   )
-// );
+const useAuthStore = create(persist(authStore, userPersist));
 
 export default useAuthStore;
