@@ -2,9 +2,7 @@ import React from "react";
 
 function ChatHeader(props) {
   const { setActive } = props;
-  console.log(props);
   const handleClick = () => {
-    console.log("clicked");
     setActive(false);
   };
 
