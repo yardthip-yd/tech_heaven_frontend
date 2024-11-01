@@ -18,7 +18,7 @@ const BookingManage = () => {
   const booking = useBookingStore((state) => state.booking);
   const [searchName, setSearchName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15; // Limit items per page
+  const itemsPerPage = 12;
 
   useEffect(() => {
     actionGetAllBookings();
