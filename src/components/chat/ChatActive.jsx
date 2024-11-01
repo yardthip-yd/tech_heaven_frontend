@@ -5,7 +5,7 @@ import ChatFooter from "./ChatFooter";
 
 function ChatActive({ setActive }) {
   return (
-    <div className="absolute flex flex-col w-64 h-96 bottom-0 right-32 bg-slate-400">
+    <div className="absolute flex flex-col w-72 h-96 bottom-0 right-40 bg-slate-400 rounded-tl-md rounded-tr-md">
       <ChatHeader setActive={setActive} />
       <ChatBody />
       <ChatFooter />
