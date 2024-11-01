@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { CartIcon } from "../ui/Icon";
 import LoginModal from "../auth/LoginModal";
 import UserDropdown from "../auth/UserDropdown";
@@ -42,15 +43,24 @@ const AdminNav = () => {
       {/* NavBar  */}
       <div>
         <ul className="flex items-center gap-4">
-          <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-            <p>HOME</p>
-          </li>
-          <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-            <p>STORE</p>
-          </li>
-          <li className="hover:scale-105 hover:-translate-y-1 hover:duration-200">
-            <p>BOOKING</p>
-          </li>
+          <Link
+            to={"/"}
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+          >
+            HOME
+          </Link>
+          <Link
+            to={"/store"}
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+          >
+            STORE
+          </Link>
+          <Link
+            to={"/booking"}
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+          >
+            BOOKING
+          </Link>
           <li>
             {!isLoggedIn && (
               <button
