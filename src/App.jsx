@@ -5,38 +5,67 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SocketContext } from "./contexts/SocketContext";
 import useAuthStore from "./stores/authStore";
+import useChatStore from "./stores/chatStore";
 
 const App = () => {
   const socket = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
+  const setChatId = useChatStore((state) => state.setChatId);
 
-  useEffect(() => {
-    if (!currentUser) return;
-    socket.on("connect", () => {
-      // console.log(currentUser);
+  //======= SOCKET=======
+  const socketHdlr = {
+    handleConnect: () => {
       console.log("Connected to server");
-      // socket.emit("TEST", "TEST");
       socket.emit("identify", {
         user: currentUser,
       });
-    });
-
-    socket.on("error", (data) => {
+    },
+    handleError: (data) => {
       console.log(data);
-    });
-    // socket.on("error-" + currentUser.id, (data) => {
-    //   console.log(data);
-    // });
+    },
 
-    socket.on("test", (data) => {
+    handleTest: (data) => {
       console.log(data);
-    });
+    },
+
+    adminJoinChat: (data) => {
+      // console.log(data);
+      socket.emit("join_chat", {
+        userId: currentUser.id,
+        chatId: data.chatId,
+      });
+    },
+
+    handelReceiveIdentify: (data) => {
+      // console.log(data);
+      setChatId(data.chatId);
+    },
+  };
+  //=====================
+
+  useEffect(() => {
+    if (!currentUser) return;
+    console.log(currentUser.id);
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    socket.on("connect", socketHdlr.handleConnect);
+    socket.on("error", socketHdlr.handleError);
+    socket.on("test", socketHdlr.handleTest);
+    socket.on("admin-join-chat-" + currentUser.id, socketHdlr.adminJoinChat);
+    socket.on("receive-identify", socketHdlr.handelReceiveIdentify);
 
     return () => {
-      socket.off("connect");
-      socket.off("error");
+      socket.off("connect", socketHdlr.handleConnect);
+      socket.off("error", socketHdlr.handleError);
+      socket.off("test", socketHdlr.handleTest);
+      socket.off("admin-join-chat-" + currentUser.id, socketHdlr.adminJoinChat);
+      socket.off("receive-identify", socketHdlr.handelReceiveIdentify);
+      socket.disconnect();
     };
-  }, [socket, currentUser]);
+  }, [socket, currentUser, token]);
 
   return (
     <div>
