@@ -8,9 +8,9 @@ axios.defaults.baseURL = import.meta.env.VITE_API;
 axios.interceptors.request.use(
   (config) => {
     const authStore = useAuthStore.getState();
-    console.log("config", config);
+    // console.log("config", config);
     const accessToken = authStore.token;
-    console.log(accessToken);
+    // console.log(accessToken);
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }

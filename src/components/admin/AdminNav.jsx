@@ -32,11 +32,15 @@ const AdminNav = () => {
   useEffect(() => {
     if (currentUser) {
       setIsLoggedIn(true);
+      setIsAdmin(currentUser.role === "ADMIN");
     }
   }, [currentUser]);
 
   return (
-    <div className="flex h-12 w-full items-center px-8 justify-between">
+    <div
+      id="adminNav"
+      className="flex h-12 w-full items-center px-8 justify-between"
+    >
       {/* Logo */}
       <a className="text-2xl font-bold">LOGO</a>
 
