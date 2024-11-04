@@ -34,6 +34,7 @@ const MainNav = () => {
         setIsLoggedIn(true);
         console.log("Current user:", currentUser);
     }
+    
 }, [currentUser]);
 
   return (

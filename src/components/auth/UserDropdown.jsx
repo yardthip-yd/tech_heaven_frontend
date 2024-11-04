@@ -26,18 +26,19 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
     };
 
     const checkIfAdmin = () => {
-        if (user && user.user && user.user.role === "ADMIN") {
+        if (user && user.role === "ADMIN") {
             setIsAdmin(true);
         } else {
             setIsAdmin(false);
         }
-        console.log("User role:", user?.user?.role);
+        console.log("User role:", user?.role);
     };
-
+    console.log("user from dropdown", user)
+    
     useEffect(() => {
-        if (user && user.user && user.user.role) {
+        if (user && user.role) {
             checkIfAdmin();
-            console.log("User role from useEffect:", user?.user?.role);
+            // console.log("User role from useEffect:", user?.role);
         }
     }, [user]);
 
