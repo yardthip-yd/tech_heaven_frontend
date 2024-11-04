@@ -29,6 +29,7 @@ function ChatFooter() {
       userId: currentUser.id,
       chatId: chatId,
     });
+    setSendMessage("");
   };
 
   return (
