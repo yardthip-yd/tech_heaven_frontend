@@ -27,6 +27,7 @@ import UserAccount from "@/pages/UserAccount";
 import UserLayout from "@/layouts/UserLayout";
 import useAuthStore from "@/stores/authStore";
 import { useEffect } from "react";
+import AdminChat from "@/pages/admin/AdminChat";
 
 // Import Store
 
@@ -57,6 +58,7 @@ const router = createBrowserRouter([
       { path: "category", element: <Category /> },
       { path: "bookingsmng", element: <BookingManage /> },
       { path: "ordermng", element: <OrderManage /> },
+      { path: "chat", element: <AdminChat /> },
     ],
   },
   {

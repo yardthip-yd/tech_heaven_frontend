@@ -23,7 +23,6 @@ function AdminLayout() {
             </div>
           </div>
         </SidebarProvider>
-
       </div>
     </div>
   );
