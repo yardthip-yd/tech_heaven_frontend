@@ -78,7 +78,7 @@ export const createProductDrive = async(token, form) => {
 // โชว์ข้อมูลตามจำนวนที่กำหนด
 export const listProducts = async(count = 20) => {
     return axios.get("http://localhost:8000/products/" + count)
-}
+} 
 
 // ------------------------------------------------------------------------//
 
@@ -150,3 +150,15 @@ export const searchFilters = async (arg) => {
     // code body
     return axios.post('http://localhost:8000/search/filters',arg)
 }
+
+// ชั่วคราวระหว่างรอพี่อู๊ดแก้
+
+export const getAllProduct = async (count) => {
+  try {
+    const response = await axios.get(`http://localhost:8000/products/${count}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
+};

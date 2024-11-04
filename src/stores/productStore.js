@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import axios from 'axios';
+import {getAllProduct} from "../API/product-api"
 
 const useProductStore = create((set) => ({
   products: [],
@@ -88,6 +89,18 @@ const useProductStore = create((set) => ({
     } catch (error) {
       console.error("Error searching products:", error);
       set({ error: "Error searching products" });
+    }
+},
+
+// ชั่วคราวระหว่างรอพี่อู๊ดแก้
+
+  actionGetAllProducts: async (count = 15) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await getAllProduct(count);
+      set({ products: response, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
     }
   },
 }));
