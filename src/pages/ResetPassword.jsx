@@ -1,10 +1,14 @@
 import Authvdo from "@/assets/video/auth.mp4";
+import useAuthStore from "@/stores/authStore";
 import { useState } from "react";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState("");
+    const {token} = useParams()
     const [confirmPassword, setConfirmPassword] = useState("");
-
+    const actionResetPassword = useAuthStore(state => state.actionResetPassword)
+    const navigate = useNavigate()
     // Fn for reset password
     const hdlResetPassword = async (e) => {
         e.preventDefault();
@@ -14,13 +18,15 @@ const ResetPassword = () => {
         }
 
         try {
-            const response = await actionResetPassword(token, newPassword);
+            const body = {newPassword,token}
+            
+            const response = await actionResetPassword(body);
             toast.success(response.message);
 
             console.log("Response from reset password:", response);
             navigate(`/login`)
         } catch (error) {
-            toast.error(error.response.data.error || "Error resetting password");
+            toast.error(error.response?.data?.error || "Error resetting password");
         }
     };
     return (
@@ -48,6 +54,7 @@ const ResetPassword = () => {
                 </div>
 
                 <form onSubmit={hdlResetPassword} className="flex flex-col gap-4 relative">
+                    {/* <input type="hidden" name="token" value={token}/> */}
                     <input
                         type="password"
                         placeholder="New Password"

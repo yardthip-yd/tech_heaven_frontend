@@ -28,6 +28,7 @@ import UserLayout from "@/layouts/UserLayout";
 import useAuthStore from "@/stores/authStore";
 import { useEffect } from "react";
 import AdminChat from "@/pages/admin/AdminChat";
+import ProductDetail from "@/pages/user/ProductDetail";
 
 // Import Store
 
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/reset-password/:token", element: <ResetPassword /> },
       { path: "/store", element: <Store /> },
+      { path: "/product/:id", element: <ProductDetail /> },
       { path: "/booking", element: <Booking /> },
       { path: "/payment", element: <Payment /> },
       { path: "*", element: <Navigate to="/" /> },
