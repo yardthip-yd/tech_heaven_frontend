@@ -7,7 +7,7 @@ import useChatStore from "@/stores/chatStore";
 function ChatContainer() {
   const adminActiveChat = useChatStore((state) => state.adminActiveChat);
   return adminActiveChat ? (
-    <div className="flex-1 flex flex-col h-96 bg-slate-300 ">
+    <div className="absolute flex flex-col w-[20rem] h-[28rem] bottom-0 right-80 bg-slate-400 rounded-tl-md rounded-tr-md">
       <ChatHeader />
       <ChatBody />
       <ChatFooter />
