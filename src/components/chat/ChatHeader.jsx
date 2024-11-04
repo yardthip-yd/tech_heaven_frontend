@@ -8,7 +8,7 @@ function ChatHeader(props) {
 
   return (
     <div className="flex justify-between items-center p-2">
-      <div>Admin</div>
+      <div>Contact Admin</div>
       <div className="" onClick={handleClick}>
         X
       </div>
