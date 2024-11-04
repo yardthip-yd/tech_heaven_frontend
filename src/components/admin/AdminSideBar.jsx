@@ -13,8 +13,7 @@ import {
 
 function AdminSidebar() {
   return (
-    <div className="w-64 h-full mt-12 border-none">
-      <Sidebar>
+      <Sidebar className="w-64 h-full mt-12 border-none">
         <SidebarContent>
           <SidebarGroup>
             <SidebarGroupLabel>Menu</SidebarGroupLabel>
@@ -47,7 +46,6 @@ function AdminSidebar() {
           </SidebarGroup>
         </SidebarContent>
       </Sidebar>
-    </div>
   );
 }
 
