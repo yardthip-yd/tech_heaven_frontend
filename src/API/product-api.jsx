@@ -1,60 +1,32 @@
 import axios from "axios"
 
 // create products
-export const createProductCPU = async(token, form) => {
-    return axios.post("http://localhost:8000/product/cpu", form, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const createProductCPU = async(form) => {
+    return axios.post("http://localhost:8000/product/cpu", form)
 }
 
-export const createProductMonitor = async(token, form) => {
-    return axios.post("http://localhost:8000/product/monitor", form, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const createProductMonitor = async(form) => {
+    return axios.post("http://localhost:8000/product/monitor", form)
 }
 
-export const createProductCPUCooler = async(token, form) => {
-    return axios.post("http://localhost:8000/product/cpucooler", form, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const createProductCPUCooler = async(form) => {
+    return axios.post("http://localhost:8000/product/cpucooler", form)
 }
 
-export const createProductPowerSupply = async(token, form) => {
-    return axios.post("http://localhost:8000/product/powersupply", form, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const createProductPowerSupply = async(form) => {
+    return axios.post("http://localhost:8000/product/powersupply", form)
 }
 
-export const createProductCase = async(token, form) => {
-    return axios.post("http://localhost:8000/product/case", form, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const createProductCase = async(form) => {
+    return axios.post("http://localhost:8000/product/case", form)
 }
 
-export const createProductGPU = async(token, form) => {
-    return axios.post("http://localhost:8000/product/gpu", form, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const createProductGPU = async(form) => {
+    return axios.post("http://localhost:8000/product/gpu", form)
 }
 
-export const createProductMemory = async(token, form) => {
-    return axios.post("http://localhost:8000/product/memory", form, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
+export const createProductMemory = async(form) => {
+    return axios.post("http://localhost:8000/product/memory", form)
 }
 
 export const createProductMotherboard = async(token, form) => {

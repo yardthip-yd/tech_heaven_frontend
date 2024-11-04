@@ -13,9 +13,10 @@ import {
 
 function AdminSidebar() {
   return (
+   
     <Sidebar className="w-64 h-full mt-12 border-none absolute">
-      <SidebarContent>
-        <SidebarGroup>
+      <SidebarContent> 
+       <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem className="py-2 flex flex-row gap-2">
