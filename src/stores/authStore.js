@@ -18,6 +18,9 @@ const authStore = (set, get) => ({
     // get input from outside
 
     const result = await authApi.login(input);
+    
+    console.log("Login in Zustand", result.data)
+
     set({
       token: result.data.token,
       user: result.data.user,
@@ -35,9 +38,11 @@ const authStore = (set, get) => ({
   getCurrentUser: async () => {
     try {
       const result = await authApi.getMe();
+      // console.log(result);
       set({
         user: result.data.user,
       });
+      return result.data.user;
     } catch (error) {
       console.log(error);
     }
@@ -88,6 +93,15 @@ actionResetPassword : async (body) => {
   ,
   removeToken: () => {
     set({ token: null });
+  },
+  actionUpdateUser: async (input) => {
+    try {
+      const response = await authApi.updateUser(input);
+      set({ user: response.data.user });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   },
 });
 

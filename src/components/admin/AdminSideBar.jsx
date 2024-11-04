@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { LayoutDashboard, UserRoundCog } from 'lucide-react';
+import { Cpu, Database, LayoutDashboard, UserRoundCog } from 'lucide-react';
 
 import {
   Sidebar,
@@ -25,6 +25,20 @@ function AdminSidebar() {
             <SidebarMenuItem className="py-2 flex flex-row gap-2">
               <UserRoundCog />
               <Link to={"/admin/usermng"}>User Manage</Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem className="py-2 flex flex-row gap-2">
+              <Cpu />
+              <Link to={"/admin/product"}>Products</Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem className="py-2 flex flex-row gap-2">
+              <Database />
+              <Link to={"/admin/category"}>Category</Link>
+              <UserRoundCog />
+              <Link to={"/admin/bookingsmng"}>Bookings Manage</Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem className="py-2 flex flex-row gap-2">
+              <UserRoundCog />
+              <Link to={"/admin/ordermng"}>Order Manage</Link>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
