@@ -13,7 +13,7 @@ function AdminLayout() {
 
         {/* Main content*/}
         <SidebarProvider>
-          <div className="flex flex-1">
+          <div className="flex flex-1 relative h-full">
             {/* Sidebar*/}
             <AdminSideBar />
 

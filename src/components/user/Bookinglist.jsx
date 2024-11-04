@@ -10,6 +10,7 @@ const Bookinglist = () => {
     (state) => state.actionUpdateBooking
   );
   const user = useAuthStore((state) => state.user);
+  const token = useAuthStore((state) => state.token);
   const booking = useBookingStore((state) => state.booking);
 
   useEffect(() => {
@@ -18,7 +19,7 @@ const Bookinglist = () => {
 
   const hdlCancel = async (id) => {
     try {
-      await actionUpdateBooking(user.token, id, { status: "CANCELLED" });
+      await actionUpdateBooking(token, id, { status: "CANCELLED", queuePosition: null });
       actionGetBookingByUserId();
     } catch (err) {
       console.log(err);
@@ -43,7 +44,8 @@ const Bookinglist = () => {
         </thead>
         <tbody>
           {booking.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
+            item.status !== "CANCELLED" ? (
+              <tr key={index} className="hover:bg-gray-50">
               <td className="border border-gray-300 p-2">
                 {item.user.firstName} {item.user.lastName}
               </td>
@@ -57,6 +59,9 @@ const Bookinglist = () => {
                 <button onClick={() => hdlCancel(item.id)}>Cancel</button>
               </td>
             </tr>
+            ) : (
+              null
+            )
           ))}
         </tbody>
       </table>
