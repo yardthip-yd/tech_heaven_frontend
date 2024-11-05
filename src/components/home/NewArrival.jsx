@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import useProductStore from "@/stores/productStore";
-import useAuthStore from "@/stores/authStore";
+import useCartStore from "@/stores/cartStore";
 import {
   Card,
   CardContent,
@@ -17,20 +17,17 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import useCartStore from "@/stores/cartStore";
 import { Heart, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const NewArrival = () => {
   const { products, actionGetAllProducts, loading, error } = useProductStore();
-  const { actionAddToCart } = useCartStore();
+  const addToCart = useCartStore((state) => state.addToCart); // Use addToCart from useCartStore
   const navigate = useNavigate();
 
   useEffect(() => {
     actionGetAllProducts();
   }, [actionGetAllProducts]);
-
-  console.log("get all product", products);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -47,18 +44,13 @@ const NewArrival = () => {
     return text;
   };
 
+  // Adding product to the cart
   const handleAddToCart = (product) => {
-    actionAddToCart({
-      userId: currentUser ? currentUser.id : "guest",
-      productId: product.id,
-      quantity: 1,
-    });
+    addToCart({ ...product, quantity: 1 });
   };
 
-  // Function to handle card click
   const handleCardClick = (productId) => {
     navigate(`/product/${productId}`);
-    console.log("product ID from all product", productId);
   };
 
   return (
@@ -84,7 +76,7 @@ const NewArrival = () => {
                     <img
                       src="https://via.placeholder.com/150"
                       alt="No Image Available"
-                      className="w-[240px] h-[240px] object-cover"
+                      className="w-[240px] h-[240px] object-cover rounded-md"
                       onClick={() => handleCardClick(product.id)}
                     />
                   )}
@@ -93,11 +85,9 @@ const NewArrival = () => {
                   className="h-24 p-0 mt-2"
                   onClick={() => handleCardClick(product.id)}
                 >
-                  <CardDescription>
-                    {product.ProductCategory?.name}
-                  </CardDescription>
+                  <CardDescription>{product.ProductCategory?.name}</CardDescription>
                   <CardTitle className="mt-2">{product.name}</CardTitle>
-                  <p className="py-1">{product.description.slice(0, 48)}...</p>
+                  <p className="py-1">{truncateText(product.description, 46)}</p>
                 </CardContent>
                 <CardFooter className="text-lg font-bold p-0 py-2 flex flex-row items-center justify-between">
                   <div className="text-lg">THB {product.price}</div>

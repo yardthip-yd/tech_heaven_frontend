@@ -14,7 +14,7 @@ import useCartStore from "@/stores/cartStore";
 
 const Store = () => {
   const { products, actionGetAllProducts } = useProductStore();
-  const { actionAddToCart } = useCartStore();
+  const addToCart = useCartStore((state) => state.addToCart); // Use addToCart from useCartStore
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -75,11 +75,11 @@ const Store = () => {
   // Function to handle card click
   const handleCardClick = (productId) => {
     navigate(`/product/${productId}`);
-    console.log("product ID from all product", productId)
   };
 
+  // Adding product to the cart
   const handleAddToCart = (product) => {
-    actionAddToCart({ productId: product.id, quantity: 1 });
+    addToCart({ ...product, quantity: 1 });
   };
 
   return (
@@ -141,21 +141,19 @@ const Store = () => {
                   />
                 )}
               </CardHeader>
-              <CardContent className="h-26 p-0 mt-2" >
+              <CardContent className="h-26 p-0 mt-2">
                 <CardDescription>{product.ProductCategory?.name}</CardDescription>
                 <CardTitle className="mt-2 text-lg">
                   {truncateText(product.name, 24)}
                 </CardTitle>
-                <p className="py-1"> {truncateText(product.description, 46)}</p>
+                <p className="py-1">{truncateText(product.description, 46)}</p>
               </CardContent>
               <CardFooter className="text-lg font-bold p-0 py-2 flex flex-row items-center justify-between">
                 <div className="text-lg">THB {product.price}</div>
                 <div className="flex space-x-2">
-                  {/* Add to Cart Button */}
                   <button onClick={() => handleAddToCart(product)}>
-                    <ShoppingCart className="w-6 h-6 hover:scale-110 transition-transform" />
+                    <ShoppingCart className="w-6 h-6 hover:scale-110 transition-transform hover:text-blue-500" />
                   </button>
-                  {/* Add to Wishlist Button */}
                   <button>
                     <Heart className="w-6 h-6 hover:scale-110 transition-transform hover:text-red-500" />
                   </button>

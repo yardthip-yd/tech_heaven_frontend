@@ -8,7 +8,7 @@ import ReletedProducts from "@/components/product/ReletedProducts";
 const ProductDetail = () => {
     const { id } = useParams();
     const { products, actionGetAllProducts } = useProductStore();
-    const { actionAddToCart } = useCartStore();
+    const addToCart = useCartStore((state) => state.addToCart);
     const [productData, setProductData] = useState(null);
     const [selectedImage, setSelectedImage] = useState("");
     const [quantity, setQuantity] = useState(1);
@@ -34,6 +34,12 @@ const ProductDetail = () => {
     const relatedProducts = products.filter(
         (item) => item.categoryId === productData.categoryId && item.id !== productData.id
     );
+
+    // Function to handle adding to cart
+    const handleAddToCart = () => {
+        // Call addToCart with product data and quantity
+        addToCart({ ...productData, quantity });
+    };
 
     return (
         <div className="px-8 py-12 min-w-[800px] max-w-[1440px] mx-auto">
@@ -93,7 +99,7 @@ const ProductDetail = () => {
                     <div className="flex gap-4 mt-8">
                         <button
                             className="bg-black text-white px-6 py-4 rounded hover:scale-110 transition w-1/2 font-medium"
-                            onClick={() => actionAddToCart(productData.id, quantity)}
+                            onClick={handleAddToCart} 
                         >
                             Add to Cart
                         </button>

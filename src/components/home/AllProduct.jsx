@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 const AllProduct = () => {
   const { products, actionGetAllProducts, loading, error } = useProductStore();
-  const { actionAddToCart } = useCartStore();
+  const addToCart = useCartStore((state) => state.addToCart);
   // const { actionAddToCart, actionUpdateCartItem, actionRemoveCartItem } = useCartStore();
   const navigate = useNavigate();
 
@@ -36,18 +36,15 @@ const AllProduct = () => {
     return text;
   };
 
+  // Adding product to the cart
   const handleAddToCart = (product) => {
-    actionAddToCart({
-      userId: currentUser ? currentUser.id : "guest",
-      productId: product.id,
-      quantity: 1,
-    });
+    addToCart({ ...product, quantity: 1 });
   };
 
   // Function to handle card click
   const handleCardClick = (productId) => {
     navigate(`/product/${productId}`);
-    console.log("product ID from all product", productId)
+    // console.log("product ID from all product", productId)
   };
 
   const handleViewAllClick = () => {
