@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useBookingStore from "../../stores/bookingStore";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
@@ -8,6 +8,7 @@ import useAuthStore from "@/stores/authStore";
 const FormBooking = () => {
   const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
+  const booking = useBookingStore((state) => state.booking);
   const actionCreateBooking = useBookingStore((state) => state.actionCreateBooking);
   const actionGetAllBookings = useBookingStore((state) => state.actionGetAllBookings);
   
@@ -39,6 +40,10 @@ const FormBooking = () => {
 
   const hdlSubmit = async (e) => {
     e.preventDefault();
+    const queuePosition = booking.queuePosition
+    if(queuePosition >= 2) {
+      return toast.error("Queue is full. Please choose another date and time.")
+    }
     try {
       await actionCreateBooking(token, data);
       console.log(data)
@@ -58,7 +63,7 @@ const FormBooking = () => {
       <div className="flex flex-col justify-center items-center">
         <div className="w-1/2 h-auto gap-6 px-14 py-6 border flex flex-col justify-start items-center">
           <h1 className="text-3xl font-bold my-6">Booking Form</h1>
-          <h2 className="text-xl w-full text-left">{user.firstName} {user.lastName}</h2>
+          <h2 className="text-xl w-full text-left">{user ? `${user.firstName} ${user.lastName}` : "Guest"}</h2>
           <div className="flex flex-row justify-between w-full">
             <textarea
               name="notes"
