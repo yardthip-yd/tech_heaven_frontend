@@ -6,8 +6,28 @@ import { create } from "zustand";
 const cartStore = (set,get) => ({
 
     cartItems: [],
-
-    addToCart: (item) => set((state) => ({ cartItems: [...state.cartItems, item] })),
+    cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
+      
+    addToCart: (item) => {
+      const currentItems = get().cartItems;
+      const updatedItems = [...currentItems, item];
+  
+      // Update cart items in the store and localStorage
+      set({ cartItems: updatedItems });
+      localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    },
+  
+    removeFromCart: (id) => {
+      const updatedItems = get().cartItems.filter((item) => item.id !== id);
+  
+      set({ cartItems: updatedItems });
+      localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+    },
+  
+    clearCart: () => {
+      set({ cartItems: [] });
+      localStorage.removeItem("cartItems");
+    },
 
     removeFromCart: (id) => set((state) => ({ cartItems: state.cartItems.filter((item) => item.id !== id) })),
     clearCart: () => set({ cartItems: [] }),

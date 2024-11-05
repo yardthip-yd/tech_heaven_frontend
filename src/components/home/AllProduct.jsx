@@ -35,14 +35,16 @@ const AllProduct = () => {
     }
     return text;
   };
-
   const handleAddToCart = (product) => {
-    actionAddToCart({
+    const itemToAdd = {
       userId: currentUser ? currentUser.id : "guest",
       productId: product.id,
       quantity: 1,
-    });
+    };
+    console.log(itemToAdd,"item")
+    actionAddToCart(itemToAdd);
   };
+  
 
   // Function to handle card click
   const handleCardClick = (productId) => {
@@ -107,3 +109,4 @@ const AllProduct = () => {
 };
 
 export default AllProduct;
+

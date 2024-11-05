@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const CartSidebar = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
 
-    const cartItems = useCartStore((state) => state.cart);
+    const cartItems = useCartStore((state) => state.cart) || [];
     const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -93,3 +93,4 @@ const CartSidebar = () => {
 };
 
 export default CartSidebar;
+
