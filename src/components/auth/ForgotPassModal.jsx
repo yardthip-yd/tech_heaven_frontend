@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import useAuthStore from "@/stores/authStore";
 import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -12,6 +15,7 @@ import {
 const ForgotPassModal = ({ isOpen, onClose, onResetSuccess }) => {
   // State for the email input
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false)
 
   // State from Stores
   const actionSendResetPassLink = useAuthStore(state => state.actionSendResetPassLink);
@@ -24,12 +28,19 @@ const ForgotPassModal = ({ isOpen, onClose, onResetSuccess }) => {
     }
 
     try {
-      await actionSendResetPassLink(email);
+      setLoading(true)
+      const body = { email }
+      console.log("Check body",body)
+      const res = await actionSendResetPassLink(body);
+      console.log(res, " Cjeck email")
       toast.success("Reset link sent to your email!");
+      setEmail("")
       onResetSuccess(); // Optionally call success callback
       onClose(); // Close the modal
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -51,12 +62,19 @@ const ForgotPassModal = ({ isOpen, onClose, onResetSuccess }) => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <button
-            type="submit"
-            className="btn bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full border-none w-full p-2"
-          >
-            Get Reset Password Link
-          </button>
+          {loading ? <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </Button> 
+          :
+
+            <button
+              type="submit"
+              className="btn bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full border-none w-full p-2"
+            >
+              Get Reset Password Link
+            </button>
+            }
           <button
             type="button"
             onClick={onClose}
@@ -64,6 +82,7 @@ const ForgotPassModal = ({ isOpen, onClose, onResetSuccess }) => {
           >
             Cancel
           </button>
+
         </form>
       </DialogContent>
     </Dialog>
