@@ -12,17 +12,17 @@ import {
   createProductMotherboard,
   createProductDrive,
   createProductCPUCooler,
+  readProducts,
+  listProducts,
 } from "@/API/product-api";
 import { toast } from "react-toastify";
-import useProductStore from "@/stores/productStore";
-import { Link } from "react-router-dom";
-const FormProduct = () => {
+
+
+
+const FormEditProduct = () => {
   const token = useAuthStore((state) => state.token);
   const getCategory = useCategoryStore((state) => state.getCategory);
   const categories = useCategoryStore((state) => state.categories);
-  const actionListProducts = useProductStore((state) => state.actionListProducts);
-  const products = useProductStore((state) => state.products);
-  // console.log(products);
 
   const [form, setForm] = useState({
     images: []
@@ -35,7 +35,6 @@ const FormProduct = () => {
 
   useEffect(() => {
     getCategory();
-    actionListProducts(100);
   }, []);
 
   const handleOnChange = (e) => {
@@ -51,7 +50,6 @@ const FormProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // return console.log(image, form, selectedCategory);
     const allProducts = {
       image: image,
       form: form,
@@ -642,61 +640,14 @@ const FormProduct = () => {
           </div>
         )}
 
-        <button className="bg-blue-500">เพิ่มสินค้า</button>
+        <button className="bg-blue-500">edit product</button>
 
         <hr />
         <br />
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Image</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">CategoryId</th>
-              <th scope="col">UpdatedAt</th>
-              <th scope="col">Manage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((item, index) => {
-              // console.log(item);
-              return (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
 
-                  <td>
-                    {
-                      item.images && item.images.length > 0
-                      ? <img
-                        className="w-24 h-24 rounded-lg shadow-md"
-                        src={item.images[0].url} />
-                      : <div className="w-24 h-24 bg-gray-200 rounded-md flex items-center justify-center shadow-sm">No Image</div>
-                    }
-
-                  </td>
-                  <td>{item.name}</td>
-                  <td>{item.description}</td>
-                  <td>{item.price}</td>
-                  <td>{item.categoryId}</td>
-                  <td>{item.updatedAt}</td>
-                  <td>
-                    <p className="bg-yellow-500 rounded-md p-1 shadow-md">
-                      <Link to={'/admin/product/' +item.id}>
-                        Edit 
-                      </Link>
-                    </p>
-                    <p>Delete</p>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
       </form>
     </div>
   );
 };
 
-export default FormProduct;
+export default FormEditProduct;
