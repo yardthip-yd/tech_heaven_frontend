@@ -14,7 +14,7 @@ function ChatActive({ setActive }) {
   }, [socket]);
 
   return (
-    <div className="absolute flex flex-col w-72 h-96 max-h-96 max-w-72 bottom-0 right-40 bg-slate-400 rounded-tl-md rounded-tr-md">
+    <div className="absolute flex flex-col w-[20rem] h-[28rem] bottom-0 right-40 bg-slate-400 rounded-tl-md rounded-tr-md">
       <ChatHeader setActive={setActive} />
       <ChatBody />
       <ChatFooter />
