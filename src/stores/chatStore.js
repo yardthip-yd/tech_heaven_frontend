@@ -9,6 +9,10 @@ const chatStore = (set, get) => ({
   setAdminActiveChat: (adminActiveChat) => {
     set({ adminActiveChat });
   },
+  chatNotify: [],
+  setChatNotify: (chatNotify) => {
+    set({ chatNotify });
+  },
 });
 
 const useChatStore = create(chatStore);

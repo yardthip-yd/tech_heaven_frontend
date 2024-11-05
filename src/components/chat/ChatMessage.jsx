@@ -5,7 +5,7 @@ import moment from "moment";
 
 function ChatMessage(props) {
   const { message: MessageProp } = props;
-  console.log(MessageProp);
+  // console.log(MessageProp);
 
   const currentUser = useAuthStore((state) => state.user);
   //if todat show only time
