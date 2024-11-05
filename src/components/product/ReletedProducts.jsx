@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import useProductStore from "@/stores/productStore";
-import useAuthStore from "@/stores/authStore";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -13,64 +12,37 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import useCartStore from "@/stores/cartStore";
 import { Heart, ShoppingCart } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
-const NewArrival = () => {
-  const { products, actionGetAllProducts, loading, error } = useProductStore();
+const ReletedProducts = ({ relatedProducts }) => {
   const { actionAddToCart } = useCartStore();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    actionGetAllProducts();
-  }, [actionGetAllProducts]);
-
-  console.log("get all product", products);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  // Sort products by createdAt date in descending order (newest first)
-  const sortedProducts = [...products].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
-
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + "...";
-    }
-    return text;
-  };
-
   const handleAddToCart = (product) => {
     actionAddToCart({
-      userId: currentUser ? currentUser.id : "guest",
+      userId: "guest", // Adjust based on user authentication if needed
       productId: product.id,
       quantity: 1,
     });
   };
 
-  // Function to handle card click
   const handleCardClick = (productId) => {
     navigate(`/product/${productId}`);
-    console.log("product ID from all product", productId);
   };
 
   return (
-    <div className="min-h-[420px] w-full px-8 max-w-[1440px] flex flex-col items-start justify-center mx-auto pt-8">
-      <h1 className="text-2xl font-bold mb-4">NEW ARRIVALS</h1>
+    <div className="w-full mt-8">
+      <h2 className="text-xl font-bold mb-4">RELATED PRODUCTS</h2>
       <Carousel
         plugins={[Autoplay({ delay: 2000 })]}
         className="w-full overflow-hidden"
       >
         <CarouselContent className="flex space-x-0 w-[292px]">
-          {sortedProducts.map((product) => (
-            <CarouselItem key={product.id} className="flex-shrink-0 w-[2720px]">
+          {relatedProducts.map((product) => (
+            <CarouselItem key={product.id} className="flex-shrink-0 w-[272px]">
               <Card className="border-none shadow-none overflow-hidden rounded-md p-4">
                 <CardHeader className="p-0">
                   {product.ProductImages && product.ProductImages.length > 0 ? (
@@ -93,9 +65,7 @@ const NewArrival = () => {
                   className="h-24 p-0 mt-2"
                   onClick={() => handleCardClick(product.id)}
                 >
-                  <CardDescription>
-                    {product.ProductCategory?.name}
-                  </CardDescription>
+                  <CardDescription>{product.ProductCategory?.name}</CardDescription>
                   <CardTitle className="mt-2">{product.name}</CardTitle>
                   <p className="py-1">{product.description.slice(0, 48)}...</p>
                 </CardContent>
@@ -119,4 +89,4 @@ const NewArrival = () => {
   );
 };
 
-export default NewArrival;
+export default ReletedProducts;
