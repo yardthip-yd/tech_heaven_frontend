@@ -115,6 +115,8 @@ const FormProduct = () => {
     }
   };
 
+  console.log(products)
+
   return (
     <div className="container mx-auto p-4 bg-white shadow-md">
       <form onSubmit={handleSubmit}>
@@ -668,10 +670,12 @@ const FormProduct = () => {
 
                   <td>
                     {
-                      item.images && item.images.length > 0
+                      item?.ProductImages && item?.ProductImages.length > 0
                       ? <img
                         className="w-24 h-24 rounded-lg shadow-md"
-                        src={item.images[0].url} />
+                        src={item.ProductImages[0]
+                          .imageUrl
+                          } />
                       : <div className="w-24 h-24 bg-gray-200 rounded-md flex items-center justify-center shadow-sm">No Image</div>
                     }
 

@@ -139,6 +139,7 @@ const useProductStore = create((set) => ({
     try {
       const response = await readProducts(id);
       set({ product: response.data });
+      return response.data
     } catch (error) {
       console.error("Error fetching product by ID:", error);
       set({ error: "Error fetching product by ID" });
@@ -203,6 +204,7 @@ const useProductStore = create((set) => ({
       set({ error: "Error updating product" });
     }
   },
+
 
   // ลบข้อมูลสินค้า
   actionDeleteProduct: async (id) => {
