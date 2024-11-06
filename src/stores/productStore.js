@@ -215,11 +215,14 @@ const useProductStore = create((set) => ({
       set((state) => ({
         products: state.products.filter((product) => product.id !== id),
       }));
+      return true;  // คืนค่าหลังลบสำเร็จ
     } catch (error) {
       console.error("Error deleting product:", error);
       set({ error: "Error deleting product" });
+      return false;  // คืนค่า false ในกรณีที่เกิดข้อผิดพลาด
     }
   },
+  
 
   
   // ค้นหาสินค้าตามเงื่อนไข
