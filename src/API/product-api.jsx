@@ -97,3 +97,16 @@ export const searchFilters = async (arg) => {
     // code body
     return await axios.post('http://localhost:8000/search/filters',arg)
 }
+
+
+// ชั่วคราวระหว่างรอพี่อู๊ดแก้
+
+export const getAllProduct = async (count) => {
+  try {
+    const response = await axios.get(`http://localhost:8000/products/${count}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
+};

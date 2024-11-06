@@ -31,3 +31,11 @@ export const updateBooking = async (token, id, data) => {
         },
     });
 }
+
+export const deleteBooking = async (token, id) => {
+    return await axios.delete("http://localhost:8000/booking/delete-booking/"+id, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
