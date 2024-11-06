@@ -85,6 +85,7 @@ const UserProfile = () => {
     }
     if (profileImage) {
       updatedData.append("profileImage", profileImage);
+      console.log(profileImage,"profileImage")
     }
 
     await actionUpdateUser(updatedData); // Call the action to update user profile

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import useProductStore from "@/stores/productStore";
-import ProductCard from "@/components/product/ProductCard"; 
+import ProductCard from "@/components/product/ProductCard";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
@@ -15,6 +15,28 @@ const AllProduct = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    }
+    return text;
+  };
+  const handleAddToCart = (product) => {
+    const itemToAdd = {
+      userId: currentUser ? currentUser.id : "guest",
+      productId: product.id,
+      quantity: 1,
+    };
+    console.log(itemToAdd, "item")
+    actionAddToCart(itemToAdd);
+  };
+
+
+  // Function to handle card click
+  const handleCardClick = (productId) => {
+    navigate(`/product/${productId}`);
+    console.log("product ID from all product", productId)
+  }
   const handleViewAllClick = () => {
     navigate("/store");
   };
@@ -31,7 +53,7 @@ const AllProduct = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-7">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} /> 
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>
@@ -39,3 +61,4 @@ const AllProduct = () => {
 };
 
 export default AllProduct;
+
