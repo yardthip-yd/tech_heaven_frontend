@@ -6,8 +6,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 
 function ChatBody() {
   const [messageList, setMessageList] = useState([]);
-  const adminActiveChat = useChatStore((state) => state.adminActiveChat);
-  const socket = useContext(SocketContext);
+  // const adminActiveChat = useChatStore((state) => state.adminActiveChat);
+  const { socket, adminActiveChat } = useContext(SocketContext);
 
   const bottomChatRef = useRef(null);
 
@@ -38,7 +38,7 @@ function ChatBody() {
   }, [adminActiveChat, socket]);
 
   return (
-    <div className="bg-white flex-1 flex flex-col overflow-y-auto gap-2 py-1">
+    <div className="bg-white flex-1 flex flex-col justify-end overflow-y-auto gap-2 py-1">
       {messageList.map((message, index) => (
         <ChatMessage key={index} message={message} />
       ))}

@@ -9,12 +9,24 @@ import useChatStore from "./stores/chatStore";
 import chatApi from "./API/chat-api";
 
 const App = () => {
-  const socket = useContext(SocketContext);
+  const {
+    socket,
+    chatNotify,
+    setChatNotify,
+    chatId,
+    setChatId,
+    setNewChatNotify,
+  } = useContext(SocketContext);
+  // const { socket } = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
   const token = useAuthStore((state) => state.token);
-  const setChatId = useChatStore((state) => state.setChatId);
-  const chatNotify = useChatStore((state) => state.chatNotify);
-  const setChatNotify = useChatStore((state) => state.setChatNotify);
+  // const setChatId = useChatStore((state) => state.setChatId);
+  // const chatNotify = useChatStore((state) => state.chatNotify);
+  // const setChatNotify = useChatStore((state) => state.setChatNotify);
+  // const chatId = useChatStore((state) => state.chatId);
+  // const setNewChatNotify = useChatStore((state) => state.setNewChatNotify);
+
+  // console.log(chatNotify);
 
   //======= SOCKET=======
   const socketHdlr = {
@@ -46,8 +58,12 @@ const App = () => {
     },
 
     handleReceiveNotify: (data) => {
-      console.log(data);
-      //check chat notify already exist. if exist, update the notify.
+      // console.log(data);
+      // check chat notify already exist. if exist, update the notify.
+      if (data.notify.isAdminRead === false) {
+        console.log("NEWCCCCC");
+        setNewChatNotify(data);
+      }
       const chatNotifyIndex = chatNotify.findIndex(
         (notify) => notify.chatId === data.chatId
       );
@@ -55,17 +71,37 @@ const App = () => {
         const newNotify = [...chatNotify];
         if (currentUser.role === "ADMIN") {
           if (data.notify.isAdminRead === false) {
+            // console.log("----1");
             newNotify[chatNotifyIndex] = data.notify;
+            console.log(newNotify);
             setChatNotify(newNotify);
           } else {
+            // console.log("----2");
             setChatNotify(newNotify.splice(chatNotifyIndex, 1));
           }
         }
         // if user is user
         else {
+          if (data.notify.isRead === false) {
+            // console.log("----3");
+            newNotify[chatNotifyIndex] = data.notify;
+            setChatNotify(newNotify);
+          } else {
+            // console.log("----4");
+            setChatNotify(newNotify.splice(chatNotifyIndex, 1));
+          }
         }
       } else {
-        setChatNotify([...chatNotify, data.notify]);
+        // setChatNotify([...chatNotify, data.notify]);
+        if (currentUser.role === "ADMIN") {
+          if (data.notify.isAdminRead === false) {
+            setChatNotify([...chatNotify, data.notify]);
+          }
+        } else {
+          if (data.notify.isRead === false) {
+            setChatNotify([...chatNotify, data.notify]);
+          }
+        }
       }
     },
 
@@ -83,25 +119,29 @@ const App = () => {
   const getChatNotification = async () => {
     try {
       const resp =
-        currentUser.role === "ADMIN"
+        currentUser?.role === "ADMIN"
           ? await chatApi.adminGetChatNotify()
           : await chatApi.getChatNotify();
-      console.log(resp.data);
-      setChatNotify(resp.data);
+
+      if (resp.data.length > 0) {
+        // console.log(resp.data, "CHAT NOTI");
+        setChatNotify(resp.data);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (currentUser) {
-      getChatNotification();
-    }
+    // console.log(currentUser, "CHECK USER");
+    // if (currentUser) {
+    getChatNotification();
+    // }
   }, [currentUser]);
 
   useEffect(() => {
     if (!currentUser) return;
-    console.log(currentUser.id);
+    // console.log(currentUser.id);
     if (!socket.connected) {
       socket.connect();
     }
@@ -112,7 +152,7 @@ const App = () => {
     socket.on("admin-join-chat-" + currentUser.id, socketHdlr.adminJoinChat);
     socket.on("receive-identify", socketHdlr.handleReceiveIdentify);
     socket.on("chatNotify", socketHdlr.handleReceiveNotify);
-    socket.on("updateAdminChatNotify", socketHdlr.handleUpdateChatNotify);
+    // socket.on("updateAdminChatNotify", socketHdlr.handleUpdateChatNotify);
 
     return () => {
       socket.off("connect", socketHdlr.handleConnect);
@@ -123,7 +163,7 @@ const App = () => {
       socket.off("chatNotify", socketHdlr.handleReceiveNotify);
       socket.disconnect();
     };
-  }, [socket, currentUser, token]);
+  }, [socket, currentUser]);
 
   return (
     <div>

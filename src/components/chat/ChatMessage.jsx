@@ -15,13 +15,13 @@ function ChatMessage(props) {
   const isToday = moment(MessageProp.createdAt).isSame(new Date(), "day");
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-fit justify-end">
       {currentUser.id === MessageProp.userId ? (
         // SENDER
         <div className="flex flex-col items-end">
           <div className="flex flex-col items-end max-w-[60%] gap-1">
             {/* MESSAGE */}
-            <div className="bg-lime-400 p-1 px-2 rounded-md w-full break-words">
+            <div className="bg-lime-400 p-1 px-2 rounded-md w-fit break-words">
               {MessageProp.message}
             </div>
             {/* TIME */}
@@ -53,7 +53,7 @@ function ChatMessage(props) {
               )}
             </div>
             {/* MESSAGE */}
-            <div className="bg-sky-300 p-1 px-2 rounded-md w-full break-words">
+            <div className="bg-sky-300 p-1 px-2 rounded-md w-fit break-words">
               {MessageProp.message}
             </div>
             {/* TIME */}

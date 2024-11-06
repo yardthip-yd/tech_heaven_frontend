@@ -1,10 +1,14 @@
 import chatApi from "@/API/chat-api";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ChatList from "./ChatList";
 import { Button } from "@/components/ui/button";
+import useChatStore from "@/stores/chatStore";
+import { SocketContext } from "@/contexts/SocketContext";
 
 function ChatSidebar({ setActive }) {
   const [chatList, setChatList] = useState([]);
+  const { newChatNotify } = useContext(SocketContext);
+  // const newChatNotify = useChatStore((state) => state.newChatNotify);
 
   const getChatList = async () => {
     const response = await chatApi.getAllChat();
@@ -19,6 +23,33 @@ function ChatSidebar({ setActive }) {
   useEffect(() => {
     getChatList();
   }, []);
+
+  useEffect(() => {
+    if (newChatNotify) {
+      console.log("chatList");
+      console.log(chatList);
+      console.log("newChatNotify");
+      console.log(newChatNotify);
+
+      //find index of chat
+      const matchIndex = chatList.findIndex(
+        (item) => item.chatId === newChatNotify.chatId
+      );
+      //found chat
+      if (matchIndex !== -1) {
+        //remove old on chat list and add new chat to the top
+        setChatList((prev) => {
+          const newChatList = [...prev];
+          newChatList.splice(matchIndex, 1);
+          return [newChatNotify.chat, ...newChatList];
+        });
+      }
+      //not found chat
+      else {
+        setChatList((prev) => [newChatNotify.chat, ...prev]);
+      }
+    }
+  }, [newChatNotify]);
 
   return (
     <div className="bg-slate-400 absolute right-10 bottom-10 border-[4px] min-w-[250px] gap-2">

@@ -8,8 +8,8 @@ import useChatStore from "@/stores/chatStore";
 function ChatBody() {
   const [messageList, setMessageList] = useState([]);
   const currentUser = useAuthStore((state) => state.user);
-  const socket = useContext(SocketContext);
-  const chatId = useChatStore((state) => state.chatId);
+  const { socket, chatId } = useContext(SocketContext);
+  // const chatId = useChatStore((state) => state.chatId);
   const bottomChatRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -39,7 +39,7 @@ function ChatBody() {
   }, [socket, currentUser]);
 
   return (
-    <div className="bg-white flex-1 flex flex-col overflow-y-auto gap-3 py-1 px-1">
+    <div className="bg-white flex-1 flex flex-col justify-end overflow-y-auto gap-3 py-1 px-1">
       {messageList.map((message, index) => (
         <ChatMessage key={index} message={message} />
       ))}

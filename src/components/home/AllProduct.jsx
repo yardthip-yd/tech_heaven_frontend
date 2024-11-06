@@ -13,7 +13,6 @@ import useCartStore from "@/stores/cartStore";
 import { Heart, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-
 const AllProduct = () => {
   const { products, actionGetAllProducts, loading, error } = useProductStore();
   const { actionAddToCart } = useCartStore();
@@ -24,7 +23,7 @@ const AllProduct = () => {
     actionGetAllProducts();
   }, [actionGetAllProducts]);
 
-  console.log("get all product", products);
+  // console.log("get all product", products);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -47,7 +46,7 @@ const AllProduct = () => {
   // Function to handle card click
   const handleCardClick = (productId) => {
     navigate(`/product/${productId}`);
-    console.log("product ID from all product", productId)
+    console.log("product ID from all product", productId);
   };
 
   return (

@@ -30,7 +30,7 @@ const NewArrival = () => {
     actionGetAllProducts();
   }, [actionGetAllProducts]);
 
-  console.log("get all product", products);
+  // console.log("get all product", products);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;

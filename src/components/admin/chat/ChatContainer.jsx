@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import ChatHeader from "./ChatHeader";
 import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
 import useChatStore from "@/stores/chatStore";
+import { SocketContext } from "@/contexts/SocketContext";
 
 function ChatContainer() {
-  const adminActiveChat = useChatStore((state) => state.adminActiveChat);
+  const { adminActiveChat } = useContext(SocketContext);
+  // const adminActiveChat = useChatStore((state) => state.adminActiveChat);
   return adminActiveChat ? (
     <div className="absolute flex flex-col w-[20rem] h-[28rem] bottom-0 right-80 bg-slate-400 rounded-tl-md rounded-tr-md">
       <ChatHeader />

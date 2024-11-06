@@ -7,9 +7,9 @@ import useChatStore from "@/stores/chatStore";
 
 function ChatFooter() {
   const [sendMessage, setSendMessage] = useState("");
-  const socket = useContext(SocketContext);
+  const { socket, chatId } = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
-  const chatId = useChatStore((state) => state.chatId);
+  // const chatId = useChatStore((state) => state.chatId);
 
   const handleEnterKey = (e) => {
     if (e.key === "Enter") {

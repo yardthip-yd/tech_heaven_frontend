@@ -7,9 +7,9 @@ import React, { useContext, useState } from "react";
 
 function ChatFooter() {
   const [sendMessage, setSendMessage] = useState("");
-  const socket = useContext(SocketContext);
+  const { socket, adminActiveChat } = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
-  const AdminActiveChat = useChatStore((state) => state.adminActiveChat);
+  // const AdminActiveChat = useChatStore((state) => state.adminActiveChat);
   //   console.log(currentUser);
 
   const handleEnterKey = (e) => {
@@ -28,7 +28,7 @@ function ChatFooter() {
     socket.emit("admin-send-message", {
       message: sendMessage,
       userId: currentUser.id,
-      chatId: AdminActiveChat.chatId,
+      chatId: adminActiveChat.chatId,
     });
     setSendMessage("");
   };

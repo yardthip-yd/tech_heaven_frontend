@@ -5,11 +5,12 @@ import useAuthStore from "@/stores/authStore";
 import { SocketContext } from "@/contexts/SocketContext";
 
 function ChatButton({ setActive }) {
-  const socket = useContext(SocketContext);
+  const { socket, chatNotify, setChatNotify, chatId } =
+    useContext(SocketContext);
 
-  const chatId = useChatStore((state) => state.chatId);
-  const chatNotify = useChatStore((state) => state.chatNotify);
-  const setChatNotify = useChatStore((state) => state.setChatNotify);
+  // const chatId = useChatStore((state) => state.chatId);
+  // const chatNotify = useChatStore((state) => state.chatNotify);
+  // const setChatNotify = useChatStore((state) => state.setChatNotify);
   const [notifyNum, setNotifyNum] = React.useState(0);
   const currentUser = useAuthStore((state) => state.user);
 

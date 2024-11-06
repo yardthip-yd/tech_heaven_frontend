@@ -6,14 +6,16 @@ import React, { useContext, useEffect, useState } from "react";
 
 function ChatList(props) {
   const { chat } = props;
-  console.log(chat);
-  const socket = useContext(SocketContext);
+  // console.log(chat);
+  const { socket, chatNotify, setChatNotify, setAdminActiveChat } =
+    useContext(SocketContext);
 
-  const setAdminActiveChat = useChatStore((state) => state.setAdminActiveChat);
+  // const setAdminActiveChat = useChatStore((state) => state.setAdminActiveChat);
   const currentUser = useAuthStore((state) => state.user);
 
-  const chatNotify = useChatStore((state) => state.chatNotify);
-  const setChatNotify = useChatStore((state) => state.setChatNotify);
+  // const chatNotify = useChatStore((state) => state.chatNotify);
+  // console.log(chatNotify);
+  // const setChatNotify = useChatStore((state) => state.setChatNotify);
   const [notify, setNotify] = useState(false);
 
   const hdlOnclick = () => {
