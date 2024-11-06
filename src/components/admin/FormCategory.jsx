@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { createCategory, listCategory, removeCategory, updateCategory } from '@/API/category-api';
+import { createCategory, removeCategory, updateCategory } from '@/API/category-api';
 import useAuthStore from '@/stores/authStore';
 import { toast } from 'react-toastify';
+import useCategoryStore from '@/stores/category';
 
 const FormCategory = () => {
     const token = useAuthStore((state) => state.token);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [categories, setCategories] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
     const [editDescription, setEditDescription] = useState('');
 
+    const categories = useCategoryStore((state) => state.categories);
+    const getCategory = useCategoryStore((state) => state.getCategory);
+
     useEffect(() => {
         getCategory();
-    }, []);
-
-    const getCategory = async () => {
-        try {
-            const res = await listCategory();
-            setCategories(res.data);
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    }, [getCategory]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,7 +27,7 @@ const FormCategory = () => {
         try {
             const res = await createCategory({ name, description });
             toast.success(`Added Category ${res.data.name} successfully!`);
-            getCategory();
+            getCategory(); // อัปเดต categories ใหม่
             setName('');
             setDescription('');
         } catch (err) {
@@ -52,7 +46,7 @@ const FormCategory = () => {
         try {
             const res = await updateCategory(id, { name: editName, description: editDescription });
             toast.success(`Updated Category ${res.data.name} successfully!`);
-            getCategory();
+            getCategory(); // อัปเดต categories ใหม่
             setEditingId(null);
         } catch (err) {
             console.log(err);
@@ -67,7 +61,7 @@ const FormCategory = () => {
         try {
             await removeCategory(id);
             toast.success(`Deleted ${name} successfully!`);
-            getCategory();
+            getCategory(); // อัปเดต categories ใหม่
         } catch (err) {
             console.log(err);
         }
