@@ -31,6 +31,7 @@ import AdminChat from "@/pages/admin/AdminChat";
 import EditProduct from "@/pages/admin/EditProduct";
 import ProductDetail from "@/pages/user/ProductDetail";
 import UserCart from "@/pages/UserCart";
+import Wishlist from "@/pages/Wishlist";
 
 // Import Store
 
@@ -75,6 +76,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <UserAccount /> }, 
       { path: "cart", element: <UserCart /> },
+      { path: "wishlist", element: <Wishlist /> },
     ],
   },
 ]);
