@@ -39,7 +39,7 @@ const ProductCard = ({ product }) => {
     } else {
       try {
         await actionAddToWishlist(token, product.id);
-        toast.success("Added your wishlist successful!");
+        toast.success("Added to wishlist!");
       } catch (error) {
         toast.error("Failed to add to wishlist");
       }
