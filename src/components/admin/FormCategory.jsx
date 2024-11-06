@@ -11,10 +11,9 @@ const FormCategory = () => {
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
     const [editDescription, setEditDescription] = useState('');
-
+    
     const categories = useCategoryStore((state) => state.categories);
     const getCategory = useCategoryStore((state) => state.getCategory);
-
     useEffect(() => {
         getCategory();
     }, [getCategory]);
@@ -26,6 +25,8 @@ const FormCategory = () => {
 
         try {
             const res = await createCategory({ name, description });
+            console.log("asdasdasd",res.data)
+            
             toast.success(`Added Category ${res.data.name} successfully!`);
             getCategory(); // อัปเดต categories ใหม่
             setName('');
@@ -66,7 +67,7 @@ const FormCategory = () => {
             console.log(err);
         }
     };
-
+    // console.log(categories)
     return (
         <div className='container mx-auto p-4 bg-white shadow-md'>
             <h1>Category Management</h1>

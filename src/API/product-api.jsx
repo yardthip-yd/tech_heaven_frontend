@@ -55,7 +55,7 @@ export const readProducts = async(id) => {
 
 // ลบข้อมูล
 export const deleteProduct = async(id) => {
-    return await axios.get("http://localhost:8000/product/" + id)
+    return await axios.delete("product/" + id)
 }
 
 // ------------------------------------------------------------------------//

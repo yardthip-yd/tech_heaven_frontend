@@ -6,8 +6,11 @@ const useCategoryStore = create((set) => ({
 
     getCategory : async () => {
         try {
+
             const res = await listCategory();
+            // console.log(res,"catagories")
             set({ categories: res.data })
+            
         } catch (err) {
             console.log(err);
         }

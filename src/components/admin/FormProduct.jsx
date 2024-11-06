@@ -22,6 +22,7 @@ const FormProduct = () => {
   const categories = useCategoryStore((state) => state.categories);
   const actionListProducts = useProductStore((state) => state.actionListProducts);
   const products = useProductStore((state) => state.products);
+  const actionDeleteProduct = useProductStore((state) => state.actionDeleteProduct)
   // console.log(products);
 
   const [form, setForm] = useState({
@@ -115,7 +116,20 @@ const FormProduct = () => {
     }
   };
 
-  console.log(products)
+  const handleDelete = async(id) => {
+    if(window.confirm(`Are you sure you want to delete id:${id}?`)){
+      try {
+        const res = await actionDeleteProduct(id)
+        console.log(res)
+        toast.success('Deleted Success!!!')
+        
+      } catch (err) {
+        console.log(err)
+      }
+
+    }
+  }
+
 
   return (
     <div className="container mx-auto p-4 bg-white shadow-md">
@@ -145,6 +159,15 @@ const FormProduct = () => {
           onChange={handleOnChange}
           placeholder="Price"
           name="price"
+        />
+        <label>stock:</label>
+        <input
+          type="number"
+          className="border"
+          value={form.stock || ""}
+          onChange={handleOnChange}
+          placeholder="Stock"
+          name="stock"
         />
         <label>Category:</label>
         <select
@@ -656,6 +679,7 @@ const FormProduct = () => {
               <th scope="col">Name</th>
               <th scope="col">Description</th>
               <th scope="col">Price</th>
+              <th scope="col">Stock</th>
               <th scope="col">CategoryId</th>
               <th scope="col">UpdatedAt</th>
               <th scope="col">Manage</th>
@@ -683,15 +707,21 @@ const FormProduct = () => {
                   <td>{item.name}</td>
                   <td>{item.description}</td>
                   <td>{item.price}</td>
+                  <td>{item.stock}</td>
                   <td>{item.categoryId}</td>
                   <td>{item.updatedAt}</td>
-                  <td>
+                  <td className="flex gap-2">
                     <p className="bg-yellow-500 rounded-md p-1 shadow-md">
                       <Link to={'/admin/product/' +item.id}>
                         Edit 
                       </Link>
                     </p>
-                    <p>Delete</p>
+                    <p 
+                      className="bg-red-500 rounded-md p-1 shadow-md"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      Delete
+                    </p>
                   </td>
                 </tr>
               );
