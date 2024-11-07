@@ -1,6 +1,7 @@
 import axios from '../config/axios';
 
 export const createCart = (cartData) => {
+    console.log("gorjkwpo")
     return axios.post('http://localhost:8000/cart',cartData)
 }
 
