@@ -3,6 +3,7 @@ import { createCategory, removeCategory, updateCategory } from '@/API/category-a
 import useAuthStore from '@/stores/authStore';
 import { toast } from 'react-toastify';
 import useCategoryStore from '@/stores/category';
+import { Pencil, Trash2 } from "lucide-react";
 
 const FormCategory = () => {
     const token = useAuthStore((state) => state.token);
@@ -72,6 +73,7 @@ const FormCategory = () => {
         <div className='container mx-auto p-4 bg-white shadow-md'>
             <h1>Category Management</h1>
             <form className='my-4' onSubmit={handleSubmit}>
+                <label>Name:</label>
                 <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -79,6 +81,7 @@ const FormCategory = () => {
                     type="text"
                     placeholder="Category Name"
                 />
+                <label>Description:</label>
                 <input
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -147,16 +150,16 @@ const FormCategory = () => {
                                 ) : (
                                     <div className="flex justify-center gap-2">
                                         <button
-                                            className="bg-yellow-500 px-2"
+                                            className="bg-yellow-500 p-2 rounded-md shadow-md text-white hover:bg-yellow-600 transition duration-200"
                                             onClick={() => handleEditClick(item)}
                                         >
-                                            Edit
+                                            <Pencil />
                                         </button>
                                         <button
-                                            className="bg-red-500 px-2"
+                                            className="bg-red-500 p-2 rounded-md shadow-md text-white hover:bg-red-600 transition duration-200"
                                             onClick={() => handleRemove(item.id, item.name)}
                                         >
-                                            Delete
+                                            <Trash2 />
                                         </button>
                                     </div>
                                 )}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Resize from "react-image-file-resizer";
-import { removeFiles, uploadFiles } from "@/API/product-api";
+import { deleteProductImage, removeFiles, uploadFiles } from "@/API/product-api";
 import useAuthStore from "@/stores/authStore";
 import { Loader } from 'lucide-react';
 
-const Uploadfile = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
+const UploadFileEditProduct = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
   // javascript
   const token = useAuthStore((state) => state.token);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,13 +60,18 @@ const Uploadfile = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
     }
   };
 
-  // console.log(form);
+  console.log(form);
   // console.log('imageForm', imageForm)
 
   const handleDelete = async(public_id) => {
     const images = form?.images
     await removeFiles(public_id)
-    .then((res) => {
+    .then(async(res) => {
+      await deleteProductImage(public_id).then(() => {
+        setForm(prv => {
+          return prv.filter(item => item.public_id !== public_id)
+        })
+      })
       // const filterImages = images.filter((item) => {
       //   console.log(item)
       //   return item.public_id !== public_id
@@ -80,10 +85,10 @@ const Uploadfile = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
       if(imageForm) {
         console.log('imageForm555555', imageForm)
       }
-      setForm2(prev  => {
-        console.log("prev",prev)
-        return prev.images.filter(item => item.public_id !== public_id)
-      })
+      // setForm2(prev  => {
+      //   console.log("prev",prev)
+      //   return prev.images.filter(item => item.public_id !== public_id)
+      // })
       toast.error(res.data)
     })
     .catch((err) => {
@@ -133,4 +138,4 @@ const Uploadfile = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
   );
 };
 
-export default Uploadfile;
+export default UploadFileEditProduct;
