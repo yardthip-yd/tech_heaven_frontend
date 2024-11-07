@@ -7,11 +7,13 @@ import {
 import "../../stripe.css";
 import useOrderStore from "@/stores/orderStore";
 import useAuthStore from "@/stores/authStore";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckoutForm({ dpmCheckerLink }) {
   const actionCreateOrder = useOrderStore((state) => state.actionCreateOrder);
   const stripe = useStripe();
   const elements = useElements();
+  const navigate = useNavigate();
 
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,9 +44,11 @@ export default function CheckoutForm({ dpmCheckerLink }) {
         setMessage(payload.error.message);
         console.log("Error:", payload.error.message);
       } else if (payload.paymentIntent.status === "succeeded") {
-        console.log("Payment succeeded!");
         setIsLoading(false);
-        const orderResponse = await actionCreateOrder(token, payload);
+        console.log("Payment succeeded!");
+        const response = await actionCreateOrder(token, payload);
+        console.log(response)
+        navigate("/user/order-success");
       }
     } catch (err) {
       clearTimeout(timeout);
@@ -52,7 +56,7 @@ export default function CheckoutForm({ dpmCheckerLink }) {
       console.log("Error in Order Creation:", err);
       setIsLoading(false);
     }
-
+    
     setIsLoading(false);
   };
   console.log(isLoading);

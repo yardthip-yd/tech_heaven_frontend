@@ -29,14 +29,15 @@ const UserCart = () => {
       navigate("/login");
     } else {
       // Pass cartItems as state while navigating to the Payment page
+      console.log("Clicked")
       createCart({ item: cartItems })
         .then((res) => {
           console.log(res);
+          navigate("/user/payment", { state: { cartItems } });
         })
         .catch((err) => {
           console.log(err);
         });
-      navigate("/user/payment", { state: { cartItems } });
     }
   };
 
