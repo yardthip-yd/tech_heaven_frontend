@@ -1,11 +1,18 @@
 import axios from "axios";
 
 export const getWishlist = async (token) => {
-  return await axios.get("http://localhost:8000/wishlist/getWishlist", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  try {
+    const response = await axios.get("http://localhost:8000/wishlist/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Wishlist fetched:", response.data);
+    return response;
+  } catch (error) {
+    console.error("Error fetching wishlist:", error);
+    throw error;
+  }
 };
 
 export const addToWishlist = async (token, productId) => {

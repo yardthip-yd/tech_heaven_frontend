@@ -1,29 +1,36 @@
-// pages/Wishlist.js
 import React, { useEffect } from 'react';
 import { ShoppingCart, Trash } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import useWishlistStore from '@/stores/wishlistStore';
 import useCartStore from '@/stores/cartStore';
-import useAuthStore from '@/stores/authStore'; 
+import useAuthStore from '@/stores/authStore';
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 
 const Wishlist = () => {
+  const navigate = useNavigate();
   const { wishlist, actionGetWishlist, actionRemoveFromWishlist } = useWishlistStore();
-  const addToCart = useCartStore((state) => state.addToCart);
-  const { token } = useAuthStore(); 
+  const { addToCart } = useCartStore();
+  const { token } = useAuthStore();
 
   useEffect(() => {
     if (token) {
-      actionGetWishlist(token); // ใช้ token ในการเรียกดึงข้อมูล wishlist
+      actionGetWishlist(token);
     }
   }, [token, actionGetWishlist]);
+
+  const handleDelete = (productId) => {
+    actionRemoveFromWishlist(token, productId);
+  };
+
+  const handleAddToCart = (product) => {
+    addToCart({ ...product, quantity: 1 });
+  };
 
   return (
     <div className="p-6">
@@ -33,32 +40,38 @@ const Wishlist = () => {
       ) : (
         <Table>
           <TableCaption>List of your saved items in Wishlist.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Product</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
           <TableBody>
             {wishlist.map((item) => (
-              <TableRow key={item.product.id}>
-                <TableCell className="font-medium">{item.product.name}</TableCell>
-                <TableCell>{item.product.description}</TableCell>
-                <TableCell>THB {item.product.price}</TableCell>
-                <TableCell className="text-right">
+              <TableRow key={item.product?.id}>
+                <TableCell className="flex justify-center items-center"> {/* ใช้ flex เพื่อจัดตำแหน่ง */}
+                  {item.product?.ProductImages.length > 0 && (
+                    <img 
+                      src={item.product.ProductImages[0].imageUrl} 
+                      alt={item.product.name} 
+                      className="w-20 h-20 object-cover rounded-lg" 
+                    />
+                  )}
+                </TableCell>
+                <TableCell className="font-medium text-base cursor-pointer" onClick={() => navigate(`/product/${item.product?.id}`)}>
+                  {item.product?.name || 'Unknown Product'}
+                  <p className="text-sm text-gray-500">{item.product?.description || 'No Description'}</p>
+                </TableCell>
+                <TableCell className="font-medium text-base">THB {item.product?.price || '0.00'}</TableCell>
+                <TableCell className="text-center">
                   <button
-                    onClick={() => addToCart({ ...item.product, quantity: 1 })}
+                    onClick={() => handleAddToCart(item.product)}
                     className="mr-2"
+                    disabled={!item.product}
                   >
-                    <ShoppingCart className="w-5 h-5 hover:scale-110 transition-transform text-blue-500" />
+                    <ShoppingCart className="w-5 h-5 hover:text-blue-500 transition-transform" />
                   </button>
+                </TableCell>
+                <TableCell className="text-center">
                   <button
-                    onClick={() => actionRemoveFromWishlist(token, item.product.id)}
-                    className="text-red-500"
+                    onClick={() => handleDelete(item.product?.id)}
+                    disabled={!item.product}
                   >
-                    <Trash className="w-5 h-5 hover:scale-110 transition-transform" />
+                    <Trash className="w-5 h-5 transition-transform" />
                   </button>
                 </TableCell>
               </TableRow>

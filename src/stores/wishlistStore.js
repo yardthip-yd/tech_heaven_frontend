@@ -8,10 +8,12 @@ const useWishlistStore = create((set) => ({
     try {
       const response = await getWishlist(token);
       set({ wishlist: response.data });
+      console.log("Fetched wishlist:", response.data); // Log fetched wishlist
     } catch (error) {
-      console.error("Failed to fetch wishlist:", error);
+      console.error("Failed to fetch wishlist:", error); // Log error
     }
   },
+  
   
   actionAddToWishlist: async (token, productId) => {
     try {
