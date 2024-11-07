@@ -3,8 +3,8 @@ import axios from "axios";
 // USER ORDER
 export const createOrder = async (token, payload) => {
     try {
-      const response = await axios.post('/api/orders/create', {
-        paymentIntentId: payload.paymentIntent.id,
+      const response = await axios.post('http://localhost:8000/user/create-order', {
+        paymentIntent: payload.paymentIntent,
         token,
       }, {
         headers: {

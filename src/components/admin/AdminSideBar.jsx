@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-
-import { Cpu, Database, LayoutDashboard, UserRoundCog } from 'lucide-react';
+import { LayoutDashboard, UserRoundCog, ListOrdered, BookCheck } from "lucide-react";
+import { Cpu, Database } from "lucide-react";
 
 import {
   Sidebar,

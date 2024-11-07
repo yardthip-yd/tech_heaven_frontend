@@ -3,13 +3,16 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "@/stores/cartStore";
 import useAuthStore from "@/stores/authStore";
 import { Trash } from "lucide-react";
+import { createCart } from "@/API/cart-api";
 
 const UserCart = () => {
   const cartItems = useCartStore((state) => state.cartItems || []);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const increaseAmount = useCartStore((state) => state.increaseAmount);
   const decreaseAmount = useCartStore((state) => state.decreaseAmount);
-  const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+  const totalPrice = cartItems
+    .reduce((total, item) => total + item.price * item.quantity, 0)
+    .toFixed(2);
 
   const isLoggedIn = useAuthStore((state) => !!state.user); // Check if user object exists
   const navigate = useNavigate();
@@ -26,6 +29,13 @@ const UserCart = () => {
       navigate("/login");
     } else {
       // Pass cartItems as state while navigating to the Payment page
+      createCart({ item: cartItems })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       navigate("/user/payment", { state: { cartItems } });
     }
   };
@@ -43,7 +53,10 @@ const UserCart = () => {
                 {/* Product Image */}
                 <div className="w-24 h-24 mr-4">
                   <img
-                    src={item.ProductImages[0]?.imageUrl || "https://via.placeholder.com/150"}
+                    src={
+                      item.ProductImages[0]?.imageUrl ||
+                      "https://via.placeholder.com/150"
+                    }
                     alt={item.name}
                     className="w-full h-full object-cover rounded"
                   />
