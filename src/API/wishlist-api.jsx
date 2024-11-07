@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const getWishlist = async (token) => {
-  return await axios.get("/api/wishlist", {
+  return await axios.get("http://localhost:8000/wishlist/getWishlist", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -10,7 +10,7 @@ export const getWishlist = async (token) => {
 
 export const addToWishlist = async (token, productId) => {
   return await axios.post(
-    "/api/wishlist",
+    "http://localhost:8000/wishlist",
     { productId },
     {
       headers: {
@@ -21,7 +21,7 @@ export const addToWishlist = async (token, productId) => {
 };
 
 export const removeFromWishlist = async (token, productId) => {
-  return await axios.delete(`/api/wishlist/${productId}`, {
+  return await axios.delete(`http://localhost:8000/wishlist/${productId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
