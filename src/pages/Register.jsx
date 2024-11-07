@@ -48,12 +48,13 @@ const Register = () => {
             }
 
             // Check password match with confirm password
-            if (input.password !== input.confirmPassword) {
+           else if (input.password !== input.confirmPassword) {
                 // return alert("Password do not match")
                 return toast.info("Password do not match");
             }
 
             // Send information input
+           else{ 
             await actionRegister(input);
 
             // Clear input
@@ -63,10 +64,13 @@ const Register = () => {
                 email: "",
                 password: "",
                 confirmPassword: "",
+                dateOfBirth: "",
             });
 
             console.log("Register Successful!");
             toast.success("Register Successful!");
+            setIsLoginModalOpen(true)
+        }
         } catch (err) {
             const errMsg = err.response?.data?.error || err.message;
             console.log("Register not success", errMsg);
@@ -176,7 +180,7 @@ const Register = () => {
 
                     {/* Button Register */}
                     <button
-                        onClick={() => setIsLoginModalOpen(true)}
+                        // onClick={() => setIsLoginModalOpen(true)}
                         className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full border-none mt-4 text-lg p-2"
                     >
                         Sign up

@@ -24,12 +24,8 @@ const Store = () => {
   }, [products]);
 
   useEffect(() => {
-    applyFilters();
-  }, [category, products]);
-
-  useEffect(() => {
-    sortProducts();
-  }, [sortType, filteredProducts]);
+    applyFiltersAndSort();
+  }, [category, sortType, products]);
 
   const toggleCategory = (value) => {
     setCategory((prev) =>
@@ -37,22 +33,24 @@ const Store = () => {
     );
   };
 
-  const applyFilters = () => {
+  const applyFiltersAndSort = () => {
     let filtered = products;
+
+    // Apply category filters
     if (category.length > 0) {
       filtered = filtered.filter((item) => category.includes(item.ProductCategory?.name));
     }
-    setFilteredProducts(filtered);
-  };
 
-  const sortProducts = () => {
-    let sorted = [...filteredProducts];
+    // Apply sorting
     if (sortType === "low-high") {
-      sorted.sort((a, b) => a.price - b.price);
+      filtered.sort((a, b) => a.price - b.price);
     } else if (sortType === "high-low") {
-      sorted.sort((a, b) => b.price - a.price);
-    }
-    setFilteredProducts(sorted);
+      filtered.sort((a, b) => b.price - a.price);
+     } // else if (sortType === "relevant") {
+    //   // Sort by relevance, e.g., by popularity (or another custom field)
+    //   filtered.sort((a, b) => b.popularity - a.popularity);
+    // }
+    setFilteredProducts(filtered);
   };
 
   return (

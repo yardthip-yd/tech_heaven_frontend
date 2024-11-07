@@ -1,63 +1,63 @@
+
 import { create } from "zustand";
 
 const cartStore = (set, get) => ({
-  cartItems: [],
+  // Initialize cartItems from localStorage or as an empty array
+  cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
 
-  // Add to Cart with quantity update if item already exists
+  // Add an item to the cart and update localStorage
   addToCart: (item) => {
-    set((state) => {
-      const existingItemIndex = state.cartItems.findIndex(
-        (cartItem) => cartItem.id === item.id
+    const currentItems = get().cartItems;
+    const existingItem = currentItems.find((i) => i.id === item.id);
+
+    let updatedItems;
+    if (existingItem) {
+      // If item already in cart, increase its quantity
+      updatedItems = currentItems.map((i) =>
+        i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
       );
+    } else {
+      // If item is new, add it with an initial quantity of 1
+      updatedItems = [...currentItems, { ...item, quantity: 1 }];
+    }
 
-      if (existingItemIndex !== -1) {
-        // If item already exists, update the quantity
-        const updatedCartItems = [...state.cartItems];
-        updatedCartItems[existingItemIndex].quantity += 1;
-        return { cartItems: updatedCartItems };
-      }
-
-      // If item is new, add to cart with initial quantity of 1
-      return { cartItems: [...state.cartItems, { ...item, quantity: 1 }] };
-    });
+    set({ cartItems: updatedItems });
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
   },
 
-  // Remove an item from the cart
+  // Remove an item from the cart and update localStorage
   removeFromCart: (id) => {
-    set((state) => ({
-      cartItems: state.cartItems.filter((item) => item.id !== id),
-    }));
+    const updatedItems = get().cartItems.filter((item) => item.id !== id);
+    set({ cartItems: updatedItems });
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
   },
 
-  // Clear the entire cart
-  clearCart: () => set({ cartItems: [] }),
+  // Clear all items from the cart and remove from localStorage
+  clearCart: () => {
+    set({ cartItems: [] });
+    localStorage.removeItem("cartItems");
+  },
 
-  // Increase quantity of an item
+  // Increase quantity of an item and update localStorage
   increaseAmount: (id) => {
-    set((state) => {
-      const updatedCartItems = state.cartItems.map((item) => {
-        if (item.id === id) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      });
-      return { cartItems: updatedCartItems };
-    });
+    const updatedCartItems = get().cartItems.map((item) =>
+      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+    );
+
+    set({ cartItems: updatedCartItems });
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   },
 
-  // Decrease quantity of an item
+  // Decrease quantity of an item and remove if quantity becomes 0, then update localStorage
   decreaseAmount: (id) => {
-    set((state) => {
-      const updatedCartItems = state.cartItems
-        .map((item) => {
-          if (item.id === id) {
-            return { ...item, quantity: Math.max(1, item.quantity - 1) };
-          }
-          return item;
-        })
-        .filter((item) => item.quantity > 0); // Remove items with quantity 0
-      return { cartItems: updatedCartItems };
-    });
+    const updatedCartItems = get()
+      .cartItems.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(1, item.quantity - 1) } : item
+      )
+      .filter((item) => item.quantity > 0);
+
+    set({ cartItems: updatedCartItems });
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   },
 
   // Manage checkout modal state

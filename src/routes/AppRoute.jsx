@@ -28,6 +28,7 @@ import UserLayout from "@/layouts/UserLayout";
 import useAuthStore from "@/stores/authStore";
 import { useEffect } from "react";
 import AdminChat from "@/pages/admin/AdminChat";
+import EditProduct from "@/pages/admin/EditProduct";
 import ProductDetail from "@/pages/user/ProductDetail";
 import UserCart from "@/pages/UserCart";
 import OrderSuccess from "@/components/user/OrderSuccess";
@@ -58,6 +59,7 @@ const router = createBrowserRouter([
       { index: true, element: <Dashboard /> },
       { path: "usermng", element: <UserManage /> },
       { path: "product", element: <Product /> },
+      { path: "product/:id", element: <EditProduct /> },
       { path: "category", element: <Category /> },
       { path: "bookingsmng", element: <BookingManage /> },
       { path: "ordermng", element: <OrderManage /> },
