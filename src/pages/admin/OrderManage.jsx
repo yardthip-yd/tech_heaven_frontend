@@ -24,6 +24,7 @@ const OrderManage = () => {
   const itemsPerPage = 12;
 
   const [openDetails, setOpenDetails] = useState({});
+  console.log(openDetails);
 
   useEffect(() => {
     actionGetOrderAdmin(token);
@@ -40,7 +41,7 @@ const OrderManage = () => {
 
   const handleToggleDetails = (orderId) => {
     setOpenDetails((prevState) => ({
-      ...prevState,
+      // ...prevState,
       [orderId]: !prevState[orderId],
     }));
   };
