@@ -86,14 +86,13 @@ const BookingManage = () => {
   };
 
   return (
-    <div className="w-full mx-4">
+    <div className="w-[calc(100%_-_4rem)] mx-4">
       <h1 className="text-3xl font-bold w-full mb-2">User Bookings</h1>
       <Input
         type="text"
         placeholder="Search by name..."
         value={searchName}
         onChange={handleSearch}
-        className="w-full"
       />
       <Table>
         <TableHeader>
