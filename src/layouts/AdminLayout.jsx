@@ -3,6 +3,7 @@ import AdminNav from "@/components/admin/AdminNav";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AdminSidebar from "@/components/admin/AdminSideBar";
+import ChatButtonContainer from "@/components/chat/ChatButtonContainer";
 
 function AdminLayout() {
   return (
@@ -14,18 +15,17 @@ function AdminLayout() {
         {/* Main content*/}
         <SidebarProvider>
           <div className="flex flex-1">
-
-            {/* Sidebar*/}  
+            {/* Sidebar*/}
             <AdminSidebar />
 
             {/* Content area */}
-            <div className="flex-1 p-4 overflow-auto">
+            <div className="flex-1 overflow-auto">
               <Outlet />
             </div>
-
           </div>
         </SidebarProvider>
       </div>
+      <ChatButtonContainer />
     </div>
   );
 }

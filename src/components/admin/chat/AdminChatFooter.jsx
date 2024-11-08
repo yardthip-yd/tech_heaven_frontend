@@ -5,11 +5,11 @@ import useAuthStore from "@/stores/authStore";
 import useChatStore from "@/stores/chatStore";
 import React, { useContext, useState } from "react";
 
-function ChatFooter() {
+function AdminChatFooter() {
   const [sendMessage, setSendMessage] = useState("");
-  const socket = useContext(SocketContext);
+  const { socket, adminActiveChat } = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
-  const AdminActiveChat = useChatStore((state) => state.adminActiveChat);
+  // const AdminActiveChat = useChatStore((state) => state.adminActiveChat);
   //   console.log(currentUser);
 
   const handleEnterKey = (e) => {
@@ -24,11 +24,11 @@ function ChatFooter() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(sendMessage);
+    // console.log(sendMessage);
     socket.emit("admin-send-message", {
       message: sendMessage,
       userId: currentUser.id,
-      chatId: AdminActiveChat.chatId,
+      chatId: adminActiveChat.chatId,
     });
     setSendMessage("");
   };
@@ -48,4 +48,4 @@ function ChatFooter() {
   );
 }
 
-export default ChatFooter;
+export default AdminChatFooter;

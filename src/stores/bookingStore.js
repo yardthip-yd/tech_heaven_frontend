@@ -15,8 +15,6 @@ const useBookingStore = create((set, get) => ({
   },
   actionGetAllBookings: async () => {
     try {
-      const booking = get()
-      const total = booking.length
       const result = await getAllBookings();
       console.log(result);
       set({ booking: result.data });
