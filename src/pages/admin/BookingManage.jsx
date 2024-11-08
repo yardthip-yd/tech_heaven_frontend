@@ -10,11 +10,19 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import useAuthStore from "@/stores/authStore";
+import { toast } from "react-toastify";
 
 const BookingManage = () => {
   const token = useAuthStore((state) => state.token);
-  const actionGetAllBookings = useBookingStore((state) => state.actionGetAllBookings);
-  const actionUpdateBooking = useBookingStore((state) => state.actionUpdateBooking);
+  const actionGetAllBookings = useBookingStore(
+    (state) => state.actionGetAllBookings
+  );
+  const actionUpdateBooking = useBookingStore(
+    (state) => state.actionUpdateBooking
+  );
+  const actionDeleteBooking = useBookingStore(
+    (state) => state.actionDeleteBooking
+  );
   const booking = useBookingStore((state) => state.booking);
   const [searchName, setSearchName] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,13 +50,26 @@ const BookingManage = () => {
     setSearchName(name);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const result = await actionDeleteBooking(token, id);
+      toast.success("Booking deleted successfully");
+      actionGetAllBookings();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const filteredBookings = booking.filter((item) =>
     item.user.firstName.toLowerCase().includes(searchName)
   );
 
   const indexOfLastBooking = currentPage * itemsPerPage;
   const indexOfFirstBooking = indexOfLastBooking - itemsPerPage;
-  const currentBookings = filteredBookings.slice(indexOfFirstBooking, indexOfLastBooking);
+  const currentBookings = filteredBookings.slice(
+    indexOfFirstBooking,
+    indexOfLastBooking
+  );
 
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
 
@@ -65,14 +86,13 @@ const BookingManage = () => {
   };
 
   return (
-    <div className="w-full mx-4">
+    <div className="w-[calc(100%_-_4rem)] mx-4">
       <h1 className="text-3xl font-bold w-full mb-2">User Bookings</h1>
       <Input
         type="text"
         placeholder="Search by name..."
         value={searchName}
         onChange={handleSearch}
-        className="w-full"
       />
       <Table>
         <TableHeader>
@@ -84,12 +104,13 @@ const BookingManage = () => {
             <TableHead>Note</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Time</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentBookings.map((item) => (
+          {currentBookings.map((item, index) => (
             <TableRow key={item.id}>
-              <TableCell className="font-medium">{item.id}</TableCell>
+              <TableCell className="font-medium">{index + 1}</TableCell>
               <TableCell>{item.user.firstName}</TableCell>
               <TableCell>
                 <select
@@ -112,6 +133,9 @@ const BookingManage = () => {
               <TableCell>
                 {new Date(item.bookingDate).toLocaleTimeString()}
               </TableCell>
+              <TableCell>
+                {item.status === "PENDING" ? (<button disabled className="cursor-not-allowed text-gray-300">Delete</button>) : (<button onClick={() => handleDelete(item.id)} className="text-red-500">Delete</button>)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -120,7 +144,9 @@ const BookingManage = () => {
         <button onClick={handlePreviousPage} disabled={currentPage === 1}>
           &lt; Previous
         </button>
-        <span>Page {currentPage} of {totalPages}</span>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
         <button onClick={handleNextPage} disabled={currentPage === totalPages}>
           Next &gt;
         </button>

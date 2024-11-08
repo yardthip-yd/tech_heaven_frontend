@@ -1,4 +1,4 @@
-import { createBooking, getAllBookings, updateBooking, getBookingByUserId } from "../API/booking-api";
+import { createBooking, getAllBookings, updateBooking, getBookingByUserId, deleteBooking } from "../API/booking-api";
 import { create } from "zustand";
 
 const useBookingStore = create((set, get) => ({
@@ -15,8 +15,6 @@ const useBookingStore = create((set, get) => ({
   },
   actionGetAllBookings: async () => {
     try {
-      const booking = get()
-      const total = booking.length
       const result = await getAllBookings();
       console.log(result);
       set({ booking: result.data });
@@ -46,6 +44,17 @@ const useBookingStore = create((set, get) => ({
       console.log(err);
     }
   },
+  actionDeleteBooking: async (token, id) => {
+    try {
+      const result = await deleteBooking(token, id);
+      console.log(result);
+      set((state) => ({
+        booking: state.booking.filter((item) => item.id !== id),
+      }));
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }));
 
 export default useBookingStore;

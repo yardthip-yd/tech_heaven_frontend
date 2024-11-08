@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { CartIcon, UserIcon } from '@/components/ui/Icon';
 import useAuthStore from '@/stores/authStore';
 import { useNavigate } from "react-router-dom";
-import { Heart, LayoutDashboard, LogOut } from "lucide-react"
+import { Heart, LayoutDashboard, LogOut } from "lucide-react";
 
 import {
     DropdownMenu,
@@ -31,14 +31,11 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
         } else {
             setIsAdmin(false);
         }
-        console.log("User role:", user?.role);
     };
-    console.log("user from dropdown", user)
-    
+
     useEffect(() => {
         if (user && user.role) {
             checkIfAdmin();
-            // console.log("User role from useEffect:", user?.role);
         }
     }, [user]);
 
@@ -48,6 +45,10 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
 
     const goToProfile = () => {
         navigate("/user");
+    };
+
+    const goToWishlist = () => {
+        navigate("/user/wishlist");
     };
 
     return (
@@ -67,7 +68,7 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
                         <UserIcon />
                         Profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => alert("Wishlist clicked")} className="py-2">
+                    <DropdownMenuItem onClick={goToWishlist} className="py-2"> {/* Updated to navigate to Wishlist */}
                         <Heart />
                         Wishlist
                     </DropdownMenuItem>

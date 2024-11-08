@@ -12,18 +12,22 @@ import {
   createProductMotherboard,
   createProductDrive,
   createProductCPUCooler,
+  readProducts,
+  listProducts,
 } from "@/API/product-api";
 import { toast } from "react-toastify";
+import { useParams, useNavigate } from 'react-router-dom'
 import useProductStore from "@/stores/productStore";
-import { Link } from "react-router-dom";
-const FormProduct = () => {
+
+
+const FormEditProduct = () => {
+  const { id } = useParams()
+  const navigate = useNavigate()
   const token = useAuthStore((state) => state.token);
   const getCategory = useCategoryStore((state) => state.getCategory);
   const categories = useCategoryStore((state) => state.categories);
-  const actionListProducts = useProductStore((state) => state.actionListProducts);
-  const products = useProductStore((state) => state.products);
-  const actionDeleteProduct = useProductStore((state) => state.actionDeleteProduct)
-  // console.log(products);
+  const actionReadProducts = useProductStore((state) => state.actionReadProducts)
+  const actionUpdateProduct = useProductStore((state) => state.actionUpdateProduct)
 
   const [form, setForm] = useState({
     images: []
@@ -35,9 +39,84 @@ const FormProduct = () => {
   const inputImageRef = useRef(null);
 
   useEffect(() => {
-    getCategory();
-    actionListProducts(100);
+    // getCategory();
+    getProduct()
   }, []);
+
+  // console.log(setImage)
+
+  const getProduct = async() => {
+    try {
+      const resp = await actionReadProducts(id)
+      console.log(resp)
+      setSelectedCategory(String(resp.categoryId))
+      const formBody = {
+        name: resp.name,
+        description: resp.description,
+        price: resp.price,
+      }
+      switch (String(resp.categoryId)) {
+        case "1": // CPU
+          formBody.model = resp.CPU[0].model
+          formBody.socket = resp.CPU[0].socket
+          formBody.cores = resp.CPU[0].cores
+          formBody.threads = resp.CPU[0].threads
+          formBody.baseClock = resp.CPU[0].baseClock
+          formBody.boostClock = resp.CPU[0].boostClock
+          break;
+        case "2": // Monitor
+          formBody.model = resp.Monitor[0].model
+          formBody.size = resp.Monitor[0].size
+          formBody.resolution = resp.Monitor[0].resolution
+          formBody.refreshRate = resp.Monitor[0].refreshRate
+          formBody.panelType = resp.Monitor[0].panelType
+          break;
+        case "3": // CPU Cooler
+          formBody.model = resp.CPUCooler[0].model
+          formBody.socket = resp.CPUCooler[0].socket
+          formBody.radiator = resp.CPUCooler[0].radiator
+          formBody.type = resp.CPUCooler[0].type
+          break;
+        case "4": // Power Supply
+          formBody.model = resp.PowerSupply[0].model
+          formBody.wattage = resp.PowerSupply[0].wattage
+          break;
+        case "5": // Case
+          formBody.model = resp.Case[0].model
+          formBody.size = resp.Case[0].size
+          break;
+        case "6": // GPU
+          formBody.model = resp.GPU[0].model
+          formBody.vram = resp.GPU[0].vram
+          formBody.power = resp.GPU[0].power
+          break;
+        case "7": // Memory
+          formBody.model = resp.Memory[0].model
+          formBody.memory = resp.Memory[0].memory
+          formBody.busSpeed = resp.Memory[0].busSpeed
+          formBody.type = resp.Memory[0].type
+          break;
+        case "8": // Motherboard
+          formBody.model = resp.Motherboard[0].model
+          formBody.socket = resp.Motherboard[0].socket
+          formBody.chipset = resp.Motherboard[0].chipset
+          break;
+        case "9": // Drive
+          formBody.model = resp.Drive[0].model
+          formBody.size = resp.Drive[0].size
+          formBody.type = resp.Drive[0].type
+          formBody.format = resp.Drive[0].format
+          formBody.speed = resp.Drive[0].speed
+          break;
+        default:
+          throw new Error("Invalid categoryId");
+      }
+
+      setForm(formBody)
+    } catch (err) {
+      console.log(err)
+    }
+  } 
 
   const handleOnChange = (e) => {
     setForm({
@@ -52,15 +131,25 @@ const FormProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // return console.log(image, form, selectedCategory);
     const allProducts = {
       image: image,
       form: form,
       selectedCategory: selectedCategory,
     }
+
+    console.log("Attempting to update product with ID:", id);
+    console.log("Product data:", allProducts);
+    
     try {
       let response;
-
+    
+      // ถ้ามี id จะทำการอัปเดตข้อมูลสินค้า
+      if (id) {
+        response = await actionUpdateProduct(id, allProducts);
+        console.log("Update response:", response)
+        toast.success("Product updated successfully!");
+        navigate('/admin/product')
+      } else {
       // สร้างสินค้าโดยขึ้นอยู่กับหมวดหมู่ที่เลือก
       switch (selectedCategory) {
         case "1": // CPU
@@ -105,6 +194,8 @@ const FormProduct = () => {
 
       toast.success("Product created successfully!");
       // console.log("Product created successfully!");
+      }
+      
       setForm({});
       setSelectedCategory(0); // รีเซ็ต selectedCategory เป็น null
       setImage([])
@@ -112,29 +203,16 @@ const FormProduct = () => {
         inputImageRef.current.value = "";
       }
     } catch (err) {
-      console.log(err);
+      console.log("Error updating product", err);
     }
   };
 
-  const handleDelete = async(id) => {
-    if(window.confirm(`Are you sure you want to delete id:${id}?`)){
-      try {
-        const res = await actionDeleteProduct(id)
-        console.log(res)
-        toast.success('Deleted Success!!!')
-        
-      } catch (err) {
-        console.log(err)
-      }
-
-    }
-  }
-
+  console.log(form)
 
   return (
     <div className="container mx-auto p-4 bg-white shadow-md">
       <form onSubmit={handleSubmit}>
-        <h1>เพิ่มข้อมูลสินค้า</h1>
+        <h1>แก้ไขข้อมูลสินค้า</h1>
         <label>Name:</label>
         <input
           className="border"
@@ -160,16 +238,7 @@ const FormProduct = () => {
           placeholder="Price"
           name="price"
         />
-        <label>stock:</label>
-        <input
-          type="number"
-          className="border"
-          value={form.stock || ""}
-          onChange={handleOnChange}
-          placeholder="Stock"
-          name="stock"
-        />
-        <label>Category:</label>
+        {/* <label>Category:</label>
         <select
           value={selectedCategory}
           className="border"
@@ -185,7 +254,7 @@ const FormProduct = () => {
               {item.name}
             </option>
           ))}
-        </select>
+        </select> */}
 
         {/* Upload file */}
           <Uploadfile form={image} setForm={setImage} inputImageRef={inputImageRef}/>
@@ -671,66 +740,10 @@ const FormProduct = () => {
 
         <hr />
         <br />
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Image</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Stock</th>
-              <th scope="col">CategoryId</th>
-              <th scope="col">UpdatedAt</th>
-              <th scope="col">Manage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((item, index) => {
-              // console.log(item);
-              return (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
 
-                  <td>
-                    {
-                      item?.ProductImages && item?.ProductImages.length > 0
-                      ? <img
-                        className="w-24 h-24 rounded-lg shadow-md"
-                        src={item.ProductImages[0]
-                          .imageUrl
-                          } />
-                      : <div className="w-24 h-24 bg-gray-200 rounded-md flex items-center justify-center shadow-sm">No Image</div>
-                    }
-
-                  </td>
-                  <td>{item.name}</td>
-                  <td>{item.description}</td>
-                  <td>{item.price}</td>
-                  <td>{item.stock}</td>
-                  <td>{item.categoryId}</td>
-                  <td>{item.updatedAt}</td>
-                  <td className="flex gap-2">
-                    <p className="bg-yellow-500 rounded-md p-1 shadow-md">
-                      <Link to={'/admin/product/' +item.id}>
-                        Edit 
-                      </Link>
-                    </p>
-                    <p 
-                      className="bg-red-500 rounded-md p-1 shadow-md"
-                      onClick={() => handleDelete(item.id)}
-                    >
-                      Delete
-                    </p>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
       </form>
     </div>
   );
 };
 
-export default FormProduct;
+export default FormEditProduct;

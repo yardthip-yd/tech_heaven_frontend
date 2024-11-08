@@ -30,6 +30,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         // console.log("asdadads")
         console.log("check res function --> ", res);
         onLogin();
+        onClose()
         navigate("/");
       } catch (error) {
         console.error(error);
@@ -75,7 +76,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         console.log(err);
         const errMsg = err.response?.data?.error || err.message;
         console.log(errMsg);
-        toast.error("Login not successful: " + errMsg);
+        toast.error("Email or Password is invalid");
       } finally {
         setLoading(false);
       }
