@@ -7,6 +7,7 @@ export const SocketProvider = ({ children }) => {
   const [chatNotify, setChatNotify] = useState([]);
   const [chatId, setChatId] = useState(null);
   const [newChatNotify, setNewChatNotify] = useState(null);
+  const [adminActiveChat, setAdminActiveChat] = useState(null);
   const socket = socketIO(import.meta.env.VITE_API, {
     transports: ["websocket", "polling"],
     cors: {
@@ -26,6 +27,8 @@ export const SocketProvider = ({ children }) => {
         setChatId,
         newChatNotify,
         setNewChatNotify,
+        adminActiveChat,
+        setAdminActiveChat,
       }}
     >
       {children}

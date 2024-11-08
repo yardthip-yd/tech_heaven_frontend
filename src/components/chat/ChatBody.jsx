@@ -20,6 +20,7 @@ function ChatBody() {
     const resp = await chatApi.getChat();
     // console.log(resp.data);
     setMessageList(resp.data);
+    console.log("mes len", resp.data.length);
     setTimeout(scrollToBottom, 250);
   };
 
@@ -39,7 +40,7 @@ function ChatBody() {
   }, [socket, currentUser]);
 
   return (
-    <div className="bg-white flex-1 flex flex-col justify-end overflow-y-auto gap-3 py-1 px-1">
+    <div className="bg-white flex-1 flex flex-col overflow-y-auto gap-3 py-1 px-1">
       {messageList.map((message, index) => (
         <ChatMessage key={index} message={message} />
       ))}

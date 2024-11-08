@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react";
 import ChatButton from "./ChatButton";
 import ChatActive from "./ChatActive";
 import useAuthStore from "@/stores/authStore";
-import ChatSidebar from "../admin/chat/ChatSidebar";
-import ChatContainer from "../admin/chat/ChatContainer";
+import AdminChatSidebar from "../admin/chat/AdminChatSidebar";
+import AdminChatContainer from "../admin/chat/AdminChatContainer";
 import useChatStore from "@/stores/chatStore";
 import { SocketContext } from "@/contexts/SocketContext";
 
@@ -17,10 +17,10 @@ function ChatButtonContainer() {
 
   return (
     <>
-      {adminActiveChat && <ChatContainer />}
+      {adminActiveChat && <AdminChatContainer />}
       {role === "ADMIN" ? (
         active ? (
-          <ChatSidebar setActive={setActive} />
+          <AdminChatSidebar setActive={setActive} />
         ) : (
           <ChatButton setActive={setActive} />
         )

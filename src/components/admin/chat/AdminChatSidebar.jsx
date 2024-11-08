@@ -1,11 +1,11 @@
 import chatApi from "@/API/chat-api";
 import React, { useContext, useEffect, useState } from "react";
-import ChatList from "./ChatList";
+import AdminChatList from "./AdminChatList";
 import { Button } from "@/components/ui/button";
 import useChatStore from "@/stores/chatStore";
 import { SocketContext } from "@/contexts/SocketContext";
 
-function ChatSidebar({ setActive }) {
+function AdminChatSidebar({ setActive }) {
   const [chatList, setChatList] = useState([]);
   const { newChatNotify } = useContext(SocketContext);
   // const newChatNotify = useChatStore((state) => state.newChatNotify);
@@ -26,10 +26,10 @@ function ChatSidebar({ setActive }) {
 
   useEffect(() => {
     if (newChatNotify) {
-      console.log("chatList");
-      console.log(chatList);
-      console.log("newChatNotify");
-      console.log(newChatNotify);
+      // console.log("chatList");
+      // console.log(chatList);
+      // console.log("newChatNotify");
+      // console.log(newChatNotify);
 
       //find index of chat
       const matchIndex = chatList.findIndex(
@@ -63,23 +63,11 @@ function ChatSidebar({ setActive }) {
       {/* ChatList */}
       <div className="flex flex-col overflow-y-auto max-h-[500px]">
         {chatList.map((chat) => (
-          <ChatList key={chat.id} chat={chat} />
+          <AdminChatList key={chat.id} chat={chat} />
         ))}
-        <div className="bg-white min-h-20"></div>
-        <div className="bg-black min-h-20"></div>
-        <div className="bg-white min-h-20"></div>
-        <div className="bg-black min-h-20"></div>
-        <div className="bg-white min-h-20"></div>
-        <div className="bg-black min-h-20"></div>
-        <div className="bg-white min-h-20"></div>
-        <div className="bg-black min-h-20"></div>
-        <div className="bg-white min-h-20"></div>
-        <div className="bg-black min-h-20"></div>
-        <div className="bg-white min-h-20"></div>
-        <div className="bg-black min-h-20"></div>
       </div>
     </div>
   );
 }
 
-export default ChatSidebar;
+export default AdminChatSidebar;

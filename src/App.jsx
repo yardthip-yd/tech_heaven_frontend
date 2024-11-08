@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import AppRoute from "./routes/AppRoute";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,6 +7,7 @@ import { SocketContext } from "./contexts/SocketContext";
 import useAuthStore from "./stores/authStore";
 import useChatStore from "./stores/chatStore";
 import chatApi from "./API/chat-api";
+import notifySound from "./assets/sound/notify.mp3";
 
 const App = () => {
   const {
@@ -20,6 +21,17 @@ const App = () => {
   // const { socket } = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
   const token = useAuthStore((state) => state.token);
+
+  //setup notify sound
+  const AudioRef = useRef(new Audio(notifySound));
+  const playNotifySound = () => {
+    const audioContext = new (window.AudioContext || window.AudioContext)();
+    audioContext.resume().then(() => {
+      AudioRef.current.currentTime = 0;
+      AudioRef.current.play();
+    });
+  };
+
   // const setChatId = useChatStore((state) => state.setChatId);
   // const chatNotify = useChatStore((state) => state.chatNotify);
   // const setChatNotify = useChatStore((state) => state.setChatNotify);
@@ -45,7 +57,7 @@ const App = () => {
     },
 
     adminJoinChat: (data) => {
-      // console.log(data);
+      console.log("adminJoinChat", data);
       socket.emit("join_chat", {
         userId: currentUser.id,
         chatId: data.chatId,
@@ -59,9 +71,11 @@ const App = () => {
 
     handleReceiveNotify: (data) => {
       // console.log(data);
-      // check chat notify already exist. if exist, update the notify.
+      if (data.notify.message.user.id !== currentUser.id) {
+        // console.log("playNotifySound");
+        playNotifySound();
+      }
       if (data.notify.isAdminRead === false) {
-        console.log("NEWCCCCC");
         setNewChatNotify(data);
       }
       const chatNotifyIndex = chatNotify.findIndex(
@@ -73,7 +87,7 @@ const App = () => {
           if (data.notify.isAdminRead === false) {
             // console.log("----1");
             newNotify[chatNotifyIndex] = data.notify;
-            console.log(newNotify);
+            // console.log(newNotify);
             setChatNotify(newNotify);
           } else {
             // console.log("----2");

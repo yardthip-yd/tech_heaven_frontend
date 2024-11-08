@@ -4,7 +4,7 @@ import useAuthStore from "@/stores/authStore";
 import useChatStore from "@/stores/chatStore";
 import React, { useContext, useEffect, useState } from "react";
 
-function ChatList(props) {
+function AdminChatList(props) {
   const { chat } = props;
   // console.log(chat);
   const { socket, chatNotify, setChatNotify, setAdminActiveChat } =
@@ -68,4 +68,4 @@ function ChatList(props) {
   );
 }
 
-export default ChatList;
+export default AdminChatList;
