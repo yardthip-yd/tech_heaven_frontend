@@ -5,7 +5,7 @@ import { deleteProductImage, removeFiles, uploadFiles } from "@/API/product-api"
 import useAuthStore from "@/stores/authStore";
 import { Loader } from 'lucide-react';
 
-const UploadFileEditProduct = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
+const UploadFileEditProduct = ({ form, setForm, setForm2, inputImageRef, imageForm}) => {
   // javascript
   const token = useAuthStore((state) => state.token);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ const UploadFileEditProduct = ({ form, setForm,setForm2, inputImageRef, imageFor
     const files = e.target.files;
     if (files) {
       setIsLoading(true);
-      let allFiles = form.images; //[] empty array
+      console.log('7777777777777', imageForm)
       for (let i = 0; i < files.length; i++) {
         // console.log(files[i])
 
@@ -41,11 +41,10 @@ const UploadFileEditProduct = ({ form, setForm,setForm2, inputImageRef, imageFor
               .then((res) => {
                 console.log(res);
 
-                allFiles.push(res.data);
-                setForm({
-                  ...form,
-                  images: allFiles,
-                });
+                setForm(prev => {
+                  return [{public_id: res.data.public_id, 
+                    secure_url: res.data.secure_url}, ...prev]
+                })
                 setIsLoading(false)
                 toast.success("Upload image Success!!!");
               })
@@ -64,7 +63,8 @@ const UploadFileEditProduct = ({ form, setForm,setForm2, inputImageRef, imageFor
   // console.log('imageForm', imageForm)
 
   const handleDelete = async(public_id) => {
-    const images = form?.images
+    console.log("555555555555555",public_id)
+    const images = imageForm?.images
     await removeFiles(public_id)
     .then(async(res) => {
       await deleteProductImage(public_id).then(() => {

@@ -36,9 +36,10 @@ const FormProduct = () => {
   const [form, setForm] = useState({
     images: [],
   });
-  console.log("form", form);
+  // console.log("form", form);
   const [image, setImage] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(""); // state สำหรับเก็บคีย์เวิร์ดการค้นหา
 
   const inputImageRef = useRef(null);
 
@@ -141,6 +142,17 @@ const FormProduct = () => {
       }
     }
   };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value); // อัปเดตค่าการค้นหา
+  };
+
+  // กรองข้อมูลสินค้าให้ตรงกับคีย์เวิร์ดการค้นหา
+  const filteredProducts = products.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.categoryId.toString() === searchTerm // กรองตามชื่อหรือหมวดหมู่
+  );
 
   return (
     <div className="container mx-auto p-4 bg-white shadow-md">
@@ -733,6 +745,14 @@ const FormProduct = () => {
       {/* Products Table */}
       <div className="mt-10">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Product List:</h2>
+        {/* กล่องค้นหา */}
+        <input
+          type="text"
+          placeholder="ค้นหาสินค้า"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="border p-2 mb-4"
+        />
         <table className="w-full bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
           <thead>
             <tr className="bg-gray-100">
@@ -748,7 +768,7 @@ const FormProduct = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((item, index) => (
+            {filteredProducts.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="py-3 px-6">{index + 1}</td>
                 <td className="py-3 px-6">
@@ -770,7 +790,7 @@ const FormProduct = () => {
                 <td className="py-3 px-6">{item.stock}</td>
                 <td className="py-3 px-6">{item.categoryId}</td>
                 <td className="py-3 px-6">
-                  {moment(item.updatedAt).format("L")}
+                  {moment(item.updatedAt).format("LLL")}
                 </td>
                 <td className="py-3 px-6 flex gap-2">
                   <Link

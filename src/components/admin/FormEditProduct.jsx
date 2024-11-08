@@ -1,20 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import Uploadfile from "./Uploadfile";
 import useAuthStore from "@/stores/authStore";
 import useCategoryStore from "@/stores/category";
-import {
-  createProductCPU,
-  createProductMonitor,
-  createProductGPU,
-  createProductPowerSupply,
-  createProductCase,
-  createProductMemory,
-  createProductMotherboard,
-  createProductDrive,
-  createProductCPUCooler,
-  readProducts,
-  listProducts,
-} from "@/API/product-api";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import useProductStore from "@/stores/productStore";
@@ -23,7 +9,6 @@ import UploadFileEditProduct from "./UploadfileEditProduct";
 const FormEditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = useAuthStore((state) => state.token);
   const getCategory = useCategoryStore((state) => state.getCategory);
   const categories = useCategoryStore((state) => state.categories);
   const actionReadProducts = useProductStore(
@@ -151,27 +136,27 @@ const FormEditProduct = () => {
     e.preventDefault();
 
     // ตรวจสอบความถูกต้องของข้อมูล
-    if (!form.name || !form.price || !selectedCategory) {
+    if (!form.name || !form.description || !form.price || !selectedCategory || !form.stock) {
       toast.error("Please fill in all required fields.");
       return;
     }
 
-    const allProducts = {
-      image: image,
-      form: form,
-      selectedCategory: selectedCategory,
-    };
+    // const allProducts = {
+    //   image: image,
+    //   form: form,
+    //   selectedCategory: selectedCategory,
+    // };
 
-    console.log("Attempting to update product with ID:", id);
-    console.log("Product data:", allProducts);
-    console.log("form", form);
+    // console.log("Attempting to update product with ID:", id);
+    // console.log("Product data:", allProducts);
+    // console.log("form", form);
 
     try {
       let response;
 
       // ถ้ามี id จะทำการอัปเดตข้อมูลสินค้า
       if (id) {
-        response = await actionUpdateProduct(id, form);
+        response = await actionUpdateProduct(id, {form, image});
         console.log("Update response:", response);
         toast.success("Product updated successfully!");
         navigate("/admin/product");
