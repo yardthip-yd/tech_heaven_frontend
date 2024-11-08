@@ -37,6 +37,10 @@ export const createProductDrive = async(form) => {
     return await axios.post("http://localhost:8000/product/drive", form)
 }
 
+export const createProductAccessory = async(form) => {
+    return await axios.post("http://localhost:8000/product/accessory", form)
+}
+
 // ------------------------------------------------------------------------//
 
 // โชว์ข้อมูลตามจำนวนที่กำหนด
@@ -96,6 +100,13 @@ export const removeFiles = async (public_id) => {
 export const searchFilters = async (arg) => {
     // code body
     return await axios.post('http://localhost:8000/search/filters',arg)
+}
+
+// deleteImage
+export const deleteProductImage = async(public_id) => {
+    return await axios.post('http://localhost:8000/remove-product-image', {
+        public_id
+    })
 }
 
 

@@ -12,25 +12,34 @@ import {
   createProductMotherboard,
   createProductDrive,
   createProductCPUCooler,
+  createProductAccessory,
 } from "@/API/product-api";
 import { toast } from "react-toastify";
 import useProductStore from "@/stores/productStore";
 import { Link } from "react-router-dom";
+import { Pencil, Trash2 } from "lucide-react";
+import moment from "moment";
+
 const FormProduct = () => {
   const token = useAuthStore((state) => state.token);
   const getCategory = useCategoryStore((state) => state.getCategory);
   const categories = useCategoryStore((state) => state.categories);
-  const actionListProducts = useProductStore((state) => state.actionListProducts);
+  const actionListProducts = useProductStore(
+    (state) => state.actionListProducts
+  );
   const products = useProductStore((state) => state.products);
-  const actionDeleteProduct = useProductStore((state) => state.actionDeleteProduct)
+  const actionDeleteProduct = useProductStore(
+    (state) => state.actionDeleteProduct
+  );
   // console.log(products);
 
   const [form, setForm] = useState({
-    images: []
+    images: [],
   });
-  const [image, setImage] = useState([])
+  // console.log("form", form);
+  const [image, setImage] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(0);
-
+  const [searchTerm, setSearchTerm] = useState(""); // state สำหรับเก็บคีย์เวิร์ดการค้นหา
 
   const inputImageRef = useRef(null);
 
@@ -57,7 +66,7 @@ const FormProduct = () => {
       image: image,
       form: form,
       selectedCategory: selectedCategory,
-    }
+    };
     try {
       let response;
 
@@ -99,6 +108,10 @@ const FormProduct = () => {
           response = await createProductDrive(allProducts);
           // console.log("Drive");
           break;
+        case "10": // Accessory
+          response = await createProductAccessory(allProducts);
+          // console.log("Accessory");
+          break;
         default:
           throw new Error("Invalid category selected");
       }
@@ -107,34 +120,44 @@ const FormProduct = () => {
       // console.log("Product created successfully!");
       setForm({});
       setSelectedCategory(0); // รีเซ็ต selectedCategory เป็น null
-      setImage([])
+      setImage([]);
       if (inputImageRef.current) {
         inputImageRef.current.value = "";
       }
+
+      await actionListProducts(100);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleDelete = async(id) => {
-    if(window.confirm(`Are you sure you want to delete id:${id}?`)){
+  const handleDelete = async (id) => {
+    if (window.confirm(`Are you sure you want to delete id:${id}?`)) {
       try {
-        const res = await actionDeleteProduct(id)
-        console.log(res)
-        toast.success('Deleted Success!!!')
-        
+        const res = await actionDeleteProduct(id);
+        console.log(res);
+        toast.success("Deleted Success!!!");
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
-
     }
-  }
+  };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value); // อัปเดตค่าการค้นหา
+  };
+
+  // กรองข้อมูลสินค้าให้ตรงกับคีย์เวิร์ดการค้นหา
+  const filteredProducts = products.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.categoryId.toString() === searchTerm // กรองตามชื่อหรือหมวดหมู่
+  );
 
   return (
     <div className="container mx-auto p-4 bg-white shadow-md">
       <form onSubmit={handleSubmit}>
-        <h1>เพิ่มข้อมูลสินค้า</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-6">Product Info:</h1>
         <label>Name:</label>
         <input
           className="border"
@@ -188,7 +211,13 @@ const FormProduct = () => {
         </select>
 
         {/* Upload file */}
-          <Uploadfile form={image} setForm={setImage} inputImageRef={inputImageRef}/>
+        <Uploadfile
+          // form={image || []}
+          form={form}
+          setForm={setImage}
+          setForm2={setForm}
+          inputImageRef={inputImageRef}
+        />
 
         {/* Conditional rendering for additional fields */}
 
@@ -667,68 +696,121 @@ const FormProduct = () => {
           </div>
         )}
 
-        <button className="bg-blue-500">เพิ่มสินค้า</button>
+        {/*Accessory Product*/}
+        {selectedCategory === "10" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Description:</label>
+            <input
+              className="border"
+              value={form.description || ""}
+              onChange={handleOnChange}
+              placeholder="Description"
+              name="description"
+            />
 
-        <hr />
-        <br />
-        <table className="table">
+            <label>Accessories Type:</label>
+            <select
+              className="border"
+              value={form.accessoriesType || ""}
+              onChange={handleOnChange}
+              name="accessoriesType"
+            >
+              <option value="" disabled>
+                Please Select
+              </option>
+              <option value="MOUSE">Mouse</option>
+              <option value="KEYBOARD">Keyboard</option>
+              <option value="CHAIR">Chair</option>
+              <option value="HEADPHONE">Headphone</option>
+              <option value="MICROPHONE">Microphone</option>
+              <option value="SPEAKER">Speaker</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+        )}
+
+        <button className="bg-blue-500 p-2 rounded-md shadow-md hover:scale-105 hover:-translate-y-1 hover:duration-200">
+          เพิ่มสินค้า
+        </button>
+      </form>
+
+      {/* Products Table */}
+      <div className="mt-10">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Product List:</h2>
+        {/* กล่องค้นหา */}
+        <input
+          type="text"
+          placeholder="ค้นหาสินค้า"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="border p-2 mb-4"
+        />
+        <table className="w-full bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
           <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Image</th>
-              <th scope="col">Name</th>
-              <th scope="col">Description</th>
-              <th scope="col">Price</th>
-              <th scope="col">Stock</th>
-              <th scope="col">CategoryId</th>
-              <th scope="col">UpdatedAt</th>
-              <th scope="col">Manage</th>
+            <tr className="bg-gray-100">
+              <th className="py-3 px-6 font-semibold text-left">#</th>
+              <th className="py-3 px-6 font-semibold text-left">Image</th>
+              <th className="py-3 px-6 font-semibold text-left">Name</th>
+              <th className="py-3 px-6 font-semibold text-left">Description</th>
+              <th className="py-3 px-6 font-semibold text-left">Price</th>
+              <th className="py-3 px-6 font-semibold text-left">Stock</th>
+              <th className="py-3 px-6 font-semibold text-left">CategoryId</th>
+              <th className="py-3 px-6 font-semibold text-left">UpdatedAt</th>
+              <th className="py-3 px-6 font-semibold text-left">Manage</th>
             </tr>
           </thead>
           <tbody>
-            {products.map((item, index) => {
-              // console.log(item);
-              return (
-                <tr key={index}>
-                  <th scope="row">{index + 1}</th>
-
-                  <td>
-                    {
-                      item?.ProductImages && item?.ProductImages.length > 0
-                      ? <img
-                        className="w-24 h-24 rounded-lg shadow-md"
-                        src={item.ProductImages[0]
-                          .imageUrl
-                          } />
-                      : <div className="w-24 h-24 bg-gray-200 rounded-md flex items-center justify-center shadow-sm">No Image</div>
-                    }
-
-                  </td>
-                  <td>{item.name}</td>
-                  <td>{item.description}</td>
-                  <td>{item.price}</td>
-                  <td>{item.stock}</td>
-                  <td>{item.categoryId}</td>
-                  <td>{item.updatedAt}</td>
-                  <td className="flex gap-2">
-                    <p className="bg-yellow-500 rounded-md p-1 shadow-md">
-                      <Link to={'/admin/product/' +item.id}>
-                        Edit 
-                      </Link>
-                    </p>
-                    <p 
-                      className="bg-red-500 rounded-md p-1 shadow-md"
-                      onClick={() => handleDelete(item.id)}
-                    >
-                      Delete
-                    </p>
-                  </td>
-                </tr>
-              );
-            })}
+            {filteredProducts.map((item, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="py-3 px-6">{index + 1}</td>
+                <td className="py-3 px-6">
+                  {item?.ProductImages && item?.ProductImages.length > 0 ? (
+                    <img
+                      className="w-24 h-24 object-cover rounded-lg shadow-sm"
+                      src={item.ProductImages[0].imageUrl}
+                      alt={item.name}
+                    />
+                  ) : (
+                    <div className="w-24 h-24 bg-gray-200 flex items-center justify-center rounded-lg">
+                      No Image
+                    </div>
+                  )}
+                </td>
+                <td className="py-3 px-6">{item.name}</td>
+                <td className="py-3 px-6">{item.description}</td>
+                <td className="py-3 px-6">{item.price}</td>
+                <td className="py-3 px-6">{item.stock}</td>
+                <td className="py-3 px-6">{item.categoryId}</td>
+                <td className="py-3 px-6">
+                  {moment(item.updatedAt).format("LLL")}
+                </td>
+                <td className="py-3 px-6 flex gap-2">
+                  <Link
+                    to={`/admin/product/${item.id}`}
+                    className="bg-yellow-500 p-2 rounded-md shadow-md text-white hover:bg-yellow-600 transition duration-200"
+                  >
+                    <Pencil />
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="bg-red-500 p-2 rounded-md shadow-md text-white hover:bg-red-600 transition duration-200"
+                  >
+                    <Trash2 />
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </form>
+      </div>
     </div>
   );
 };

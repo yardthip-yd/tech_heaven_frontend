@@ -1,122 +1,124 @@
 import React, { useEffect, useRef, useState } from "react";
-import Uploadfile from "./Uploadfile";
 import useAuthStore from "@/stores/authStore";
 import useCategoryStore from "@/stores/category";
-import {
-  createProductCPU,
-  createProductMonitor,
-  createProductGPU,
-  createProductPowerSupply,
-  createProductCase,
-  createProductMemory,
-  createProductMotherboard,
-  createProductDrive,
-  createProductCPUCooler,
-  readProducts,
-  listProducts,
-} from "@/API/product-api";
 import { toast } from "react-toastify";
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from "react-router-dom";
 import useProductStore from "@/stores/productStore";
-
+import UploadFileEditProduct from "./UploadfileEditProduct";
 
 const FormEditProduct = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const token = useAuthStore((state) => state.token);
+  const { id } = useParams();
+  const navigate = useNavigate();
   const getCategory = useCategoryStore((state) => state.getCategory);
   const categories = useCategoryStore((state) => state.categories);
-  const actionReadProducts = useProductStore((state) => state.actionReadProducts)
-  const actionUpdateProduct = useProductStore((state) => state.actionUpdateProduct)
+  const actionReadProducts = useProductStore(
+    (state) => state.actionReadProducts
+  );
+  const actionUpdateProduct = useProductStore(
+    (state) => state.actionUpdateProduct
+  );
 
   const [form, setForm] = useState({
-    images: []
+    images: [],
   });
-  const [image, setImage] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState(0);
 
+  const [image, setImage] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   const inputImageRef = useRef(null);
 
   useEffect(() => {
     // getCategory();
-    getProduct()
+    getProduct();
   }, []);
 
-  // console.log(setImage)
-
-  const getProduct = async() => {
+  const getProduct = async () => {
     try {
-      const resp = await actionReadProducts(id)
-      console.log(resp)
-      setSelectedCategory(String(resp.categoryId))
+      const resp = await actionReadProducts(id);
+      console.log("resp----------------", resp);
+      setSelectedCategory(String(resp.categoryId));
+
+      // แปลงข้อมูลรูปภาพ
+      const formattedImages = resp.ProductImages.map((img) => ({
+        public_id: img.public_id,
+        secure_url: img.imageUrl, // หรือ img.url ขึ้นอยู่กับ response ที่ได้
+      }));
+
+      setImage(formattedImages); // ใช้ setImage แทน
+
       const formBody = {
         name: resp.name,
         description: resp.description,
         price: resp.price,
-      }
+        categoryId: resp.categoryId,
+        stock: resp.stock,
+      };
+      // ใช้ switch-case เพื่อจัดการกับ categoryId
       switch (String(resp.categoryId)) {
         case "1": // CPU
-          formBody.model = resp.CPU[0].model
-          formBody.socket = resp.CPU[0].socket
-          formBody.cores = resp.CPU[0].cores
-          formBody.threads = resp.CPU[0].threads
-          formBody.baseClock = resp.CPU[0].baseClock
-          formBody.boostClock = resp.CPU[0].boostClock
+          formBody.model = resp.CPU[0].model;
+          formBody.socket = resp.CPU[0].socket;
+          formBody.cores = resp.CPU[0].cores;
+          formBody.threads = resp.CPU[0].threads;
+          formBody.baseClock = resp.CPU[0].baseClock;
+          formBody.boostClock = resp.CPU[0].boostClock;
           break;
         case "2": // Monitor
-          formBody.model = resp.Monitor[0].model
-          formBody.size = resp.Monitor[0].size
-          formBody.resolution = resp.Monitor[0].resolution
-          formBody.refreshRate = resp.Monitor[0].refreshRate
-          formBody.panelType = resp.Monitor[0].panelType
+          formBody.model = resp.Monitor[0].model;
+          formBody.size = resp.Monitor[0].size;
+          formBody.resolution = resp.Monitor[0].resolution;
+          formBody.refreshRate = resp.Monitor[0].refreshRate;
+          formBody.panelType = resp.Monitor[0].panelType;
           break;
         case "3": // CPU Cooler
-          formBody.model = resp.CPUCooler[0].model
-          formBody.socket = resp.CPUCooler[0].socket
-          formBody.radiator = resp.CPUCooler[0].radiator
-          formBody.type = resp.CPUCooler[0].type
+          formBody.model = resp.CPUCooler[0].model;
+          formBody.socket = resp.CPUCooler[0].socket;
+          formBody.radiator = resp.CPUCooler[0].radiator;
+          formBody.type = resp.CPUCooler[0].type;
           break;
         case "4": // Power Supply
-          formBody.model = resp.PowerSupply[0].model
-          formBody.wattage = resp.PowerSupply[0].wattage
+          formBody.model = resp.PowerSupply[0].model;
+          formBody.wattage = resp.PowerSupply[0].wattage;
           break;
         case "5": // Case
-          formBody.model = resp.Case[0].model
-          formBody.size = resp.Case[0].size
+          formBody.model = resp.Case[0].model;
+          formBody.size = resp.Case[0].size;
           break;
         case "6": // GPU
-          formBody.model = resp.GPU[0].model
-          formBody.vram = resp.GPU[0].vram
-          formBody.power = resp.GPU[0].power
+          formBody.model = resp.GPU[0].model;
+          formBody.vram = resp.GPU[0].vram;
+          formBody.power = resp.GPU[0].power;
           break;
         case "7": // Memory
-          formBody.model = resp.Memory[0].model
-          formBody.memory = resp.Memory[0].memory
-          formBody.busSpeed = resp.Memory[0].busSpeed
-          formBody.type = resp.Memory[0].type
+          formBody.model = resp.Memory[0].model;
+          formBody.memory = resp.Memory[0].memory;
+          formBody.busSpeed = resp.Memory[0].busSpeed;
+          formBody.type = resp.Memory[0].type;
           break;
         case "8": // Motherboard
-          formBody.model = resp.Motherboard[0].model
-          formBody.socket = resp.Motherboard[0].socket
-          formBody.chipset = resp.Motherboard[0].chipset
+          formBody.model = resp.Motherboard[0].model;
+          formBody.socket = resp.Motherboard[0].socket;
+          formBody.chipset = resp.Motherboard[0].chipset;
           break;
         case "9": // Drive
-          formBody.model = resp.Drive[0].model
-          formBody.size = resp.Drive[0].size
-          formBody.type = resp.Drive[0].type
-          formBody.format = resp.Drive[0].format
-          formBody.speed = resp.Drive[0].speed
+          formBody.model = resp.Drive[0].model;
+          formBody.size = resp.Drive[0].size;
+          formBody.type = resp.Drive[0].type;
+          formBody.format = resp.Drive[0].format;
+          formBody.speed = resp.Drive[0].speed;
+          break;
+        case "10": // Accessory
+          formBody.accessoriesType = resp.Accessory[0].accessoriesType;
           break;
         default:
           throw new Error("Invalid categoryId");
       }
 
-      setForm(formBody)
+      setForm(formBody);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  } 
+  };
 
   const handleOnChange = (e) => {
     setForm({
@@ -130,84 +132,44 @@ const FormEditProduct = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("formbody555555", form);
     e.preventDefault();
-    const allProducts = {
-      image: image,
-      form: form,
-      selectedCategory: selectedCategory,
+
+    // ตรวจสอบความถูกต้องของข้อมูล
+    if (!form.name || !form.description || !form.price || !selectedCategory || !form.stock) {
+      toast.error("Please fill in all required fields.");
+      return;
     }
 
-    console.log("Attempting to update product with ID:", id);
-    console.log("Product data:", allProducts);
-    
+    // const allProducts = {
+    //   image: image,
+    //   form: form,
+    //   selectedCategory: selectedCategory,
+    // };
+
+    // console.log("Attempting to update product with ID:", id);
+    // console.log("Product data:", allProducts);
+    // console.log("form", form);
+
     try {
       let response;
-    
+
       // ถ้ามี id จะทำการอัปเดตข้อมูลสินค้า
       if (id) {
-        response = await actionUpdateProduct(id, allProducts);
-        console.log("Update response:", response)
+        response = await actionUpdateProduct(id, {form, image});
+        console.log("Update response:", response);
         toast.success("Product updated successfully!");
-        navigate('/admin/product')
-      } else {
-      // สร้างสินค้าโดยขึ้นอยู่กับหมวดหมู่ที่เลือก
-      switch (selectedCategory) {
-        case "1": // CPU
-          response = await createProductCPU(allProducts);
-          // console.log("CPU")
-          break;
-        case "2": // Monitor
-          response = await createProductMonitor(allProducts);
-          // console.log("Monitor")
-          break;
-        case "3": // CPU Cooler
-          response = await createProductCPUCooler(allProducts);
-          // console.log("CPU Cooler")
-          break;
-        case "4": // Power Supply
-          response = await createProductPowerSupply(allProducts);
-          // console.log("Power Supply")
-          break;
-        case "5": // Case
-          response = await createProductCase(allProducts);
-          // console.log("Case")
-          break;
-        case "6": // GPU
-          response = await createProductGPU(allProducts);
-          // console.log("GPU")
-          break;
-        case "7": // Memory
-          response = await createProductMemory(allProducts);
-          // console.log("Memory")
-          break;
-        case "8": // Motherboard
-          response = await createProductMotherboard(allProducts);
-          // console.log("Motherboard")
-          break;
-        case "9": // Drive
-          response = await createProductDrive(allProducts);
-          // console.log("Drive");
-          break;
-        default:
-          throw new Error("Invalid category selected");
+        navigate("/admin/product");
       }
 
-      toast.success("Product created successfully!");
-      // console.log("Product created successfully!");
-      }
-      
-      setForm({});
-      setSelectedCategory(0); // รีเซ็ต selectedCategory เป็น null
-      setImage([])
       if (inputImageRef.current) {
         inputImageRef.current.value = "";
       }
     } catch (err) {
       console.log("Error updating product", err);
+      toast.error("Something went wrong, please try again.");
     }
   };
-
-  console.log(form)
 
   return (
     <div className="container mx-auto p-4 bg-white shadow-md">
@@ -238,6 +200,15 @@ const FormEditProduct = () => {
           placeholder="Price"
           name="price"
         />
+        <label>stock:</label>
+        <input
+          type="number"
+          className="border"
+          value={form.stock || ""}
+          onChange={handleOnChange}
+          placeholder="Stock"
+          name="stock"
+        />
         {/* <label>Category:</label>
         <select
           value={selectedCategory}
@@ -257,7 +228,14 @@ const FormEditProduct = () => {
         </select> */}
 
         {/* Upload file */}
-          <Uploadfile form={image} setForm={setImage} inputImageRef={inputImageRef}/>
+
+        <UploadFileEditProduct
+          imageForm={image}
+          form={form}
+          setForm2={setForm}
+          setForm={setImage}
+          inputImageRef={inputImageRef}
+        />
 
         {/* Conditional rendering for additional fields */}
 
@@ -736,11 +714,50 @@ const FormEditProduct = () => {
           </div>
         )}
 
-        <button className="bg-blue-500">เพิ่มสินค้า</button>
+        {/*Accessory Product*/}
+        {selectedCategory === "10" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Description:</label>
+            <input
+              className="border"
+              value={form.description || ""}
+              onChange={handleOnChange}
+              placeholder="Description"
+              name="description"
+            />
+            <label>Accessories Type:</label>
+            <select
+              className="border"
+              value={form.accessoriesType || ""}
+              onChange={handleOnChange}
+              name="accessoriesType"
+            >
+              <option value="" disabled>
+                Please Select
+              </option>
+              <option value="MOUSE">Mouse</option>
+              <option value="KEYBOARD">Keyboard</option>
+              <option value="CHAIR">Chair</option>
+              <option value="HEADPHONE">Headphone</option>
+              <option value="MICROPHONE">Microphone</option>
+              <option value="SPEAKER">Speaker</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+        )}
+
+        <button className="bg-blue-500 p-2 rounded-md shadow-md hover:scale-105 hover:-translate-y-1 hover:duration-200">แก้ไขสินค้า</button>
 
         <hr />
         <br />
-
       </form>
     </div>
   );
