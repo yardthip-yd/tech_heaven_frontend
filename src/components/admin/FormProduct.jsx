@@ -40,6 +40,7 @@ const FormProduct = () => {
   const [image, setImage] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [searchTerm, setSearchTerm] = useState(""); // state สำหรับเก็บคีย์เวิร์ดการค้นหา
+  const [isLoading, setIsLoading] = useState(false);
 
   const inputImageRef = useRef(null);
 
@@ -125,7 +126,11 @@ const FormProduct = () => {
         inputImageRef.current.value = "";
       }
 
-      await actionListProducts(100);
+      // await actionListProducts(100);
+      setIsLoading(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
     } catch (err) {
       console.log(err);
     }
@@ -154,7 +159,12 @@ const FormProduct = () => {
       item.categoryId.toString() === searchTerm // กรองตามชื่อหรือหมวดหมู่
   );
 
-  return (
+  return isLoading ? (
+    <div className="flex items-center justify-center space-x-2">
+      <div className="w-8 h-8 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+      <span className="text-gray-500">Loading...</span>
+    </div>
+  ) : (
     <div className="container mx-auto p-4 bg-white shadow-md">
       <form onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold text-gray-800 mb-6">Product Info:</h1>
