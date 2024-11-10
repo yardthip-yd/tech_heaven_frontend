@@ -23,19 +23,18 @@ const MainNav = () => {
   // Fn handle login
   const hdlLogin = () => {
     if (currentUser) {
-        setIsLoggedIn(true);
-        setIsDialogOpen(false);
-        setIsAdmin(currentUser.role === "ADMIN");
+      setIsLoggedIn(true);
+      setIsDialogOpen(false);
+      setIsAdmin(currentUser.role === "ADMIN");
     }
-};
+  };
 
   useEffect(() => {
     if (currentUser) {
-        setIsLoggedIn(true);
-        console.log("Current user:", currentUser);
+      setIsLoggedIn(true);
+      console.log("Current user:", currentUser);
     }
-    
-}, [currentUser]);
+  }, [currentUser]);
 
   return (
     <div className="flex h-12 w-full items-center px-8 justify-between">
@@ -56,6 +55,12 @@ const MainNav = () => {
             className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
           >
             STORE
+          </Link>
+          <Link
+            to={"/pcbuild"}
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+          >
+            PC BUILD
           </Link>
           <Link
             to={"/booking"}
