@@ -45,10 +45,10 @@ const Wishlist = () => {
               <TableRow key={item.product?.id}>
                 <TableCell className="flex justify-center items-center"> {/* ใช้ flex เพื่อจัดตำแหน่ง */}
                   {item.product?.ProductImages.length > 0 && (
-                    <img 
-                      src={item.product.ProductImages[0].imageUrl} 
-                      alt={item.product.name} 
-                      className="w-20 h-20 object-cover rounded-lg" 
+                    <img
+                      src={item.product.ProductImages[0].imageUrl}
+                      alt={item.product.name}
+                      className="w-20 h-20 object-cover rounded-lg"
                     />
                   )}
                 </TableCell>
@@ -56,7 +56,9 @@ const Wishlist = () => {
                   {item.product?.name || 'Unknown Product'}
                   <p className="text-sm text-gray-500">{item.product?.description || 'No Description'}</p>
                 </TableCell>
-                <TableCell className="font-medium text-base">THB {item.product?.price || '0.00'}</TableCell>
+                <TableCell className="font-medium text-base">
+                  THB {(item.product?.price || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </TableCell>
                 <TableCell className="text-center">
                   <button
                     onClick={() => handleAddToCart(item.product)}

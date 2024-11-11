@@ -7,7 +7,7 @@ const PriceRange = ({ priceRange, onPriceChange, min, max }) => {
   };
 
   return (
-    <div className="w-[250px]">
+    <div className="w-[230px]">
       <Slider.Root
         className="relative flex items-center select-none touch-none w-full h-5"
         min={min}
@@ -22,10 +22,14 @@ const PriceRange = ({ priceRange, onPriceChange, min, max }) => {
         <Slider.Thumb className="block w-4 h-4 bg-blue-600 rounded-full shadow" />
         <Slider.Thumb className="block w-4 h-4 bg-blue-600 rounded-full shadow" />
       </Slider.Root>
-      <div className="flex items-center justify-between mt-4">
-        <div className="bg-slate-200 p-2 w-28 text-center rounded">{priceRange[0]}</div>
+      <div className="flex items-center justify-between mt-4 text-sm">
+        <div className="bg-slate-200 p-2 w-24 text-center rounded">
+          {priceRange[0].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
         <span>-</span>
-        <div className="bg-slate-200 p-2 w-28 text-center rounded">{priceRange[1]}</div>
+        <div className="bg-slate-200 p-2 w-24 text-center rounded">
+          {priceRange[1].toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </div>
       </div>
     </div>
   );

@@ -72,7 +72,7 @@ const AllProduct = () => {
   };
 
   return (
-    <div className="min-h-[420px] w-full max-w-[1440px] flex flex-col mx-auto pt-8">
+    <div className="min-h-[420px] w-full max-w-[1600px] flex flex-col mx-auto pt-8">
 
       <div className="max-w-[1440px] mx-auto px-8">
         {/* Header Section */}
@@ -119,16 +119,18 @@ const AllProduct = () => {
           viewport={{ once: true, amount: 0.1 }}
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8"
         >
-          {filteredProducts.map((product) => (
+          {filteredProducts.slice(0, 15).map((product) => (
             <motion.div
               key={product.id}
               variants={itemVariants}
               className="group flex justify-center"
             >
               <div className="w-[272px] bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex">
-                <div className="relative overflow-hidden rounded-t-2xl">
-                  <ProductCard product={product} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div
+                key={`${product.id}`}
+                className="flex-shrink-0 w-[272px] transform transition-all duration-300 hover:scale-105 shadow-lg"
+              >
+                  <ProductCard key={product.id} product={product} />
                 </div>
               </div>
             </motion.div>

@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useProductStore from "@/stores/productStore";
 import ProductCard from "@/components/product/ProductCard";
-import PriceRange from "@/components/cart/PriceRange";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
+import FiltersSidebar from "@/components/product/FilterSidebar";
 import {
   Select,
   SelectContent,
@@ -12,9 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Filter } from "lucide-react";
 
 const Store = () => {
   const { products, actionGetAllProducts } = useProductStore();
@@ -25,6 +19,9 @@ const Store = () => {
   const [priceRange, setPriceRange] = useState([0, 0]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
+  const [productsToShow, setProductsToShow] = useState(20);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const observerRef = useRef(null);
 
   useEffect(() => {
     actionGetAllProducts();
@@ -33,11 +30,9 @@ const Store = () => {
   useEffect(() => {
     if (products.length > 0) {
       const prices = products.map((product) => product.price);
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
-      setMinPrice(min);
-      setMaxPrice(max);
-      setPriceRange([min, max]);
+      setMinPrice(Math.min(...prices));
+      setMaxPrice(Math.max(...prices));
+      setPriceRange([Math.min(...prices), Math.max(...prices)]);
     }
   }, [products]);
 
@@ -58,13 +53,15 @@ const Store = () => {
     );
   };
 
+  const clearCategory = () => {
+    setCategory([]);
+  };
+
   const applyFiltersAndSort = () => {
     let filtered = products;
-
     if (category.length > 0) {
       filtered = filtered.filter((item) => category.includes(item.ProductCategory?.name));
     }
-
     filtered = filtered.filter(
       (item) => item.price >= priceRange[0] && item.price <= priceRange[1]
     );
@@ -74,88 +71,58 @@ const Store = () => {
     } else if (sortType === "high-low") {
       filtered.sort((a, b) => b.price - a.price);
     }
-
     setFilteredProducts(filtered);
   };
 
-  const FiltersSidebar = () => (
-    <Card className="max-h-[calc(100vh-4rem)] overflow-auto">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5" />
-            <h2 className="text-xl font-semibold">Filters</h2>
-          </div>
-          {category.length > 0 && (
-            <button
-              onClick={() => setCategory([])}
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              Clear all
-            </button>
-          )}
-        </div>
+  const loadMoreProducts = () => {
+    if (productsToShow >= filteredProducts.length) return;
+    setIsFetchingMore(true);
+    setTimeout(() => {
+      setProductsToShow((prev) => Math.min(prev + 20, filteredProducts.length));
+      setIsFetchingMore(false);
+    }, 500);
+  };
 
-        <Separator className="mb-6" />
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetchingMore) {
+          loadMoreProducts();
+        }
+      },
+      { threshold: 1.0 }
+    );
 
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-medium mb-3">Category</h3>
-            <ScrollArea className="pr-4">
-              <div className="space-y-2">
-                {categories.map((cat) => (
-                  <div key={cat} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={cat}
-                      checked={category.includes(cat)}
-                      onCheckedChange={() => toggleCategory(cat)}
-                    />
-                    <label
-                      htmlFor={cat}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {cat}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </div>
-
-          <Separator />
-
-          <div>
-            <h3 className="font-medium mb-3">Price</h3>
-            <PriceRange
-              priceRange={priceRange}
-              onPriceChange={(newRange) => setPriceRange(newRange)}
-              min={minPrice}
-              max={maxPrice}
-            />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+    if (observerRef.current) observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [isFetchingMore, filteredProducts]);
 
   return (
     <div className="max-w-[1440px] mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Filters Sidebar */}
-        <div className="w-full lg:w-[300px]">
-          <FiltersSidebar />
+        <div className="w-full lg:w-[280px]">
+          <FiltersSidebar
+            categories={categories}
+            category={category}
+            toggleCategory={toggleCategory}
+            clearCategory={clearCategory}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+          />
         </div>
 
         {/* Products Section */}
         <div className="flex-1">
+          {/* Header and Sort */}
           <div className="flex justify-between">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              ALL PRODUCTS
+            </h2>
             <div className="flex items-center gap-2">
-              <h2 className="text-3xl font-bold font-prompt bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                ALL PRODUCTS
-              </h2>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-gray-600 text-sm">Sort by:</span>
+              <span className="text-slate-600 text-sm">Sort by:</span>
               <Select value={sortType} onValueChange={setSortType}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Sort by price" />
@@ -167,36 +134,31 @@ const Store = () => {
               </Select>
             </div>
           </div>
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-2">
-              {category.map((cat) => (
-                <Badge key={cat} variant="secondary">
-                  {cat}
-                  <button
-                    className="ml-2 hover:text-red-500"
-                    onClick={() => toggleCategory(cat)}
-                  >
-                    ✕
-                  </button>
-                </Badge>
-              ))}
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
+            {filteredProducts.slice(0, productsToShow).map((product) => (
+              <div key={product.id} className="shadow-lg">
+                <ProductCard key={product.id} product={product} />
+              </div>
             ))}
           </div>
 
+          {isFetchingMore && (
+            <div className="text-center mt-4">
+              <p className="text-blue-600">Loading more products...</p>
+            </div>
+          )}
+          <div ref={observerRef} className="h-1 mt-8"></div>
+
           {filteredProducts.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500">No products found matching your criteria.</p>
+              <p className="text-slate-500">No products found matching your criteria.</p>
             </div>
           )}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
