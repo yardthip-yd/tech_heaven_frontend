@@ -400,7 +400,7 @@ const FormEditProduct = () => {
             <input
               type="number"
               className="border"
-              value={Number(form.radiator || "")}
+              value={form.radiator || ""}
               onChange={handleOnChange}
               placeholder="Radiator"
               name="radiator"
@@ -643,7 +643,7 @@ const FormEditProduct = () => {
             />
             <label>Size:</label>
             <input
-              className="border"
+              className="boerder"
               value={form.size || ""}
               onChange={handleOnChange}
               placeholder="Size"
