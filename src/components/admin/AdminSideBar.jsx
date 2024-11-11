@@ -99,6 +99,19 @@ function AdminSidebar() {
                 Order Manage
               </NavLink>
             </SidebarMenuItem>
+            <SidebarMenuItem className="py-2 flex flex-row gap-2">
+              <ListOrdered />
+              <NavLink
+                to={"/admin/couponManage"}
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
+                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
+                }
+              >
+                CouponManage
+              </NavLink>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
