@@ -1,22 +1,19 @@
-import React from 'react';
+// Import
+import React from 'react'
 import { Outlet } from "react-router-dom";
 
-// Import Components
+//Import Components
 import MainNav from '@/components/MainNav';
-import Footer from "../components/Footer";
 
 const UserLayout = () => {
     return (
-        <div className="flex flex-col min-h-screen">
-            <MainNav />
-            {/* Content area */}
-            <div className="flex-grow">
+        <div className="flex h-screen w-full overflow-hidden">
+            <div className="flex flex-1 flex-col flex-grow">
+                <MainNav />
                 <Outlet />
             </div>
-            {/* Footer */}
-            <Footer />
         </div>
-    );
+    )
 }
 
-export default UserLayout;
+export default UserLayout

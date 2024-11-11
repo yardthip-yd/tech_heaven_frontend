@@ -4,7 +4,6 @@ import UserDropdown from "./auth/UserDropdown";
 import useAuthStore from "../stores/authStore";
 import { Link } from "react-router-dom";
 import CartSidebar from "./cart/CartSidebar";
-import TechLogo from "@/assets/image/logo.png"
 
 const MainNav = () => {
   const currentUser = useAuthStore((state) => state.user);
@@ -38,9 +37,9 @@ const MainNav = () => {
   }, [currentUser]);
 
   return (
-    <div className="flex h-12 w-full items-center px-8 py-6 justify-between sticky bg-white/70 backdrop-blur-lg shadow-lg rounded-md">
+    <div className="flex h-12 w-full items-center px-8 justify-between">
       {/* Logo */}
-      <img src={TechLogo} className="h-10 w-10"/>
+      <a className="text-2xl font-bold">LOGO</a>
 
       {/* NavBar  */}
       <div>

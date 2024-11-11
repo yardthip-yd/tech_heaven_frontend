@@ -15,7 +15,7 @@ const UserAccount = () => {
   }
 
   return (
-    <div className="w-[1080px] flex flex-row gap-2 items-start rounded-2xl shadow-lg mx-auto my-[100px]">
+    <div className="min-w-[1080px] flex flex-row gap-2 items-start rounded-2xl mb-8 shadow-lg mx-auto">
       <UserSidebar onSelect={setSelectedContent}/>
       {contentMap[selectedContent]}
     </div>
