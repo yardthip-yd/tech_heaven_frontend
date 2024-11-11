@@ -11,7 +11,7 @@ function AdminChatBody() {
   const [skipMessage, setSkipMessage] = useState(0);
   // const adminActiveChat = useChatStore((state) => state.adminActiveChat);
   const { socket, adminActiveChat } = useContext(SocketContext);
-
+  //   const adminActiveChat = useChatStore((state) => state.adminActiveChat);
   const topChatRef = useRef(null);
   const msgRef = useRef(null);
   const bottomChatRef = useRef(null);
