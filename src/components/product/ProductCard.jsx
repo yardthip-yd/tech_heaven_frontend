@@ -1,5 +1,4 @@
-// components/ProductCard.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -10,14 +9,41 @@ import {
 } from "@/components/ui/card";
 import { Heart, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import useCartStore from "@/stores/cartStore";
+import useWishlistStore from "@/stores/wishlistStore";
+import useAuthStore from "@/stores/authStore";
+import LoginModal from "@/components/auth/LoginModal";
 
 const ProductCard = ({ product }) => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
+  const { actionAddToWishlist } = useWishlistStore();
+  const { user, getCurrentUser, token } = useAuthStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      getCurrentUser();
+    }
+  }, [user, getCurrentUser]);
 
   const handleAddToCart = () => {
     addToCart({ ...product, quantity: 1 });
+    toast.success("Added to cart!");
+  };
+
+  const handleHeartClick = async () => {
+    if (!user) {
+      setIsLoginModalOpen(true);
+    } else {
+      try {
+        await actionAddToWishlist(token, product.id);
+        toast.success("Added to wishlist!");
+      } catch (error) {
+        toast.error("Failed to add to wishlist");
+      }
+    }
   };
 
   const handleCardClick = () => {
@@ -25,16 +51,13 @@ const ProductCard = ({ product }) => {
   };
 
   const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.slice(0, maxLength) + "...";
-    }
-    return text;
+    return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
   };
 
   return (
     <Card className="border-none shadow-none overflow-hidden rounded-md w-[272px] p-4">
       <CardHeader className="p-0">
-        {product.ProductImages && product.ProductImages.length > 0 ? (
+        {product.ProductImages?.[0]?.imageUrl ? (
           <img
             src={product.ProductImages[0].imageUrl}
             alt={product.name}
@@ -63,11 +86,20 @@ const ProductCard = ({ product }) => {
           <button onClick={handleAddToCart}>
             <ShoppingCart className="w-6 h-6 hover:scale-110 transition-transform hover:text-blue-500" />
           </button>
-          <button>
+          <button onClick={handleHeartClick}>
             <Heart className="w-6 h-6 hover:scale-110 transition-transform hover:text-red-500" />
           </button>
         </div>
       </CardFooter>
+      
+      {/* Login Modal */}
+      {isLoginModalOpen && (
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
+          onLogin={() => setIsLoginModalOpen(false)}
+        />
+      )}
     </Card>
   );
 };

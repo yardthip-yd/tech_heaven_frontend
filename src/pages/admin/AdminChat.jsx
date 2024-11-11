@@ -1,5 +1,5 @@
-import ChatContainer from "@/components/admin/chat/ChatContainer";
-import ChatSidebar from "@/components/admin/chat/ChatSidebar";
+import ChatContainer from "@/components/admin/chat/AdminChatContainer";
+import ChatSidebar from "@/components/admin/chat/AdminChatSidebar";
 import React from "react";
 
 function AdminChat() {

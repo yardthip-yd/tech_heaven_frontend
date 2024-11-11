@@ -1,12 +1,14 @@
 import Avatar from "@/components/Avatar";
 import { Button } from "@/components/ui/button";
+import { SocketContext } from "@/contexts/SocketContext";
 import useChatStore from "@/stores/chatStore";
-import React from "react";
+import React, { useContext } from "react";
 
-function ChatHeader() {
-  const adminActiveChat = useChatStore((state) => state.adminActiveChat);
-  const setAdminActiveChat = useChatStore((state) => state.setAdminActiveChat);
-  console.log(adminActiveChat);
+function AdminChatHeader() {
+  const { adminActiveChat, setAdminActiveChat } = useContext(SocketContext);
+  // const adminActiveChat = useChatStore((state) => state.adminActiveChat);
+  // const setAdminActiveChat = useChatStore((state) => state.setAdminActiveChat);
+  // console.log(adminActiveChat);
 
   const user = adminActiveChat?.user;
 
@@ -33,4 +35,4 @@ function ChatHeader() {
   );
 }
 
-export default ChatHeader;
+export default AdminChatHeader;

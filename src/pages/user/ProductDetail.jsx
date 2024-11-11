@@ -2,16 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useProductStore from "@/stores/productStore";
 import useCartStore from "@/stores/cartStore";
+import useWishlistStore from "@/stores/wishlistStore";
+import useAuthStore from "@/stores/authStore";
 import { Heart } from "lucide-react";
+import { toast } from "react-toastify";
+import LoginModal from "@/components/auth/LoginModal";
 import ReletedProducts from "@/components/product/ReletedProducts";
 
 const ProductDetail = () => {
     const { id } = useParams();
     const { products, actionGetAllProducts } = useProductStore();
     const addToCart = useCartStore((state) => state.addToCart);
+    const { actionAddToWishlist } = useWishlistStore();
+    const { user, token } = useAuthStore();
     const [productData, setProductData] = useState(null);
     const [selectedImage, setSelectedImage] = useState("");
     const [quantity, setQuantity] = useState(1);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     useEffect(() => {
         if (products.length === 0) {
@@ -35,10 +42,22 @@ const ProductDetail = () => {
         (item) => item.categoryId === productData.categoryId && item.id !== productData.id
     );
 
-    // Function to handle adding to cart
     const handleAddToCart = () => {
-        // Call addToCart with product data and quantity
         addToCart({ ...productData, quantity });
+        toast.success("Added to cart!");
+    };
+
+    const handleAddToWishlist = async () => {
+        if (!user) {
+            setIsLoginModalOpen(true);
+        } else {
+            try {
+                await actionAddToWishlist(token, productData.id);
+                toast.success("Added to wishlist!");
+            } catch (error) {
+                toast.error("Failed to add to wishlist");
+            }
+        }
     };
 
     return (
@@ -108,7 +127,7 @@ const ProductDetail = () => {
                         </button>
                     </div>
                     <div className="flex gap-4 mt-8">
-                        <button className="hover:text-red-500 transition hover:scale-105 flex flex-row gap-2">
+                        <button onClick={handleAddToWishlist} className="hover:text-red-500 transition hover:scale-105 flex flex-row gap-2">
                             <Heart className="w-6 h-6" />
                             <p>Add to wishlist</p>
                         </button>
@@ -118,6 +137,15 @@ const ProductDetail = () => {
 
             {/* Related Products Section - Moved Below */}
             <ReletedProducts relatedProducts={relatedProducts} />
+
+            {/* Login Modal */}
+            {isLoginModalOpen && (
+                <LoginModal
+                    isOpen={isLoginModalOpen}
+                    onClose={() => setIsLoginModalOpen(false)}
+                    onLogin={() => setIsLoginModalOpen(false)}
+                />
+            )}
         </div>
     );
 };

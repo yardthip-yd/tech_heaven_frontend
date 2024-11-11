@@ -8,8 +8,8 @@ import useChatStore from "@/stores/chatStore";
 function ChatBody() {
   const [messageList, setMessageList] = useState([]);
   const currentUser = useAuthStore((state) => state.user);
-  const socket = useContext(SocketContext);
-  const chatId = useChatStore((state) => state.chatId);
+  const { socket, chatId } = useContext(SocketContext);
+  // const chatId = useChatStore((state) => state.chatId);
   const bottomChatRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -20,6 +20,7 @@ function ChatBody() {
     const resp = await chatApi.getChat();
     // console.log(resp.data);
     setMessageList(resp.data);
+    console.log("mes len", resp.data.length);
     setTimeout(scrollToBottom, 250);
   };
 

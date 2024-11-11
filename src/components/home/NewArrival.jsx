@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useProductStore from "@/stores/productStore";
 import useCartStore from "@/stores/cartStore";
-import ProductCard from "@/components/product/ProductCard"; 
+import ProductCard from "@/components/product/ProductCard";
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +12,7 @@ import Autoplay from "embla-carousel-autoplay";
 const NewArrival = () => {
   const { products, actionGetAllProducts, loading, error } = useProductStore();
   const addToCart = useCartStore((state) => state.addToCart);
-  
+
   useEffect(() => {
     actionGetAllProducts();
   }, [actionGetAllProducts]);

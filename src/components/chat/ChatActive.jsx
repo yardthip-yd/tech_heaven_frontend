@@ -5,7 +5,7 @@ import ChatFooter from "./ChatFooter";
 import { SocketContext } from "@/contexts/SocketContext";
 
 function ChatActive({ setActive }) {
-  const socket = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
   useEffect(() => {
     if (!socket.connected) {
