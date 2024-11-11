@@ -1,6 +1,7 @@
 import { getProductByCategory } from "@/API/product-api";
 import { PCBuildContext } from "@/contexts/PCContext";
 import React, { useContext, useEffect, useState } from "react";
+import ProductCardBuild from "../product/ProductCardBuild";
 
 function PartList() {
   const { partContent } = useContext(PCBuildContext);
@@ -40,7 +41,13 @@ function PartList() {
     fetchPart();
   }, [partContent]);
 
-  return <div className="flex-1">PartList</div>;
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 bg-gray-100 p-2">
+      {productList.map((product) => (
+        <ProductCardBuild key={product.id} product={product} />
+      ))}
+    </div>
+  );
 }
 
 export default PartList;

@@ -27,7 +27,7 @@ const Store = () => {
   const [maxPrice, setMaxPrice] = useState(0);
 
   useEffect(() => {
-    actionGetAllProducts();
+    actionGetAllProducts(1000);
   }, [actionGetAllProducts]);
 
   useEffect(() => {
@@ -54,7 +54,9 @@ const Store = () => {
 
   const toggleCategory = (value) => {
     setCategory((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
     );
   };
 
@@ -62,7 +64,9 @@ const Store = () => {
     let filtered = products;
 
     if (category.length > 0) {
-      filtered = filtered.filter((item) => category.includes(item.ProductCategory?.name));
+      filtered = filtered.filter((item) =>
+        category.includes(item.ProductCategory?.name)
+      );
     }
 
     filtered = filtered.filter(
@@ -191,12 +195,14 @@ const Store = () => {
 
           {filteredProducts.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500">No products found matching your criteria.</p>
+              <p className="text-gray-500">
+                No products found matching your criteria.
+              </p>
             </div>
           )}
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
