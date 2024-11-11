@@ -110,7 +110,7 @@ const CartSidebar = () => {
                                                         className="h-8 w-8 rounded-full ml-12"
                                                         onClick={() => removeFromCart(item.id)}
                                                     >
-                                                        <Trash className="h-4 w-4 text-slate-500" />
+                                                        <Trash className="h-4 w-4" />
                                                     </Button>
                                                 </div>
                                                 <div className="mt-2">
