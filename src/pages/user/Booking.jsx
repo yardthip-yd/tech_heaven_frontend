@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Plus, CalendarDays } from "lucide-react";
 import FormBooking from "../../components/user/FormBooking";
 import BookingList from "../../components/user/BookingList";
-import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogTrigger  } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 
 const Booking = () => {
@@ -20,7 +20,7 @@ const Booking = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <CalendarDays className="w-10 h-10 text-slate-800" />
-              <h2 className="text-4xl font-bold text-slate-800">Your Bookings</h2>
+              <h2 className="text-4xl font-bold text-slate-800">Bookings</h2>
             </div>
             <p className="mt-2 text-slate-600">Manage your reservations and appointments</p>
           </div>

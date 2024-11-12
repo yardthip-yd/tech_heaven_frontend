@@ -90,7 +90,7 @@ const AllProduct = () => {
           <h2 className="text-5xl font-bold font-prompt bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6">
             ALL PRODUCTS
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
             Discover our curated selection of premium tech products
           </p>
         </motion.div>
@@ -144,7 +144,7 @@ const AllProduct = () => {
           transition={{ duration: 1 }}
           className="mt-20 flex justify-center"
         >
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent rounded-full" />
+          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent rounded-full" />
         </motion.div>
       </div>
     </div>

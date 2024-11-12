@@ -48,7 +48,7 @@ const BookingList = () => {
             <TableCaption className="text-slate-500 mt-10">
               A list of your recent bookings.
             </TableCaption>
-            <TableHeader className="h-14">
+            <TableHeader className="h-1">
               <TableRow className="bg-slate-100">
                 <TableHead className="font-semibold text-slate-700 w-[150px] text-base text-center">
                   Name

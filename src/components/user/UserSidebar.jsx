@@ -3,7 +3,7 @@ import useAuthStore from "@/stores/authStore";
 import { UserIcon } from "../ui/Icon";
 import { LogOut, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { CartIcon } from "@/components/ui/Icon";
+import { ShoppingBag } from "lucide-react";
 
 const UserSidebar = ({ onSelect }) => {
     const actionLogout = useAuthStore((state) => state.actionLogout);
@@ -34,7 +34,7 @@ const UserSidebar = ({ onSelect }) => {
                 className="btn btn-wide h-[80px] rounded-none bg-white border-none hover:bg-slate-100 shadow-none flex flex-row gap-4 pl-6 items-center"
                 onClick={() => onSelect("purchase")}
             >
-                <CartIcon className="w-4 h-4" />
+                <ShoppingBag className="w-4 h-4" />
                 Purchase
             </button>
             <button

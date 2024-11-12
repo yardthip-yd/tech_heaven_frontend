@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trash, ShoppingBag, Minus, Plus, X } from "lucide-react";
+import { Trash, ShoppingBag, Minus, Plus } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { CartIcon } from "@/components/ui/Icon";
 import useCartStore from "@/stores/cartStore";
 import useAuthStore from "@/stores/authStore";
 import LoginModal from "@/components/auth/LoginModal";
@@ -30,9 +29,10 @@ const CartSidebar = () => {
     // Function to handle "Go to Cart"
     const handleGoToCart = () => {
         if (!isLoggedIn) {
-            setIsLoginModalOpen(true); // Open login modal for guests
+            setIsLoginModalOpen(true);
         } else {
-            navigate("/user/cart"); // Navigate to cart for logged-in users
+            setIsCartOpen(false);
+            navigate("/user/cart");
         }
     };
 
@@ -45,7 +45,7 @@ const CartSidebar = () => {
         <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
             <SheetTrigger asChild>
                 <div className="cursor-pointer relative">
-                    <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+                    <ShoppingBag className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
                     {itemCount > 0 && (
                         <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
                             {itemCount}
@@ -57,7 +57,7 @@ const CartSidebar = () => {
                 <div className="p-2 flex flex-col h-full">
                     {/* Header */}
                     <div className="flex flex-row items-center mb-2">
-                        <CartIcon className="w-8 h-8 mr-2" />
+                        <ShoppingBag className="w-8 h-8 mr-2" />
                         <SheetTitle className="text-2xl font-bold">Shopping Bag</SheetTitle>
                     </div>
                     <SheetDescription className="mb-2">
@@ -107,10 +107,10 @@ const CartSidebar = () => {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 rounded-full ml-12"
+                                                        className="h-8 w-8 rounded-full ml-12 hover:bg-red-100 transition-colors group/btn p-2"
                                                         onClick={() => removeFromCart(item.id)}
                                                     >
-                                                        <Trash className="h-4 w-4" />
+                                                        <Trash className="h-4 w-4  group-hover/btn:text-red-600 transition-colors" />
                                                     </Button>
                                                 </div>
                                                 <div className="mt-2">
@@ -137,7 +137,7 @@ const CartSidebar = () => {
                                 onClick={handleGoToCart}
                                 disabled={cartItems.length === 0}
                             >
-                                {isLoggedIn ? "Proceed to Checkout" : "Sign in to Checkout"}
+                                {isLoggedIn ? "View Cart" : "Sign in to Checkout"}
                             </Button>
                         </div>
                     </div>

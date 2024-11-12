@@ -34,6 +34,7 @@ import UserCart from "@/pages/UserCart";
 import Wishlist from "@/pages/Wishlist";
 import OrderSuccess from "@/components/user/OrderSuccess";
 import PCBuild from "@/pages/PCBuild";
+import Promotion from "@/pages/admin/Promotion";
 
 // Import Store
 
@@ -66,6 +67,7 @@ const router = createBrowserRouter([
       { path: "category", element: <Category /> },
       { path: "bookingsmng", element: <BookingManage /> },
       { path: "ordermng", element: <OrderManage /> },
+      { path: "promotion", element: <Promotion /> },
       { path: "chat", element: <AdminChat /> },
     ],
   },

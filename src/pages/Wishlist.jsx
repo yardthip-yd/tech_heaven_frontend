@@ -38,8 +38,8 @@ const Wishlist = () => {
 
   if (wishlist.length === 0) {
     return (
-      <div className="p-6 max-w-4xl mx-auto ">
-        <h2 className="text-3xl font-bold mb-6 text-slate-900">My Wishlist</h2>
+      <div className="p-6 max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-slate-900">Wishlist</h2>
         <p className="text-slate-600 mb-8">Manage your saved products and add them to your cart when you're ready to purchase.</p>
         <Card className="p-12 text-center">
           <HeartOff className="w-16 h-16 mx-auto mb-4 text-slate-400" />
@@ -57,15 +57,15 @@ const Wishlist = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto mb-20">
       {/* Header Section */}
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900">My Wishlist</h2>
+        <h2 className="text-3xl font-bold text-slate-900">Wishlist</h2>
         <p className="text-slate-600 mt-2">Manage your saved products and add them to your cart when you're ready to purchase.</p>
       </div>
 
       {/* Wishlist Table */}
-      <Card className="overflow-hidden">
+      <Card className="overflow-y-auto max-h-[80vh]">
         <Table>
           <TableCaption>Your saved items</TableCaption>
           <TableBody>
