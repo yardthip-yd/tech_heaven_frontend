@@ -40,7 +40,10 @@ const ProductCardBuild = ({ product }) => {
     setCooler,
     monitor,
     setMonitor,
+    filter,
+    setFilter,
   } = useContext(PCBuildContext);
+
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
   const { actionAddToWishlist } = useWishlistStore();
@@ -51,7 +54,7 @@ const ProductCardBuild = ({ product }) => {
     if (!user) {
       getCurrentUser();
     }
-  }, [user, getCurrentUser]);
+  }, []);
 
   const handleAddToCart = () => {
     addToCart({ ...product, quantity: 1 });
@@ -77,6 +80,74 @@ const ProductCardBuild = ({ product }) => {
 
   const truncateText = (text, maxLength) => {
     return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+  };
+
+  const addToSpec = () => {
+    switch (partContent) {
+      case 1: // CPU
+        setCPU(product);
+        setFilter((prev) => {
+          prev.cpu = { socket: product.CPU[0].socket };
+          return prev;
+        });
+        break;
+      case 2: // Monitor
+        setMonitor(product);
+        break;
+      case 3: // CPU Cooler
+        setCooler(product);
+        setFilter((prev) => {
+          const socket = product.CPUCooler[0].socket.split(",");
+          prev.cooler = {
+            socket: socket,
+          };
+          return prev;
+        });
+        break;
+      case 4: // Power Supply
+        setPSU(product);
+        break;
+      case 5: // Case
+        setPCCase(product);
+        break;
+      case 6: // GPU
+        setVGA(product);
+        break;
+      case 7: // Memory
+        setRAM(product);
+        setFilter((prev) => {
+          prev.memory = {
+            type: product.Memory[0].type,
+          };
+          return prev;
+        });
+        break;
+      case 8: // Motherboard
+        setMainboard(product);
+        setFilter((prev) => {
+          const name = product.Motherboard[0].name;
+          const regex = /(DDR\d+)/;
+          const match = name.match(regex);
+          // console.log(match[0]);
+          prev.motherboard = {
+            socket: product.Motherboard[0].socket,
+            type: match[0],
+          };
+          return prev;
+        });
+        break;
+      case 9: // Drive
+        if (filter.drive.type === "SSD") {
+          setSSD(product);
+        } else if (filter.drive.type === "HDD") {
+          setHDD(product);
+        }
+    }
+  };
+
+  const handleAddtoSpec = () => {
+    console.log(product);
+    addToSpec();
   };
 
   return (
@@ -119,7 +190,10 @@ const ProductCardBuild = ({ product }) => {
             </button>
           </div>
         </div>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          onClick={handleAddtoSpec}
+        >
           Add to Build
         </button>
       </CardFooter>
