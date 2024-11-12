@@ -3,16 +3,24 @@ import { createCategory, removeCategory, updateCategory } from '@/API/category-a
 import useAuthStore from '@/stores/authStore';
 import { toast } from 'react-toastify';
 import useCategoryStore from '@/stores/category';
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Database, Trash } from "lucide-react";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const FormCategory = () => {
-    const token = useAuthStore((state) => state.token);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
     const [editDescription, setEditDescription] = useState('');
-    
+
     const categories = useCategoryStore((state) => state.categories);
     const getCategory = useCategoryStore((state) => state.getCategory);
     useEffect(() => {
@@ -26,10 +34,8 @@ const FormCategory = () => {
 
         try {
             const res = await createCategory({ name, description });
-            console.log("asdasdasd",res.data)
-            
             toast.success(`Added Category ${res.data.name} successfully!`);
-            getCategory(); // อัปเดต categories ใหม่
+            getCategory();
             setName('');
             setDescription('');
         } catch (err) {
@@ -48,7 +54,7 @@ const FormCategory = () => {
         try {
             const res = await updateCategory(id, { name: editName, description: editDescription });
             toast.success(`Updated Category ${res.data.name} successfully!`);
-            getCategory(); // อัปเดต categories ใหม่
+            getCategory();
             setEditingId(null);
         } catch (err) {
             console.log(err);
@@ -63,111 +69,120 @@ const FormCategory = () => {
         try {
             await removeCategory(id);
             toast.success(`Deleted ${name} successfully!`);
-            getCategory(); // อัปเดต categories ใหม่
+            getCategory();
         } catch (err) {
             console.log(err);
         }
     };
-    // console.log(categories)
-    return (
-        <div className='container mx-auto p-4 bg-white shadow-md'>
-            <h1>Category Management</h1>
-            <form className='my-4' onSubmit={handleSubmit}>
-                <label>Name:</label>
-                <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className='border'
-                    type="text"
-                    placeholder="Category Name"
-                />
-                <label>Description:</label>
-                <input
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className='border'
-                    type="text"
-                    placeholder="Category Description"
-                />
-                <button className='bg-blue-500'>
-                    Add Category
-                </button>
-            </form>
 
-            <table className="table-auto w-full mt-4 border-collapse">
-                <thead>
-                    <tr>
-                        <th className="border px-4 py-2">Number</th>
-                        <th className="border px-4 py-2">Category Name</th>
-                        <th className="border px-4 py-2">Description</th>
-                        <th className="border px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {categories.map((item, index) => (
-                        <tr key={item.id} className="text-center">
-                            <td className="border px-4 py-2">{index + 1}</td>
-                            <td className="border px-4 py-2">
-                                {editingId === item.id ? (
-                                    <input
-                                        value={editName}
-                                        onChange={(e) => setEditName(e.target.value)}
-                                        className="border w-full"
-                                        type="text"
-                                    />
-                                ) : (
-                                    item.name
-                                )}
-                            </td>
-                            <td className="border px-4 py-2">
-                                {editingId === item.id ? (
-                                    <input
-                                        value={editDescription}
-                                        onChange={(e) => setEditDescription(e.target.value)}
-                                        className="border w-full"
-                                        type="text"
-                                    />
-                                ) : (
-                                    item.description
-                                )}
-                            </td>
-                            <td className="border px-4 py-2">
-                                {editingId === item.id ? (
-                                    <div className="flex justify-center gap-2">
-                                        <button
-                                            className="bg-green-500 px-2"
-                                            onClick={() => handleUpdate(item.id)}
-                                        >
-                                            Save
-                                        </button>
-                                        <button
-                                            className="bg-gray-500 px-2"
-                                            onClick={() => setEditingId(null)}
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="flex justify-center gap-2">
-                                        <button
-                                            className="bg-yellow-500 p-2 rounded-md shadow-md text-white hover:bg-yellow-600 transition duration-200"
-                                            onClick={() => handleEditClick(item)}
-                                        >
-                                            <Pencil />
-                                        </button>
-                                        <button
-                                            className="bg-red-500 p-2 rounded-md shadow-md text-white hover:bg-red-600 transition duration-200"
-                                            onClick={() => handleRemove(item.id, item.name)}
-                                        >
-                                            <Trash2 />
-                                        </button>
-                                    </div>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+    return (
+        <div className="flex flex-row gap-8 mx-auto p-6">
+            <Card className="w-full lg:w-1/4 h-[360px]">
+                <CardHeader className="pb-4">
+                    <div className='flex items-center space-x-2'>
+                        <Database className="h-6 w-6 text-blue-500" />
+                        <CardTitle className="text-2xl font-bold text-slate-800">Category Information</CardTitle>
+                    </div>
+                    <CardDescription>Add a new category</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <form onSubmit={handleSubmit} className="space-y-3 flex flex-col gap-4">
+                        <div>
+                            <label className="text-sm font-medium text-slate-700">Name:</label>
+                            <input
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                type="text"
+                                placeholder="Category Name"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-sm font-medium text-slate-700">Description:</label>
+                            <input
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                type="text"
+                                placeholder="Category Description"
+                            />
+                        </div>
+                        <Button type="submit" className="w-full text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 p-4 rounded-lg shadow-md transition duration-200 font-medium">
+                            Add Category
+                        </Button>
+                    </form>
+                </CardContent>
+            </Card>
+
+            <Card className="w-full lg:w-3/4 h-auto">
+                <CardHeader className="pb-4">
+                    <CardTitle className="text-2xl font-bold text-slate-800">Category Lists</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Table className="w-full">
+                        <TableHeader className="h-14 bg-slate-100">
+                            <TableRow>
+                                <TableHead className="font-semibold text-slate-700 text-base text-center">#</TableHead>
+                                <TableHead className="font-semibold text-slate-700 text-base text-center">Category Name</TableHead>
+                                <TableHead className="font-semibold text-slate-700 text-base text-center">Description</TableHead>
+                                <TableHead className="font-semibold text-slate-700 text-base text-center">Edit/Delete</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {categories.map((item, index) => (
+                                <TableRow key={item.id} className="hover:bg-slate-50 transition-colors duration-150">
+                                    <TableCell className="text-center">{index + 1}</TableCell>
+                                    <TableCell className="text-center">
+                                        {editingId === item.id ? (
+                                            <input
+                                                value={editName}
+                                                onChange={(e) => setEditName(e.target.value)}
+                                                className="border w-full px-2 py-1 rounded-md"
+                                                type="text"
+                                            />
+                                        ) : (
+                                            item.name
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="text-center">
+                                        {editingId === item.id ? (
+                                            <input
+                                                value={editDescription}
+                                                onChange={(e) => setEditDescription(e.target.value)}
+                                                className="border w-full px-2 py-1 rounded-md"
+                                                type="text"
+                                            />
+                                        ) : (
+                                            item.description
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="text-center">
+                                        {editingId === item.id ? (
+                                            <div className="flex items-center justify-center gap-2">
+                                                <Button onClick={() => handleUpdate(item.id)} className="bg-blue-600 px-2 py-1 rounded-md text-white">
+                                                    Save
+                                                </Button>
+                                                <Button onClick={() => setEditingId(null)} className="bg-slate-600 px-2 py-1 rounded-md text-white">
+                                                    Cancel
+                                                </Button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-center gap-2">
+                                                <Button onClick={() => handleEditClick(item)} className="p-2 border rounded-full bg-blue-100 hover:bg-blue-200 transition-colors">
+                                                    <Pencil className="w-4 h-4 text-blue-500" />
+                                                </Button>
+                                                <Button onClick={() => handleRemove(item.id, item.name)} className="p-2 rounded-full bg-red-100 hover:bg-red-200 transition-colors">
+                                                    <Trash className="w-5 h-5 text-red-500" />
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
         </div>
     );
 };

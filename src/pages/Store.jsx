@@ -1,21 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import useProductStore from "@/stores/productStore";
-import ProductCard from "@/components/product/ProductCard"; 
-import { useNavigate } from "react-router-dom";
+import ProductCard from "@/components/product/ProductCard";
+import FiltersSidebar from "@/components/product/FilterSidebar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Store = () => {
   const { products, actionGetAllProducts } = useProductStore();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [sortType, setSortType] = useState("relevant");
-  const navigate = useNavigate();
+  const [sortType, setSortType] = useState("low-high");
+  const [priceRange, setPriceRange] = useState([0, 0]);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [productsToShow, setProductsToShow] = useState(20);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const observerRef = useRef(null);
 
   useEffect(() => {
     actionGetAllProducts();
   }, [actionGetAllProducts]);
 
-  // Extract unique categories from products
+  useEffect(() => {
+    if (products.length > 0) {
+      const prices = products.map((product) => product.price);
+      setMinPrice(Math.min(...prices));
+      setMaxPrice(Math.max(...prices));
+      setPriceRange([Math.min(...prices), Math.max(...prices)]);
+    }
+  }, [products]);
+
   useEffect(() => {
     const uniqueCategories = [
       ...new Set(products.map((product) => product.ProductCategory?.name)),
@@ -25,7 +45,7 @@ const Store = () => {
 
   useEffect(() => {
     applyFiltersAndSort();
-  }, [category, sortType, products]);
+  }, [category, sortType, products, priceRange]);
 
   const toggleCategory = (value) => {
     setCategory((prev) =>
@@ -33,66 +53,109 @@ const Store = () => {
     );
   };
 
+  const clearCategory = () => {
+    setCategory([]);
+  };
+
   const applyFiltersAndSort = () => {
     let filtered = products;
-
-    // Apply category filters
     if (category.length > 0) {
       filtered = filtered.filter((item) => category.includes(item.ProductCategory?.name));
     }
+    filtered = filtered.filter(
+      (item) => item.price >= priceRange[0] && item.price <= priceRange[1]
+    );
 
-    // Apply sorting
     if (sortType === "low-high") {
       filtered.sort((a, b) => a.price - b.price);
     } else if (sortType === "high-low") {
       filtered.sort((a, b) => b.price - a.price);
-     } // else if (sortType === "relevant") {
-    //   // Sort by relevance, e.g., by popularity (or another custom field)
-    //   filtered.sort((a, b) => b.popularity - a.popularity);
-    // }
+    }
     setFilteredProducts(filtered);
   };
 
+  const loadMoreProducts = () => {
+    if (productsToShow >= filteredProducts.length) return;
+    setIsFetchingMore(true);
+    setTimeout(() => {
+      setProductsToShow((prev) => Math.min(prev + 20, filteredProducts.length));
+      setIsFetchingMore(false);
+    }, 500);
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetchingMore) {
+          loadMoreProducts();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerRef.current) observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [isFetchingMore, filteredProducts]);
+
   return (
-    <div className="flex flex-col sm:flex-row gap-6 pt-8 px-4 max-w-[1440px] mx-auto">
-      {/* Filter Sidebar */}
-      <div className="w-[280px] h-full">
-        <h2 className="text-xl font-semibold mb-4">Filters</h2>
-        <div className="mb-6">
-          <h3 className="font-medium mb-2">Category</h3>
-          <div>
-            {categories.map((cat) => (
-              <label key={cat} className="block">
-                <input
-                  type="checkbox"
-                  value={cat}
-                  onChange={() => toggleCategory(cat)}
-                  className="mr-2"
-                />
-                {cat}
-              </label>
+    <div className="max-w-[1440px] mx-auto px-4 py-8">
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Filters Sidebar */}
+        <div className="w-full lg:w-[280px]">
+          <FiltersSidebar
+            categories={categories}
+            category={category}
+            toggleCategory={toggleCategory}
+            clearCategory={clearCategory}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+          />
+        </div>
+
+        {/* Products Section */}
+        <div className="flex-1">
+          {/* Header and Sort */}
+          <div className="flex justify-between">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              ALL PRODUCTS
+            </h2>
+            <div className="flex items-center gap-2">
+              <span className="text-slate-600 text-sm">Sort by:</span>
+              <Select value={sortType} onValueChange={setSortType}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Sort by price" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low-high">Price: Low to High</SelectItem>
+                  <SelectItem value="high-low">Price: High to Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
+            {filteredProducts.slice(0, productsToShow).map((product) => (
+              <div key={product.id} className="shadow-lg">
+                <ProductCard key={product.id} product={product} />
+              </div>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Product Grid */}
-      <div className="flex-1">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">All Products</h2>
-          <select
-            onChange={(e) => setSortType(e.target.value)}
-            className="border px-2 py-1 rounded"
-          >
-            <option value="relevant">Sort by: Relevant</option>
-            <option value="low-high">Sort by: Low to High</option>
-            <option value="high-low">Sort by: High to Low</option>
-          </select>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} /> 
-          ))}
+          {isFetchingMore && (
+            <div className="text-center mt-4">
+              <p className="text-blue-600">Loading more products...</p>
+            </div>
+          )}
+          <div ref={observerRef} className="h-1 mt-8"></div>
+
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-slate-500">No products found matching your criteria.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
