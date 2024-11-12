@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { CartIcon, UserIcon } from '@/components/ui/Icon';
+import { UserIcon } from '@/components/ui/Icon';
 import useAuthStore from '@/stores/authStore';
 import { useNavigate } from "react-router-dom";
-import { Heart, LayoutDashboard, LogOut } from "lucide-react";
+import { Heart, LayoutDashboard, LogOut, ShoppingBag } from "lucide-react";
 
 import {
     DropdownMenu,
@@ -73,7 +73,7 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
                         Wishlist
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => alert("Purchase clicked")} className="py-2">
-                        <CartIcon />
+                        <ShoppingBag />
                         Purchase
                     </DropdownMenuItem>
                     {isAdmin && (
