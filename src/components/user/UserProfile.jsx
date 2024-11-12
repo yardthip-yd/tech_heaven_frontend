@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Avatar from "@/components/Avatar";
+import { Plus } from 'lucide-react';
 
 // Import store
 import useAuthStore from "@/stores/authStore";
+import useAddressStore from "@/stores/addressStore";
 
 // Import Icon
 import { PhotoIcon } from "@/components/ui/icon";
@@ -15,6 +17,8 @@ const UserProfile = () => {
   // const actionCurrentUser = useAuthStore((state) => state.actionCurrentUser);
   // const actionUpdateUser = useAuthStore((state) => state.actionUpdateUser);
   const { user, getCurrentUser, actionUpdateUser } = useAuthStore();
+  const address = useAddressStore((state) => state.address);
+  const actionAddAddress = useAddressStore((state) => state.actionAddAddress);
 
   // useState for user profile information
   const [firstName, setFirstName] = useState(user?.firstName || "");
@@ -85,7 +89,7 @@ const UserProfile = () => {
     }
     if (profileImage) {
       updatedData.append("profileImage", profileImage);
-      console.log(profileImage,"profileImage")
+      console.log(profileImage, "profileImage");
     }
 
     await actionUpdateUser(updatedData); // Call the action to update user profile

@@ -5,6 +5,7 @@ import { stripeApi } from "@/API/stripe-api";
 import useAuthStore from "@/stores/authStore";
 import CheckoutForm from "@/components/user/CheckoutForm";
 import { useLocation } from "react-router-dom"; // Import useLocation hook
+import useAddressStore from "@/stores/addressStore"
 
 const stripePromise = loadStripe(
   "pk_test_51QGAMTELH1fq6Tmu7Xaz1rROW2MVJaFwzpfDQUZwedBoszrmUk2zwr5DZ80QgJKBIT6vXki7Dnh2IeKftlchuuk100DI5LWtM0"
@@ -18,9 +19,23 @@ const Payment = () => {
     .toFixed(2);
 
   const token = useAuthStore((state) => state.token);
+  const address = useAddressStore((state) => state.address)
+  const actionAddAddress = useAddressStore((state) => state.actionAddAddress)
+  const actionGetAllAddress = useAddressStore((state) => state.actionGetAllAddress)
+  const actionUpdateAddress = useAddressStore((state) => state.actionUpdateAddress)
+  const actionDeleteAddree = useAddressStore((state) => state.actionDeleteAddress)
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
+
+  useEffect((token) => {
+    actionGetAllAddress(token)
+  }, [])
+
+  useEffect((token) => {
+    actionGetAllAddress(token)
+    console.log(address)
+  }, [actionGetAllAddress, actionUpdateAddress])
 
   useEffect(() => {
     if (!token) return; // Avoid making the API call if token is not available
@@ -63,6 +78,11 @@ const Payment = () => {
   return (
     <div className="flex flex-row m-10">
       <div className="w-1/2 p-4">
+      {address.map((item) => (
+        <div>
+          <p>{item.address}</p>
+        </div>
+      ))}
         <h3 className="text-xl font-bold">Your Cart</h3>
         {cartItems.length === 0 ? (
           <p>Your cart is empty!</p>
