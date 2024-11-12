@@ -27,9 +27,9 @@ function ChatMessage(props) {
             {/* TIME */}
             <div className="text-xs text-end">
               {isToday ? (
-                <div className="text-xs text-gray-500">{time}</div>
+                <div className="text-xs text-slate-500">{time}</div>
               ) : (
-                <div className="text-xs text-gray-500">{date}</div>
+                <div className="text-xs text-slate-500">{date}</div>
               )}
             </div>
           </div>
@@ -49,7 +49,7 @@ function ChatMessage(props) {
               {MessageProp.user.role === "ADMIN" ? (
                 <div className="text-[0.6rem] text-red-500">Admin</div>
               ) : (
-                <div className="text-[0.6rem] text-gray-500">User</div>
+                <div className="text-[0.6rem] text-slate-500">User</div>
               )}
             </div>
             {/* MESSAGE */}
@@ -59,9 +59,9 @@ function ChatMessage(props) {
             {/* TIME */}
             <div className="text-xs text-end">
               {isToday ? (
-                <div className="text-xs text-gray-500">{time}</div>
+                <div className="text-xs text-slate-500">{time}</div>
               ) : (
-                <div className="text-xs text-gray-500">{date}</div>
+                <div className="text-xs text-slate-500">{date}</div>
               )}
             </div>
           </div>

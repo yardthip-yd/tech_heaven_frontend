@@ -1,7 +1,15 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, UserRoundCog, ListOrdered, BookCheck } from "lucide-react";
-import { Cpu, Database } from "lucide-react";
+import {
+  LayoutDashboard,
+  UserRoundCog,
+  Package,
+  CalendarDays,
+  Cpu,
+  Database,
+  ChevronRight,
+  Tag,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -13,110 +21,78 @@ import {
 } from "@/components/ui/sidebar";
 
 function AdminSidebar() {
-  console.log("AdminSidebar");
   return (
-    <Sidebar className="w-64 h-full mt-12 border-none">
+    <Sidebar className="w-64 h-full mt-12 border-r border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem className="py-2 flex flex-row gap-2">
-              <LayoutDashboard />
-              <NavLink
-                to={"/admin"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
-                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
+          <SidebarGroupLabel className="px-4 text-lg font-semibold text-slate-700">
+            Admin Menu
+          </SidebarGroupLabel>
+          <SidebarMenu className="mt-4 space-y-1">
+            {menuItems.map((item) => (
+              <SidebarMenuItem key={item.path} className="relative py-2 px-4 group">
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `flex items-center w-full rounded-lg p-2 text-sm font-medium transition-all duration-200 ${
+                      isActive
+                        ? "bg-blue-50 text-blue-600"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    }`
                   }
                   end
-              >
-                Dashboard
-              </NavLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="py-2 flex flex-row gap-2">
-              <UserRoundCog />
-              <NavLink
-                to={"/admin/usermng"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
-                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
-                }
-              >
-                User Manage
-              </NavLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="py-2 flex flex-row gap-2">
-              <Cpu />
-              <NavLink
-                to={"/admin/product"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
-                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
-                }
-              >
-                Products
-              </NavLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="py-2 flex flex-row gap-2">
-              <Database />
-              <NavLink
-                to={"/admin/category"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
-                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
-                }
-              >
-                Category
-              </NavLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="py-2 flex flex-row gap-2">
-              <BookCheck />
-              <NavLink
-                to={"/admin/bookingsmng"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
-                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
-                }
-              >
-                Bookings Manage
-              </NavLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="py-2 flex flex-row gap-2">
-              <ListOrdered />
-              <NavLink
-                to={"/admin/ordermng"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
-                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
-                }
-              >
-                Order Manage
-              </NavLink>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="py-2 flex flex-row gap-2">
-              <ListOrdered />
-              <NavLink
-                to={"/admin/couponManage"}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-orange-500 flex gap-2 transform translate-x-8 transition-transform duration-100"
-                    : "hover:text-yellow-500 flex gap-2 transform translate-x-0 hover:scale-105 transition-transform duration-100"
-                }
-              >
-                CouponManage
-              </NavLink>
-            </SidebarMenuItem>
+                >
+                  {/* Icon and label for each menu item */}
+                  <item.icon className="w-5 h-5 transition-colors duration-200 group-hover:text-blue-500" />
+                  <span className="ml-3">{item.label}</span>
+                  <ChevronRight className="ml-auto w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 opacity-0 group-hover:opacity-100" />
+                </NavLink>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
   );
 }
+
+// Define the menu items array with icons, labels, and paths
+const menuItems = [
+  {
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    path: "/admin",
+  },
+  {
+    label: "User Management",
+    icon: UserRoundCog,
+    path: "/admin/usermng",
+  },
+  {
+    label: "Products",
+    icon: Cpu,
+    path: "/admin/product",
+  },
+  {
+    label: "Categories",
+    icon: Database,
+    path: "/admin/category",
+  },
+  {
+    label: "Bookings",
+    icon: CalendarDays,
+    path: "/admin/bookingsmng",
+  },
+  {
+    label: "Orders",
+    icon: Package,
+    path: "/admin/ordermng",
+  },
+  {
+    label: "Promotion",
+    icon: Tag,
+    path: "/admin/promotion",
+  },
+];
 
 export default AdminSidebar;

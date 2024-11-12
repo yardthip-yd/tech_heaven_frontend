@@ -1,46 +1,29 @@
-// Import
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Avatar from "@/components/Avatar";
-
-// Import store
+import { Camera, User, Eye, EyeOff, Pencil } from "lucide-react";
 import useAuthStore from "@/stores/authStore";
-
-// Import Icon
-import { PhotoIcon } from "@/components/ui/icon";
+import Avatar from '../Avatar';
 
 const UserProfile = () => {
-  // State from Stores
-  // const user = useAuthStore((state) => state.user);
-  // const actionCurrentUser = useAuthStore((state) => state.actionCurrentUser);
-  // const actionUpdateUser = useAuthStore((state) => state.actionUpdateUser);
   const { user, getCurrentUser, actionUpdateUser } = useAuthStore();
-
-  // useState for user profile information
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const [email, setEmail] = useState(user?.email || "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState("");
-
-  // File size
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
-  // useState for file size
-  const [errorFileSize, setErrorFileSize] = useState("");
 
-  // useEffect for Fetch current user data
   useEffect(() => {
     const getUser = async () => {
       await getCurrentUser();
     };
-
     getUser();
   }, [getCurrentUser]);
 
-  // useEffect for Update local state when user data is fetched
   useEffect(() => {
     if (user) {
       setFirstName(user.firstName);
@@ -49,165 +32,220 @@ const UserProfile = () => {
       setProfileImage(user.profileImage);
       setProfileImagePreview(user.profileImage);
     }
-  }, [user]); // Depend on user
+  }, [user]);
 
-  // Fn for handle avatar file change
   const hdlAvatarChange = (e) => {
-    const file = e.target.files[0]; // Get the selected file
-    // Check file size
-    if (file.size > MAX_FILE_SIZE) {
-      setErrorFileSize("File size exceeds 10MB limit.");
+    const file = e.target.files[0];
+    if (file && file.size > MAX_FILE_SIZE) {
+      toast.error("File size exceeds 10MB limit.");
       return;
     }
     setProfileImage(file);
-    setProfileImagePreview(URL.createObjectURL(file)); // Show selected image
-    setErrorFileSize("");
+    setProfileImagePreview(URL.createObjectURL(file));
   };
 
-  // Fn for handle form submis to update user profile
   const hdlUpdateProfile = async () => {
     const updatedData = new FormData();
     updatedData.append("firstName", firstName);
     updatedData.append("lastName", lastName);
     updatedData.append("email", email);
 
-    // Check if password and confirm password match
     if (password && password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match!");
       toast.error("Passwords do not match!");
-      return; // Early return if passwords don't match
+      return;
     }
-
-    setConfirmPasswordError("");
 
     if (password) {
       updatedData.append("password", password);
     }
     if (profileImage) {
       updatedData.append("profileImage", profileImage);
-      console.log(profileImage,"profileImage")
     }
 
-    await actionUpdateUser(updatedData); // Call the action to update user profile
-    toast.success("Profile updated successfully!");
+    try {
+      await actionUpdateUser(updatedData);
+      toast.success("Profile updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update profile.");
+    }
+  };
+
+  const passwordChecks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+
+  const passwordStrength = Object.values(passwordChecks).filter(Boolean).length;
+
+  const getPasswordStrengthText = () => {
+    if (passwordStrength <= 2) return "Weak";
+    if (passwordStrength <= 4) return "Medium";
+    return "Strong";
+  };
+
+  const getPasswordStrengthColor = () => {
+    if (passwordStrength <= 2) return "bg-red-500";
+    if (passwordStrength <= 4) return "bg-yellow-500";
+    return "bg-green-500";
   };
 
   return (
-    <div className="w-full flex flex-rol gap-4 items-start p-2 rounded-2xl shadow-2xl">
-      {/* Avatar */}
-      <div className="mx-10">
-        <input
-          type="file"
-          onChange={hdlAvatarChange}
-          id="avatar-upload"
-          className="hidden"
-        />
-        <label htmlFor="avatar-upload" className="cursor-pointer">
-          <Avatar
-            className="w-[150px] h-[150px] rounded-full flex items-center shadow-lg"
-            imgSrc={profileImagePreview}
-          />
-          {/* Use Avatar component for displaying the profile image */}
-        </label>
+    <div className="flex flex-col w-full mx-auto p-6 gap-8">
+
+      {/* Header Section */}
+      <div className="mb-6">
+        <h2 className="text-3xl font-bold text-slate-900">Profile Settings</h2>
+        <p className="text-slate-600">
+          Update your profile information and manage your account
+        </p>
       </div>
 
-      {/* Infomation */}
-      <div className="flex flex-col gap-10">
-        {/* Intro */}
-        <div className="my-8">
-          <p className="font-bold text-2xl">Personal Infomation</p>
-          <p>Update your profile photo and personal details</p>
+      {/* Avatar and Form Sections */}
+      <div className="flex flex-row space-x-12">
+
+        {/* Avatar Section */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-52 h-52 rounded-full overflow-hidden bg-slate-100 border-4 border-white shadow-lg group">
+            {profileImagePreview ? (
+              <img
+                src={profileImagePreview}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <Avatar className="rounded-full flex items-center" imgSrc={user?.profileImage} />
+            )}
+
+            {/* Edit Avatar Overlay */}
+            <label
+              htmlFor="avatar-upload"
+              className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+            >
+              <div className="text-white flex flex-col items-center">
+                <Pencil className="w-6 h-6" />
+                <span className="text-sm">Edit Avatar</span>
+              </div>
+              <input
+                type="file"
+                id="avatar-upload"
+                onChange={hdlAvatarChange}
+                className="hidden"
+                accept="image/*"
+              />
+            </label>
+          </div>
+          <span className="text-slate-500 text-sm text-center"> " click on profile picture <br /> for edit avatar "</span>
         </div>
 
-        {/* Personal Details */}
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-row items-center gap-2">
-            <p className="w-[90px] font-semibold">First Name:</p>
+        {/* Form Section */}
+        <div className="flex-1 space-y-8 max-w-2xl">
+          <div className="grid grid-cols-2 gap-4">
             <input
-              className="input input-bordered w-80 h-[47.99px] bg-slate-50 border-slate-200 placeholder:text-slate-900"
               type="text"
               value={firstName}
-              placeholder="Firstname"
-              onChange={(e) => setFirstName(e.target.value)} // Update first name
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="First Name"
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <p className="w-[90px] font-semibold">Last Name:</p>
             <input
-              className="input input-bordered w-80 h-[47.99px] bg-slate-50 border-slate-200 placeholder:text-slate-900"
               type="text"
               value={lastName}
-              placeholder="Lastname"
-              onChange={(e) => setLastName(e.target.value)} // Update last name
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Last Name"
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
           </div>
-          <div className="flex flex-row items-center gap-2">
-            <p className="w-[90px] font-semibold">Email:</p>
-            <input
-              className="input input-bordered w-80 h-[47.99px] bg-slate-50 border-slate-200 placeholder:text-slate-900"
-              type="email"
-              value={email}
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)} // Update email
-            />
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <p className="w-[90px] font-semibold">Password:</p>
-            <input
-              className="input input-bordered w-80 h-[47.99px] bg-slate-50 border-slate-200 placeholder:text-slate-900"
-              type="password"
-              value={password}
-              placeholder="********"
-              onChange={(e) => setPassword(e.target.value)} // Update password
-            />
-          </div>
-          <div className="flex flex-row items-center gap-2">
-            <p className="w-[90px] font-semibold">Confirm Password:</p>
-            <input
-              className="input input-bordered w-80 h-[47.99px] bg-slate-50 border-slate-200 placeholder:text-slate-900"
-              type="password"
-              value={confirmPassword}
-              placeholder="********"
-              onChange={(e) => setConfirmPassword(e.target.value)} // Update confirm password
-            />
-          </div>
-          {confirmPasswordError && (
-            <p className="text-red-500 text-sm mt-1 pl-[90px]">
-              {confirmPasswordError}
-            </p>
-          )}
-          <div>
-            <div className="flex flex-row items-center gap-2">
-              <p className="w-[100px] font-semibold">Avatar:</p>
-              <input
-                className="hidden"
-                type="file"
-                onChange={hdlAvatarChange}
-                id="avatar-upload"
-              />
-              <label
-                htmlFor="avatar-upload"
-                className="cursor-pointer flex items-center justify-center w-10 h-10 bg-slate-900 rounded-full"
-              >
-                {/* Show PhotoIcon instead of the file input */}
-                <PhotoIcon className="w-6 h-6" />
-              </label>
-            </div>
-            {errorFileSize && (
-              <p className="text-red-500 text-sm mt-1 pl-[90px]">
-                {errorFileSize}
-              </p>
-            )}
-          </div>
-        </div>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          />
 
-        {/* Update Profile */}
-        <button
-          onClick={hdlUpdateProfile}
-          className="btn bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl border-none mt-4 text-base mb-8 p-2"
-        >
-          Save Profile
-        </button>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New Password"
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              {showPassword ? <EyeOff /> : <Eye />}
+            </button>
+          </div>
+
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm Password"
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              {showConfirmPassword ? <EyeOff /> : <Eye />}
+            </button>
+          </div>
+
+          {/* Password Strength Indicator */}
+          {password && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-slate-600">Password Strength:</span>
+                <span className={`text-sm font-medium ${passwordStrength <= 2 ? 'text-red-500' :
+                  passwordStrength <= 4 ? 'text-yellow-500' : 'text-green-500'
+                  }`}>
+                  {getPasswordStrengthText()}
+                </span>
+              </div>
+              <div className="h-2 w-full bg-slate-200 rounded-full">
+                <div
+                  className={`h-full rounded-full transition-all duration-300 ${getPasswordStrengthColor()}`}
+                  style={{ width: `${(passwordStrength / 5) * 100}%` }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Password Requirements */}
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-slate-700">Password Requirements:</h4>
+            <ul className="text-sm text-slate-600 space-y-1">
+              <li className={`flex items-center ${passwordChecks.length ? "text-green-500" : ""}`}>
+                <span className="mr-2">•</span>At least 8 characters
+              </li>
+              <li className={`flex items-center ${passwordChecks.uppercase && passwordChecks.lowercase ? "text-green-500" : ""}`}>
+                <span className="mr-2">•</span>Uppercase and lowercase letters
+              </li>
+              <li className={`flex items-center ${passwordChecks.number ? "text-green-500" : ""}`}>
+                <span className="mr-2">•</span>One number
+              </li>
+              <li className={`flex items-center ${passwordChecks.special ? "text-green-500" : ""}`}>
+                <span className="mr-2">•</span>One special character
+              </li>
+            </ul>
+          </div>
+
+          <button
+            onClick={hdlUpdateProfile}
+            className="w-full py-3 text-white rounded-lg font-semibold shadow-lg transition-all duration-300 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+          >
+            Save Changes
+          </button>
+        </div>
       </div>
     </div>
   );
