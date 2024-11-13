@@ -29,7 +29,8 @@ const ProductCard = ({ product }) => {
   }, [user, getCurrentUser]);
 
   const handleAddToCart = () => {
-    addToCart({ ...product, quantity: 1 });
+    console.log(product)
+    addToCart( {...product, quantity :1} );
     toast.success("Added to cart!");
   };
 
@@ -81,7 +82,7 @@ const ProductCard = ({ product }) => {
         <p className="py-1">{truncateText(product.description, 40)}</p>
       </CardContent>
       <CardFooter className="text-lg font-bold p-0 py-2 flex flex-row items-center justify-between">
-        <div className="text-lg">THB {product.price}</div>
+      <div className="text-lg">THB {product.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
         <div className="flex space-x-2">
           <button onClick={handleAddToCart}>
             <ShoppingCart className="w-6 h-6 hover:scale-110 transition-transform hover:text-blue-500" />

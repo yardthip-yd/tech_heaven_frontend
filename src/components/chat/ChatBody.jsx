@@ -3,13 +3,14 @@ import { SocketContext } from "@/contexts/SocketContext";
 import useAuthStore from "@/stores/authStore";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ChatMessage from "./ChatMessage";
-import useChatStore from "@/stores/chatStore";
+import moment from "moment";
 
 function ChatBody() {
   const [messageList, setMessageList] = useState([]);
+  const [displayedMessagesCount, setDisplayedMessagesCount] = useState(4);
+  const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const currentUser = useAuthStore((state) => state.user);
   const { socket, chatId } = useContext(SocketContext);
-  // const chatId = useChatStore((state) => state.chatId);
   const bottomChatRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -18,10 +19,19 @@ function ChatBody() {
 
   const getMessages = async () => {
     const resp = await chatApi.getChat();
-    // console.log(resp.data);
-    setMessageList(resp.data);
-    console.log("mes len", resp.data.length);
+    const allMessages = resp.data;
+    setMessageList(allMessages);
+    setDisplayedMessagesCount(4);
+    setHasMoreMessages(allMessages.length > 4);
     setTimeout(scrollToBottom, 250);
+  };
+
+  const loadMoreMessages = () => {
+    setDisplayedMessagesCount((prev) => {
+      const newCount = prev + 2;
+      setHasMoreMessages(newCount < messageList.length);
+      return newCount;
+    });
   };
 
   useEffect(() => {
@@ -39,11 +49,41 @@ function ChatBody() {
     };
   }, [socket, currentUser]);
 
+  const formatDate = (date) => {
+    if (moment(date).isSame(new Date(), "day")) return "Today";
+    if (moment(date).isSame(moment().subtract(1, "day"), "day")) return "Yesterday";
+    if (moment(date).isSame(new Date(), "year")) return moment(date).format("MMM D");
+    return moment(date).format("MMM D, YYYY");
+  };
+
+  let lastDisplayedDate = null;
+
   return (
-    <div className="bg-white flex-1 flex flex-col overflow-y-auto gap-3 py-1 px-1">
-      {messageList.map((message, index) => (
-        <ChatMessage key={index} message={message} />
-      ))}
+    <div className="relative flex flex-col overflow-y-auto gap-2 py-2 px-3 scrollbar-hide">
+      {hasMoreMessages && (
+        <button
+          onClick={loadMoreMessages}
+          className="text-blue-300 text-sm hover:underline mb-2 self-center"
+        >
+          See more messages
+        </button>
+      )}
+      {messageList.slice(-displayedMessagesCount).map((message, index) => {
+        const messageDate = formatDate(message.createdAt);
+        const showDate = lastDisplayedDate !== messageDate;
+        lastDisplayedDate = messageDate;
+
+        return (
+          <React.Fragment key={message.id}>
+            {showDate && (
+              <div className="text-center text-xs text-gray-500 my-2">
+                {messageDate}
+              </div>
+            )}
+            <ChatMessage message={message} />
+          </React.Fragment>
+        );
+      })}
       <div ref={bottomChatRef}></div>
     </div>
   );

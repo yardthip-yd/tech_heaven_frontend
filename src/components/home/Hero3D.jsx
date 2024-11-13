@@ -160,10 +160,6 @@ const Hero3D = () => {
                 />
             </motion.div>
 
-            {/* Decorative Elements */}
-            <div className="absolute inset-0 bg-[url('/grid.png')] opacity-30 z-[5]" />
-            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent z-[5]" />
-
             {/* Floating Light Effects */}
             <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl" />
             <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl" />

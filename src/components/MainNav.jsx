@@ -33,14 +33,16 @@ const MainNav = () => {
   useEffect(() => {
     if (currentUser) {
       setIsLoggedIn(true);
-      console.log("Current user:", currentUser);
+      // console.log("Current user:", currentUser);
     }
   }, [currentUser]);
 
   return (
     <div className="flex h-12 w-full items-center px-8 py-6 justify-between sticky bg-white/70 backdrop-blur-lg shadow-lg rounded-md">
       {/* Logo */}
-      <img src={TechLogo} className="h-10 w-10"/>
+      <Link to="/">
+        <img src={TechLogo} alt="Tech Logo" className="h-10 w-10 cursor-pointer" />
+      </Link>
 
       {/* NavBar  */}
       <div>
