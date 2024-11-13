@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import axios from "../config/axios";
 const authStore = (set, get) => ({
- token : null,
+  token: null,
   user: null,
   actionRegister: async (input) => {
     // get input from outside
@@ -18,7 +18,7 @@ const authStore = (set, get) => ({
     // get input from outside
 
     const result = await authApi.login(input);
-    
+
     console.log("Login in Zustand", result.data)
 
     set({
@@ -29,13 +29,20 @@ const authStore = (set, get) => ({
     return result.data;
   },
   actionLogout: () => {
-    localStorage.clear();
-    set({
-      token: null,
-      user: null,
+    set((state) => {
+      localStorage.removeItem('token');
+      return { user: null, token: null };
     });
   },
+  removeToken: () => {
+    localStorage.removeItem('token');
+  },
   getCurrentUser: async () => {
+    const token = get().token;
+    if (!token) {
+      console.log("No token found, skipping getCurrentUser API call");
+      return;
+    }
     try {
       const result = await authApi.getMe();
       // console.log(result);
@@ -66,30 +73,30 @@ const authStore = (set, get) => ({
   },
   actionSendResetPassLink: async (body) => {
     try {
-      
-    console.log("Sending reset link to email:", body); 
-  
 
-    const response = await authApi.forgotPassword(body);
-    
+      console.log("Sending reset link to email:", body);
 
-    console.log("Response from sending reset link:", response.data);
 
-    return response.data;
+      const response = await authApi.forgotPassword(body);
+
+
+      console.log("Response from sending reset link:", response.data);
+
+      return response.data;
     } catch (err) {
       console.log(err)
     }
 
-},
-actionResetPassword : async (body) => {
-  try {
-    const response = await authApi.resetPassword(body)
-    console.log(response.data)
-    return response.data
-  } catch (err) {
-    console.log(err)
+  },
+  actionResetPassword: async (body) => {
+    try {
+      const response = await authApi.resetPassword(body)
+      console.log(response.data)
+      return response.data
+    } catch (err) {
+      console.log(err)
+    }
   }
-}
   ,
   removeToken: () => {
     set({ token: null });

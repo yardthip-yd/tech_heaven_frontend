@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { SocketContext } from "@/contexts/SocketContext";
 import useChatStore from "@/stores/chatStore";
 import React, { useContext } from "react";
+import { ChevronRight } from "lucide-react";
 
 function AdminChatHeader() {
   const { adminActiveChat, setAdminActiveChat } = useContext(SocketContext);
@@ -17,11 +18,11 @@ function AdminChatHeader() {
   };
 
   return (
-    <div className="flex justify-between items-center p-2">
+    <div className="relative flex justify-between items-center p-2 h-[61.25px] bg-blue-50 rounded-t-lg shadow-md">
       <div className="flex gap-2 items-center">
         {/* PROFILE */}
         <Avatar
-          className="w-12 h-12 rounded-full flex items-center shadow-lg"
+          className="w-10 h-10 rounded-full flex items-center"
           imgSrc={user.profileImage}
         />
         {/* NAME */}
@@ -30,7 +31,10 @@ function AdminChatHeader() {
         </div>
       </div>
       {/* BUTTON */}
-      <Button onClick={hdlBack}>Back</Button>
+      <div className="flex flex-row gap-1 items-center text-blue-500" onClick={hdlBack}>
+        <span className="text-sm">Back</span>
+        <ChevronRight className="h-4 w-4" />
+      </div>
     </div>
   );
 }

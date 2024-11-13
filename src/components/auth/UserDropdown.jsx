@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { UserIcon } from '@/components/ui/Icon';
 import useAuthStore from '@/stores/authStore';
 import { useNavigate } from "react-router-dom";
 import { Heart, LayoutDashboard, LogOut, ShoppingBag } from "lucide-react";
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -25,41 +24,23 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
         navigate(`/`);
     };
 
-    const checkIfAdmin = () => {
-        if (user && user.role === "ADMIN") {
-            setIsAdmin(true);
-        } else {
-            setIsAdmin(false);
-        }
-    };
-
     useEffect(() => {
-        if (user && user.role) {
-            checkIfAdmin();
-        }
-    }, [user]);
+        setIsAdmin(user?.role === "ADMIN");
+    }, [user, setIsAdmin]);
 
-    const goToDashboard = () => {
-        navigate("/admin");
-    };
-
-    const goToProfile = () => {
-        navigate("/user");
-    };
-
-    const goToWishlist = () => {
-        navigate("/user/wishlist");
-    };
+    const goToDashboard = () => navigate("/admin");
+    const goToProfile = () => navigate("/user");
+    const goToWishlist = () => navigate("/user/wishlist");
+    const goToPurchase = () => navigate("/user/purchase");
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div className="cursor-pointer">
-                    <Avatar className="w-8 h-8 rounded-full flex items-center" imgSrc={user?.profileImage}/>
+                    <Avatar className="w-8 h-8 rounded-full flex items-center" imgSrc={user?.profileImage} />
                 </div>
             </DropdownMenuTrigger>
 
-            {/* Show dropdown content if user is logged in */}
             {isLoggedIn && (
                 <DropdownMenuContent className="min-w-44">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -68,11 +49,11 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
                         <UserIcon />
                         Profile
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={goToWishlist} className="py-2"> {/* Updated to navigate to Wishlist */}
+                    <DropdownMenuItem onClick={goToWishlist} className="py-2">
                         <Heart />
                         Wishlist
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => alert("Purchase clicked")} className="py-2">
+                    <DropdownMenuItem onClick={goToPurchase} className="py-2">
                         <ShoppingBag />
                         Purchase
                     </DropdownMenuItem>
