@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import useProductStore from "@/stores/productStore";
 import UploadFileEditProduct from "./UploadfileEditProduct";
 
-const FormEditProduct = ({closeDialog}) => {
+const FormEditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const getCategory = useCategoryStore((state) => state.getCategory);
@@ -28,21 +28,23 @@ const FormEditProduct = ({closeDialog}) => {
   const inputImageRef = useRef(null);
 
   useEffect(() => {
-    getCategory();
+    // getCategory();
     getProduct();
   }, []);
 
   const getProduct = async () => {
     try {
       const resp = await actionReadProducts(id);
+      console.log("resp----------------", resp);
       setSelectedCategory(String(resp.categoryId));
 
+      // แปลงข้อมูลรูปภาพ
       const formattedImages = resp.ProductImages.map((img) => ({
         public_id: img.public_id,
-        secure_url: img.imageUrl,
+        secure_url: img.imageUrl, // หรือ img.url ขึ้นอยู่กับ response ที่ได้
       }));
 
-      setImage(formattedImages);
+      setImage(formattedImages); // ใช้ setImage แทน
 
       const formBody = {
         name: resp.name,
@@ -51,7 +53,6 @@ const FormEditProduct = ({closeDialog}) => {
         categoryId: resp.categoryId,
         stock: resp.stock,
       };
-
       // ใช้ switch-case เพื่อจัดการกับ categoryId
       switch (String(resp.categoryId)) {
         case "1": // CPU
@@ -125,21 +126,38 @@ const FormEditProduct = ({closeDialog}) => {
       [e.target.name]: e.target.value,
     });
     if (e.target.name === "categoryId") {
-      setSelectedCategory(e.target.value);
+      console.log(e.target.value);
+      setSelectedCategory(e.target.value); // อัปเดต category ที่เลือก
     }
   };
 
   const handleSubmit = async (e) => {
+    console.log("formbody555555", form);
     e.preventDefault();
 
+    // ตรวจสอบความถูกต้องของข้อมูล
     if (!form.name || !form.description || !form.price || !selectedCategory || !form.stock) {
       toast.error("Please fill in all required fields.");
       return;
     }
 
+    // const allProducts = {
+    //   image: image,
+    //   form: form,
+    //   selectedCategory: selectedCategory,
+    // };
+
+    // console.log("Attempting to update product with ID:", id);
+    // console.log("Product data:", allProducts);
+    // console.log("form", form);
+
     try {
+      let response;
+
+      // ถ้ามี id จะทำการอัปเดตข้อมูลสินค้า
       if (id) {
-        await actionUpdateProduct(id, { form, image });
+        response = await actionUpdateProduct(id, {form, image});
+        console.log("Update response:", response);
         toast.success("Product updated successfully!");
         navigate("/admin/product");
       }
@@ -154,121 +172,596 @@ const FormEditProduct = ({closeDialog}) => {
   };
 
   return (
-    <div>
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto bg-white">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Product Name:</label>
-                <input
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.name || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter product name"
-                  name="name"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Price:</label>
-                <input
-                  type="number"
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.price || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter price"
-                  name="price"
-                />
-              </div>
+    <div className="container mx-auto p-4 bg-white shadow-md">
+      <form onSubmit={handleSubmit}>
+        <h1>แก้ไขข้อมูลสินค้า</h1>
+        <label>Name:</label>
+        <input
+          className="border"
+          value={form.name || ""}
+          onChange={handleOnChange}
+          placeholder="Name"
+          name="name"
+        />
+        <label>Description:</label>
+        <input
+          className="border"
+          value={form.description || ""}
+          onChange={handleOnChange}
+          placeholder="Description"
+          name="description"
+        />
+        <label>Price:</label>
+        <input
+          type="number"
+          className="border"
+          value={form.price || ""}
+          onChange={handleOnChange}
+          placeholder="Price"
+          name="price"
+        />
+        <label>stock:</label>
+        <input
+          type="number"
+          className="border"
+          value={form.stock || ""}
+          onChange={handleOnChange}
+          placeholder="Stock"
+          name="stock"
+        />
+        {/* <label>Category:</label>
+        <select
+          value={selectedCategory}
+          className="border"
+          name="categoryId"
+          onChange={handleOnChange}
+          required
+        >
+          <option value={0} disabled>
+            Please Select
+          </option>
+          {categories.map((item, index) => (
+            <option key={index} value={item.id}>
+              {item.name}
+            </option>
+          ))}
+        </select> */}
 
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Stock Quantity:</label>
-                <input
-                  type="number"
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.stock || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter stock quantity"
-                  name="stock"
-                />
-              </div>
+        {/* Upload file */}
 
-              <div className="space-y-2 md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700">Description:</label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.description || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter product description"
-                  name="description"
-                  rows="3"
-                />
-              </div>
-            </div>
+        <UploadFileEditProduct
+          imageForm={image}
+          form={form}
+          setForm2={setForm}
+          setForm={setImage}
+          inputImageRef={inputImageRef}
+        />
 
+        {/* Conditional rendering for additional fields */}
+
+        {/*CPU Product*/}
+        {selectedCategory === "1" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Socket:</label>
+            <input
+              className="border"
+              value={form.socket || ""}
+              onChange={handleOnChange}
+              placeholder="Socket"
+              name="socket"
+            />
+            <label>Cores:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.cores || ""}
+              onChange={handleOnChange}
+              placeholder="Cores"
+              name="cores"
+            />
+            <label>Threads:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.threads || ""}
+              onChange={handleOnChange}
+              placeholder="Threads"
+              name="threads"
+            />
+            <label>BaseClock:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.baseClock || ""}
+              onChange={handleOnChange}
+              placeholder="BaseClock"
+              name="baseClock"
+            />
+            <label>BoostClock:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.boostClock || ""}
+              onChange={handleOnChange}
+              placeholder="BoostClock"
+              name="boostClock"
+            />
+            <label>Description:</label>
+            <input
+              className="border"
+              value={form.description || ""}
+              onChange={handleOnChange}
+              placeholder="Description"
+              name="description"
+            />
+          </div>
+        )}
+
+        {/*Monitor Product*/}
+        {selectedCategory === "2" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Size:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.size || ""}
+              onChange={handleOnChange}
+              placeholder="Size"
+              name="size"
+            />
+            <label>Resolution:</label>
+            <input
+              className="border"
+              value={form.resolution || ""}
+              onChange={handleOnChange}
+              placeholder="Resolution"
+              name="resolution"
+            />
+            <label>RefreshRate:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.refreshRate || ""}
+              onChange={handleOnChange}
+              placeholder="RefreshRate"
+              name="refreshRate"
+            />
+            <label>PanelType:</label>
+            <input
+              className="border"
+              value={form.panelType || ""}
+              onChange={handleOnChange}
+              placeholder="PanelType"
+              name="panelType"
+            />
+          </div>
+        )}
+
+        {/*CPUCooler Product*/}
+        {selectedCategory === "3" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Socket:</label>
+            <input
+              className="border"
+              value={form.socket || ""}
+              onChange={handleOnChange}
+              placeholder="Socket"
+              name="socket"
+            />
+            <label>Radiator:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.radiator || ""}
+              onChange={handleOnChange}
+              placeholder="Radiator"
+              name="radiator"
+            />
+
+            {/* Radio buttons for Type */}
             <div>
-              <UploadFileEditProduct
-                imageForm={image}
-                form={form}
-                setForm2={setForm}
-                setForm={setImage}
-                inputImageRef={inputImageRef}
-              />
-            </div>
-
-            {selectedCategory === "1" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">CPU Information</h2>
-                
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">Model:</label>
+              <label>Type:</label>
+              <div>
+                <label>
                   <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
+                    type="radio"
+                    name="type"
+                    value="AIR"
+                    checked={form.type === "AIR"}
                     onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">Socket:</label>
+                  AIR
+                </label>
+                <label>
                   <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.socket || ""}
+                    type="radio"
+                    name="type"
+                    value="LIQUID"
+                    checked={form.type === "LIQUID"}
                     onChange={handleOnChange}
-                    placeholder="Enter socket"
-                    name="socket"
                   />
-                </div>
-
-                {/* Similar styling for other CPU fields */}
+                  LIQUID
+                </label>
               </div>
-            )}
-
-            {/* Additional conditional rendering blocks for other categories */}
-            
-            <div className="flex flex-col gap-4 mt-6">
-              <button
-                type="submit"
-                className="w-full px-4 py-3 text-white rounded-lg bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-              >
-                Save Changes
-              </button>
-              <button
-                type="button"
-                onClick={closeDialog}
-                className="w-full px-4 py-3 bg-slate-700 text-white rounded-lg hover:bg-black transition-colors duration-200"
-              >
-                Cancel
-              </button>
             </div>
-          </form>
-        </div>
-      </div>
+          </div>
+        )}
+
+        {/*PowerSupply Product*/}
+        {selectedCategory === "4" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Wattage:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.wattage || ""}
+              onChange={handleOnChange}
+              placeholder="Wattage"
+              name="wattage"
+            />
+          </div>
+        )}
+
+        {/*Case Product*/}
+        {selectedCategory === "5" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Size:</label>
+            <input
+              className="border"
+              value={form.size || ""}
+              onChange={handleOnChange}
+              placeholder="Size"
+              name="size"
+            />
+          </div>
+        )}
+
+        {/*GPU Product*/}
+        {selectedCategory === "6" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Vram:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.vram || ""}
+              onChange={handleOnChange}
+              placeholder="Vram"
+              name="vram"
+            />
+            <label>Power:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.power || ""}
+              onChange={handleOnChange}
+              placeholder="Power"
+              name="power"
+            />
+          </div>
+        )}
+
+        {/*Memory Product*/}
+        {selectedCategory === "7" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Memory:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.memory || ""}
+              onChange={handleOnChange}
+              placeholder="Memory"
+              name="memory"
+            />
+            <label>BusSpeed:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.busSpeed || ""}
+              onChange={handleOnChange}
+              placeholder="BusSpeed"
+              name="busSpeed"
+            />
+            <label>Type:</label>
+            <input
+              className="border"
+              value={form.type || ""}
+              onChange={handleOnChange}
+              placeholder="Type"
+              name="type"
+            />
+          </div>
+        )}
+
+        {/*Motherboard Product*/}
+        {selectedCategory === "8" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Socket:</label>
+            <input
+              className="border"
+              value={form.socket || ""}
+              onChange={handleOnChange}
+              placeholder="Socket"
+              name="socket"
+            />
+            <label>Chipset:</label>
+            <input
+              className="border"
+              value={form.chipset || ""}
+              onChange={handleOnChange}
+              placeholder="Chipset"
+              name="chipset"
+            />
+          </div>
+        )}
+
+        {/*Drive Product*/}
+        {selectedCategory === "9" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Size:</label>
+            <input
+              className="boerder"
+              value={form.size || ""}
+              onChange={handleOnChange}
+              placeholder="Size"
+              name="size"
+            />
+
+            {/* Radio buttons for Type */}
+            <div>
+              <label>Type:</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    name="type"
+                    value="HDD"
+                    checked={form.type === "HDD"}
+                    onChange={handleOnChange}
+                  />
+                  HDD
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="type"
+                    value="SSD"
+                    checked={form.type === "SSD"}
+                    onChange={handleOnChange}
+                  />
+                  SSD
+                </label>
+              </div>
+            </div>
+
+            {/* Radio buttons for Format */}
+            <div>
+              <label>Format:</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    name="format"
+                    value="SATA"
+                    checked={form.format === "SATA"}
+                    onChange={handleOnChange}
+                  />
+                  SATA
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="format"
+                    value="M_2"
+                    checked={form.format === "M_2"}
+                    onChange={handleOnChange}
+                  />
+                  M.2
+                </label>
+              </div>
+            </div>
+            <label>Speed:</label>
+            <input
+              className="border"
+              value={form.speed || ""}
+              onChange={handleOnChange}
+              placeholder="Speed"
+              name="speed"
+            />
+          </div>
+        )}
+
+        {/*Accessory Product*/}
+        {selectedCategory === "10" && (
+          <div>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Description:</label>
+            <input
+              className="border"
+              value={form.description || ""}
+              onChange={handleOnChange}
+              placeholder="Description"
+              name="description"
+            />
+            <label>Accessories Type:</label>
+            <select
+              className="border"
+              value={form.accessoriesType || ""}
+              onChange={handleOnChange}
+              name="accessoriesType"
+            >
+              <option value="" disabled>
+                Please Select
+              </option>
+              <option value="MOUSE">Mouse</option>
+              <option value="KEYBOARD">Keyboard</option>
+              <option value="CHAIR">Chair</option>
+              <option value="HEADPHONE">Headphone</option>
+              <option value="MICROPHONE">Microphone</option>
+              <option value="SPEAKER">Speaker</option>
+              <option value="OTHER">Other</option>
+            </select>
+          </div>
+        )}
+
+        <button className="bg-blue-500 p-2 rounded-md shadow-md hover:scale-105 hover:-translate-y-1 hover:duration-200">แก้ไขสินค้า</button>
+
+        <hr />
+        <br />
+      </form>
     </div>
   );
 };
 
 export default FormEditProduct;
+
