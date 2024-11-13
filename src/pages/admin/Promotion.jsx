@@ -221,11 +221,11 @@ const Promotion = () => {
                                     <TableCell className="text-center">{coupon.status}</TableCell>
                                     <TableCell className="text-center">
                                         <div className="flex items-center justify-center gap-2">
-                                            <Button onClick={() => openDialog(coupon.id)} className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                                                <Pencil className="h-4 w-4" />
+                                            <Button onClick={() => openDialog(coupon.id)} className="p-2 border rounded-full bg-blue-100 hover:bg-blue-200 transition-colors">
+                                                <Pencil className="h-4 w-4 text-blue-500" />
                                             </Button>
-                                            <Button onClick={() => handleDelete(coupon.id)} className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600">
-                                                <Trash className="h-4 w-4" />
+                                            <Button onClick={() => handleDelete(coupon.id)} className="p-2 rounded-full bg-red-100 hover:bg-red-200 transition-colors">
+                                                <Trash className="h-4 w-4 text-red-500" />
                                             </Button>
                                         </div>
                                     </TableCell>
@@ -236,14 +236,14 @@ const Promotion = () => {
                 </CardContent>
             </Card>
 
-            {isDialogOpen && selectedPromotionId && (
+            
                 <EditPromotionDialog
                     isOpen={isDialogOpen}
                     promotionId={selectedPromotionId}
                     onClose={closeDialog}
                     fetchCoupons={fetchCoupons}
                 />
-            )}
+            
         </div>
     );
 };

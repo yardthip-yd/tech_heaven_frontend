@@ -160,7 +160,7 @@ const FormEditProduct = ({closeDialog}) => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Product Name:</label>
+                <label className="block text-sm font-medium text-slate-700">Product Name:</label>
                 <input
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={form.name || ""}
@@ -171,7 +171,7 @@ const FormEditProduct = ({closeDialog}) => {
               </div>
               
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Price:</label>
+                <label className="block text-sm font-medium text-slate-700">Price:</label>
                 <input
                   type="number"
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -183,7 +183,7 @@ const FormEditProduct = ({closeDialog}) => {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Stock Quantity:</label>
+                <label className="block text-sm font-medium text-slate-700">Stock Quantity:</label>
                 <input
                   type="number"
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -195,7 +195,7 @@ const FormEditProduct = ({closeDialog}) => {
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Description:</label>
+                <label className="block text-sm font-medium text-slate-700">Description:</label>
                 <textarea
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={form.description || ""}
@@ -218,11 +218,11 @@ const FormEditProduct = ({closeDialog}) => {
             </div>
 
             {selectedCategory === "1" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-50 rounded-lg">
-                <h2 className="text-lg font-medium text-gray-800 col-span-2">CPU Information</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                <h2 className="text-lg font-medium text-slate-800 col-span-2">CPU Information</h2>
                 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Model:</label>
+                  <label className="block text-sm font-medium text-slate-700">Model:</label>
                   <input
                     className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={form.model || ""}
@@ -233,7 +233,7 @@ const FormEditProduct = ({closeDialog}) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Socket:</label>
+                  <label className="block text-sm font-medium text-slate-700">Socket:</label>
                   <input
                     className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={form.socket || ""}

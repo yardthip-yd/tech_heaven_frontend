@@ -32,9 +32,10 @@ import EditProduct from "@/pages/admin/EditProduct";
 import ProductDetail from "@/pages/user/ProductDetail";
 import UserCart from "@/pages/UserCart";
 import Wishlist from "@/pages/Wishlist";
-import OrderSuccess from "@/components/user/OrderSuccess";
+import OrderSuccess from "@/components/order/OrderSuccess";
 import PCBuild from "@/pages/PCBuild";
 import Promotion from "@/pages/admin/Promotion";
+import Purchase from "@/pages/Purchase";
 
 // Import Store
 
@@ -83,6 +84,7 @@ const router = createBrowserRouter([
       { path: "wishlist", element: <Wishlist /> },
       { path: "payment", element: <Payment /> },
       { path: "order-success", element: <OrderSuccess /> },
+      { path: "purchase", element: <Purchase /> },
     ],
   },
 ]);

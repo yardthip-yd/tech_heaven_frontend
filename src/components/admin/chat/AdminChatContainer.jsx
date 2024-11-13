@@ -3,19 +3,20 @@ import AdminChatHeader from "./AdminChatHeader";
 import AdminChatBody from "./AdminChatBody";
 import AdminChatFooter from "./AdminChatFooter";
 import useChatStore from "@/stores/chatStore";
+import { Card } from "@/components/ui/card";
 import { SocketContext } from "@/contexts/SocketContext";
 
 function AdminChatContainer() {
   const { adminActiveChat } = useContext(SocketContext);
   // const adminActiveChat = useChatStore((state) => state.adminActiveChat);
   return adminActiveChat ? (
-    <div className="absolute flex flex-col w-[20rem] h-[28rem] bottom-0 right-80 bg-slate-400 rounded-tl-md rounded-tr-md">
+    <Card className="absolute z-30 right-[333px] bottom-10 border w-[400px] h-[402px] shadow-xl border-slate-100 bg-slate-50 rounded-xl mr-2 flex flex-col justify-between">
       <AdminChatHeader />
       <AdminChatBody />
       <AdminChatFooter />
-    </div>
+    </Card>
   ) : (
-    <div className="flex-1 flex flex-col">AdminChat</div>
+    <div className="flex-1 flex flex-col text-slate-400">AdminChat</div>
   );
 }
 

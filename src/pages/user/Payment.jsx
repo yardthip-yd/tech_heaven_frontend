@@ -3,7 +3,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripeApi } from "@/API/stripe-api";
 import useAuthStore from "@/stores/authStore";
-import CheckoutForm from "@/components/user/CheckoutForm";
+import CheckoutForm from "@/components/payment/CheckoutForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -88,17 +88,6 @@ const Payment = () => {
   };
 
 
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gray-50">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 bg-blue-200 rounded-full mb-4"></div>
-          <div className="h-4 w-48 bg-blue-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     toast.error(error);

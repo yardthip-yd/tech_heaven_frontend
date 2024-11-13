@@ -1,71 +1,35 @@
 import chatApi from "@/API/chat-api";
 import ChatMessage from "@/components/chat/ChatMessage";
 import { SocketContext } from "@/contexts/SocketContext";
-import useChatStore from "@/stores/chatStore";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import moment from "moment";
 
 function AdminChatBody() {
   const [messageList, setMessageList] = useState([]);
-  const [moreMessageList, setMoreMessageList] = useState([]);
-  const [loadMessage, setLoadMessage] = useState(false);
-  const [skipMessage, setSkipMessage] = useState(0);
-  // const adminActiveChat = useChatStore((state) => state.adminActiveChat);
+  const [displayedMessagesCount, setDisplayedMessagesCount] = useState(4);
+  const [hasMoreMessages, setHasMoreMessages] = useState(true);
   const { socket, adminActiveChat } = useContext(SocketContext);
-  //   const adminActiveChat = useChatStore((state) => state.adminActiveChat);
-  const topChatRef = useRef(null);
-  const msgRef = useRef(null);
   const bottomChatRef = useRef(null);
 
   const scrollToBottom = () => {
     bottomChatRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const scrollToMsgRef = () => {
-    msgRef.current?.scrollIntoView();
-  };
-
   const getMessages = async () => {
     const resp = await chatApi.getChatById(adminActiveChat.chatId);
-    // console.log(resp.data);
-    setMessageList(resp.data);
-    console.log("mes len ", resp.data.length);
-
-    if (resp.data.length < 10) {
-      setLoadMessage(false);
-    } else {
-      setLoadMessage(true);
-      setSkipMessage(resp.data.length);
-    }
-
+    const allMessages = resp.data;
+    setMessageList(allMessages);
+    setDisplayedMessagesCount(4);
+    setHasMoreMessages(allMessages.length > 2);
     setTimeout(scrollToBottom, 250);
   };
 
-  const getMoreMessge = async () => {
-    const resp = await chatApi.getMoreMessage(
-      adminActiveChat.chatId,
-      skipMessage
-    );
-    setMoreMessageList(resp.data);
-    if (resp.data.length < 10) {
-      setLoadMessage(false);
-    } else {
-      setLoadMessage(true);
-      setSkipMessage((prev) => prev + resp.data.length);
-    }
-    // setTimeout(scrollToMsgRef, 100);
-  };
-
-  const handleScroll = (e) => {
-    const { scrollTop } = e.currentTarget;
-    if (scrollTop === 0 && loadMessage) {
-      if (moreMessageList.length > 0) {
-        setMessageList((prev) => [...moreMessageList, ...prev]);
-        setMoreMessageList([]);
-      }
-      getMoreMessge().then(() => {
-        scrollToMsgRef();
-      });
-    }
+  const loadMoreMessages = () => {
+    setDisplayedMessagesCount((prev) => {
+      const newCount = prev + 2;
+      setHasMoreMessages(newCount < messageList.length);
+      return newCount;
+    });
   };
 
   useEffect(() => {
@@ -83,21 +47,42 @@ function AdminChatBody() {
     };
   }, [adminActiveChat, socket]);
 
+  const formatDate = (date) => {
+    if (moment(date).isSame(new Date(), "day")) return "Today";
+    if (moment(date).isSame(moment().subtract(1, "day"), "day")) return "Yesterday";
+    if (moment(date).isSame(new Date(), "year")) return moment(date).format("MMM D");
+    return moment(date).format("MMM D, YYYY");
+  };
+
+  let lastDisplayedDate = null;
+
   return (
-    <div
-      className="bg-white flex-1 flex flex-col overflow-y-auto gap-2 py-1 px-1"
-      onScroll={handleScroll}
-    >
-      <div ref={topChatRef}></div>
-      {moreMessageList.map((message, index) => (
-        <ChatMessage key={index} message={message} />
-      ))}
-      <div ref={msgRef}></div>
-      {messageList.map((message, index) => (
-        <ChatMessage key={index} message={message} />
-      ))}
+    <div className="relative flex flex-col overflow-y-auto gap-2 py-2 px-3 scrollbar-hide">
+      {hasMoreMessages && (
+        <button
+          onClick={loadMoreMessages}
+          className="text-blue-300 text-sm hover:underline mb-2 self-center"
+        >
+          See more messages
+        </button>
+      )}
+      {messageList.slice(-displayedMessagesCount).map((message, index) => {
+        const messageDate = formatDate(message.createdAt);
+        const showDate = lastDisplayedDate !== messageDate;
+        lastDisplayedDate = messageDate;
+
+        return (
+          <React.Fragment key={message.id}>
+            {showDate && (
+              <div className="text-center text-xs text-slate-500 my-2">
+                {messageDate}
+              </div>
+            )}
+            <ChatMessage message={message} />
+          </React.Fragment>
+        );
+      })}
       <div ref={bottomChatRef}></div>
-      {/* <div className="min-h-[400px] bg-black"></div> */}
     </div>
   );
 }

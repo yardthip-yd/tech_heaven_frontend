@@ -3,6 +3,7 @@ import ChatHeader from "./ChatHeader";
 import ChatBody from "./ChatBody";
 import ChatFooter from "./ChatFooter";
 import { SocketContext } from "@/contexts/SocketContext";
+import { Card } from "@/components/ui/card";
 
 function ChatActive({ setActive }) {
   const { socket } = useContext(SocketContext);
@@ -14,11 +15,11 @@ function ChatActive({ setActive }) {
   }, [socket]);
 
   return (
-    <div className="absolute flex flex-col w-[20rem] h-[28rem] bottom-0 right-40 bg-slate-400 rounded-tl-md rounded-tr-md">
+    <Card className="absolute z-30 right-10 bottom-10 border w-[400px] h-[402px] shadow-xl border-slate-100 bg-slate-50 rounded-xl mr-2 flex flex-col justify-between">
       <ChatHeader setActive={setActive} />
       <ChatBody />
       <ChatFooter />
-    </div>
+    </Card>
   );
 }
 

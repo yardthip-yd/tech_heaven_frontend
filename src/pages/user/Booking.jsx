@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Plus, CalendarDays } from "lucide-react";
-import FormBooking from "../../components/user/FormBooking";
-import BookingList from "../../components/user/BookingList";
+import FormBooking from "../../components/booking/FormBooking";
+import BookingList from "../../components/booking/Bookinglist";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogTrigger  } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 
