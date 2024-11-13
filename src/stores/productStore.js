@@ -261,7 +261,7 @@ const useProductStore = create((set) => ({
 
 // ชั่วคราวระหว่างรอพี่อู๊ดแก้
 
-  actionGetAllProducts: async (count = 15) => {
+  actionGetAllProducts: async (count = 9999 ) => {
     set({ loading: true, error: null });
     try {
       const response = await getAllProduct(count);

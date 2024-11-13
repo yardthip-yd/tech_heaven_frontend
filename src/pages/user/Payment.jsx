@@ -3,33 +3,42 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripeApi } from "@/API/stripe-api";
 import useAuthStore from "@/stores/authStore";
-import CheckoutForm from "@/components/user/CheckoutForm";
-import { useLocation } from "react-router-dom"; // Import useLocation hook
+import CheckoutForm from "@/components/payment/CheckoutForm";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ShoppingBag, Package, CreditCard, Tag, Truck } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const stripePromise = loadStripe(
-  "pk_test_51QGAMTELH1fq6Tmu7Xaz1rROW2MVJaFwzpfDQUZwedBoszrmUk2zwr5DZ80QgJKBIT6vXki7Dnh2IeKftlchuuk100DI5LWtM0"
-);
+const stripePromise = loadStripe("pk_test_51QGAMTELH1fq6Tmu7Xaz1rROW2MVJaFwzpfDQUZwedBoszrmUk2zwr5DZ80QgJKBIT6vXki7Dnh2IeKftlchuuk100DI5LWtM0");
 
 const Payment = () => {
   const { state } = useLocation();
   const cartItems = state?.cartItems || [];
-  const totalPrice = cartItems
+  const navigate = useNavigate();
+
+  const [promotionCode, setPromotionCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+
+  const totalPriceBeforeDiscount = cartItems
     .reduce((total, item) => total + item.price * item.quantity, 0)
-    .toFixed(2);
+    .toLocaleString("en-US", { minimumFractionDigits: 2 });
+  const totalPriceAfterDiscount = (totalPriceBeforeDiscount - discount)
+    .toLocaleString("en-US", { minimumFractionDigits: 2 });
 
   const token = useAuthStore((state) => state.token);
   const [clientSecret, setClientSecret] = useState("");
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [error, setError] = useState(null); // Add error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!token) return; // Avoid making the API call if token is not available
-
-    // Fetch the clientSecret from the server
+    if (!token) return;
     stripeApi(token)
       .then((res) => {
         setClientSecret(res.data.clientSecret);
-        setLoading(false); // Set loading to false once clientSecret is fetched
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -38,69 +47,148 @@ const Payment = () => {
       });
   }, [token]);
 
-  const appearance = {
-    theme: "stripe",
+  const appearance = { theme: "stripe" };
+
+  const handleApplyPromotion = () => {
+    // Promotion Apply Function
   };
 
-  // Loader content while waiting for the API response
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <p>Loading payment details...</p>
-      </div>
-    );
-  }
-
-  // Error content if the API fails
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-row m-10">
-      <div className="w-1/2 p-4">
-        <h3 className="text-xl font-bold">Your Cart</h3>
-        {cartItems.length === 0 ? (
-          <p>Your cart is empty!</p>
-        ) : (
-          cartItems.map((item) => (
-            <div key={item.id} className="flex flex-row gap-4 my-4">
-              <div className="w-24 h-24">
-                <img
-                  src={item.ProductImages[0]?.imageUrl || "https://via.placeholder.com/150"}
-                  alt={item.name}
-                  className="w-full h-full object-cover rounded"
-                />
+    <div className="bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-8 overflow-y-auto max-h-[80vh]">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      <div className="max-w-4xl mx-auto space-y-6 h-full">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate("/store")}
+            className="flex items-center gap-2"
+          >
+            <ShoppingBag className="w-4 h-4" />
+            Continue Shopping
+          </Button>
+        </div>
+
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Package className="w-5 h-5" />
+              Order Items
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {cartItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
+                <p className="text-gray-500 text-lg mb-4">Your cart is empty</p>
+                <Button variant="default" onClick={() => navigate("/store")}>
+                  Start Shopping
+                </Button>
               </div>
-              <div className="flex flex-col justify-between">
-                <h4>{item.name}</h4>
-                <p>{item.description}</p>
-                <div className="flex h-1/2 items-end">
-                  <p>${item.price}</p>
+            ) : (
+              <div className="space-y-4">
+                {cartItems.map((item) => (
+                  <div key={item.id} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow">
+                    <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 overflow-hidden rounded-lg">
+                      <img
+                        src={item.ProductImages[0]?.imageUrl || "https://via.placeholder.com/150"}
+                        alt={item.name}
+                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-200"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg text-gray-900 mb-1">
+                        {item.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-3">{item.description}</p>
+                      <div className="flex justify-between items-center">
+                        <p className="text-lg font-medium text-blue-600">
+                          THB {(item.price * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                        </p>
+                        <span className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
+                          Qty: {item.quantity}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="flex flex-col gap-6">
+
+        <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Truck className="w-5 h-5" />
+                Order Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span className="font-medium">THB {totalPriceBeforeDiscount}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Discount</span>
+                  <span className="font-medium text-red-600">- THB {discount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Shipping</span>
+                  <span className="text-gray-600">Calculated at checkout</span>
+                </div>
+                <div className="pt-3 border-t">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">Total</span>
+                    <span className="font-bold text-xl text-blue-600">THB {totalPriceAfterDiscount}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-        )}
-        <div className="flex flex-row justify-between">
-          <span className="font-bold text-xl">Total</span>
-          <span>${totalPrice}</span>
-        </div>
-      </div>
+            </CardContent>
+          </Card>
 
-      <div className="flex flex-col w-1/2">
-        {clientSecret && (
-          <Elements
-            options={{ clientSecret, appearance }}
-            stripe={stripePromise}
-          >
-            <CheckoutForm />
-          </Elements>
-        )}
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Tag className="w-5 h-5" />
+                Promotion Code
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-3 items-center justify-center">
+                <Input
+                  type="text"
+                  placeholder="Enter promotion code"
+                  value={promotionCode}
+                  onChange={(e) => setPromotionCode(e.target.value)}
+                  className="flex-1"
+                />
+                <Button onClick={handleApplyPromotion} variant="default">
+                  Apply
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <CreditCard className="w-5 h-5" />
+              Payment Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {clientSecret && (
+              <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
+                <CheckoutForm />
+              </Elements>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

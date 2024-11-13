@@ -1,69 +1,49 @@
 import Avatar from "@/components/Avatar";
 import { SocketContext } from "@/contexts/SocketContext";
 import useAuthStore from "@/stores/authStore";
-import useChatStore from "@/stores/chatStore";
 import React, { useContext, useEffect, useState } from "react";
+import { BellDot, ChevronLeft } from "lucide-react";
 
 function AdminChatList(props) {
   const { chat } = props;
-  // console.log(chat);
-  const { socket, chatNotify, setChatNotify, setAdminActiveChat } =
-    useContext(SocketContext);
-
-  // const setAdminActiveChat = useChatStore((state) => state.setAdminActiveChat);
+  const { socket, chatNotify, setChatNotify, setAdminActiveChat } = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
-
-  // const chatNotify = useChatStore((state) => state.chatNotify);
-  // console.log(chatNotify);
-  // const setChatNotify = useChatStore((state) => state.setChatNotify);
   const [notify, setNotify] = useState(false);
 
   const hdlOnclick = () => {
     setAdminActiveChat(chat);
     if (chatNotify.length > 0) {
-      //remove notify
-      const newNotify = chatNotify.filter(
-        (item) => item.chatId !== chat.chatId
-      );
+      const newNotify = chatNotify.filter((item) => item.chatId !== chat.chatId);
       setChatNotify(newNotify);
-
-      //emit update notify
-      socket.emit("update-chat-notify", {
-        chatId: chat.chatId,
-        userId: currentUser.id,
-      });
+      socket.emit("update-chat-notify", { chatId: chat.chatId, userId: currentUser.id });
     }
   };
 
   useEffect(() => {
-    // console.log(chatNotify);
-    const thisNotify = chatNotify.filter((item) => item.chatId === chat.chatId);
-    // console.log(thisNotify);
-    if (thisNotify.length > 0) {
-      // console.log("notify");
-      setNotify(true);
-    } else {
-      // console.log("no notify");
-      setNotify(false);
-    }
+    const thisNotify = chatNotify.some((item) => item.chatId === chat.chatId);
+    setNotify(thisNotify);
   }, [chatNotify]);
 
   return (
-    <div
-      className="flex gap-2 p-1 px-2 bg-slate-400 hover:contrast-125"
+    <div 
+      className="relative  flex py-2 items-center gap-4 p-2 px-4 rounded-lg cursor-pointer hover:bg-blue-100 transition-colors duration-200 group"
       onClick={hdlOnclick}
     >
-      {/* PROFILE */}
-      <Avatar
-        className="w-12 h-12 rounded-full flex items-center shadow-lg"
-        imgSrc={chat.user.profileImage}
-      />
-      {/* NAME */}
-      <div className="flex-1">
-        <div>{chat.user.firstName + " " + chat.user.lastName}</div>
+      {/* ChevronLeft Icon */}
+      <ChevronLeft className="absolute w-4 h-4 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 left-1" />
+      
+      {/* Profile Avatar */}
+      <div className="flex gap-2 items-center flex-1 ml-2">
+        <Avatar className="w-10 h-10 rounded-full" imgSrc={chat.user.profileImage} />
+        
+        {/* User Name */}
+        <div className="flex-1">
+          <div className="text-slate-700 font-semibold">{chat.user.firstName + " " + chat.user.lastName}</div>
+        </div>
       </div>
-      {/* notify dot */}
-      {notify && <div className="w-2 h-2 rounded-full bg-red-500"></div>}
+      
+      {/* Notification Icon */}
+      {notify && <BellDot className="w-5 h-5 text-blue-500 mr-2" />}
     </div>
   );
 }

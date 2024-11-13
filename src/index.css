@@ -82,6 +82,15 @@
     border-radius: 25%;
     border: none
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @layer base {
@@ -102,8 +111,10 @@
   /* ซ่อน scrollbar เฉพาะใน no-scrollbar */
   .no-scrollbar {
     overflow: auto;
-    -ms-overflow-style: none; /* สำหรับ Internet Explorer */
-    scrollbar-width: none; /* สำหรับ Firefox */
+    -ms-overflow-style: none;
+    /* สำหรับ Internet Explorer */
+    scrollbar-width: none;
+    /* สำหรับ Firefox */
   }
 
   /* ซ่อน scrollbar เฉพาะใน Chrome, Edge */
