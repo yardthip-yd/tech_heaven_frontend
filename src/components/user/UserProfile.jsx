@@ -4,6 +4,7 @@ import { Camera, User, Eye, EyeOff, Pencil } from "lucide-react";
 import useAuthStore from "@/stores/authStore";
 import useAddressStore from "@/stores/addressStore";
 import Avatar from '../Avatar';
+import UserImageCropper from '@/components/user/UserImageCropper';
 
 const UserProfile = () => {
   const { user, getCurrentUser, actionUpdateUser } = useAuthStore();
@@ -20,6 +21,8 @@ const UserProfile = () => {
   const [profileImagePreview, setProfileImagePreview] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isCropping, setIsCropping] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   useEffect(() => {
@@ -45,8 +48,18 @@ const UserProfile = () => {
       toast.error("File size exceeds 10MB limit.");
       return;
     }
-    setProfileImage(file);
+    setIsCropping(true);
     setProfileImagePreview(URL.createObjectURL(file));
+  };
+
+  const handleCropComplete = (croppedBlob) => {
+    setProfileImage(croppedBlob);
+    setProfileImagePreview(URL.createObjectURL(croppedBlob));
+    setIsCropping(false);
+  };
+
+  const handleCloseCropper = () => {
+    setIsCropping(false);
   };
 
   const hdlUpdateProfile = async () => {
@@ -57,6 +70,7 @@ const UserProfile = () => {
 
     if (password && password !== confirmPassword) {
       toast.error("Passwords do not match!");
+      setIsLoading(false);
       return;
     }
 
@@ -72,6 +86,8 @@ const UserProfile = () => {
       toast.success("Profile updated successfully!");
     } catch (error) {
       toast.error("Failed to update profile.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -124,7 +140,6 @@ const UserProfile = () => {
               <Avatar className="rounded-full flex items-center" imgSrc={user?.profileImage} />
             )}
 
-            {/* Edit Avatar Overlay */}
             <label
               htmlFor="avatar-upload"
               className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
@@ -144,7 +159,6 @@ const UserProfile = () => {
           </div>
           <span className="text-slate-500 text-sm text-center"> " click on profile picture <br /> for edit avatar "</span>
         </div>
-
         {/* Form Section */}
         <div className="flex-1 space-y-8 max-w-2xl">
           <div className="grid grid-cols-2 gap-4">
@@ -246,12 +260,25 @@ const UserProfile = () => {
 
           <button
             onClick={hdlUpdateProfile}
-            className="w-full py-3 text-white rounded-lg font-semibold shadow-lg transition-all duration-300 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+            className={`w-full py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 ${isLoading
+                ? "bg-slate-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white"
+              }`}
+            disabled={isLoading}
           >
-            Save Changes
+            {isLoading ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
+
+      {/* Image Cropper Modal */}
+      {isCropping && (
+        <UserImageCropper
+          imageSrc={profileImagePreview}
+          onCropComplete={handleCropComplete}
+          onClose={handleCloseCropper}
+        />
+      )}
     </div>
   );
 };

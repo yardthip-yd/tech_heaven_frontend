@@ -3,7 +3,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { stripeApi } from "@/API/stripe-api";
 import useAuthStore from "@/stores/authStore";
-import CheckoutForm from "@/components/user/CheckoutForm";
+import CheckoutForm from "@/components/payment/CheckoutForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

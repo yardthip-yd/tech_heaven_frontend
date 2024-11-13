@@ -62,7 +62,7 @@ const NewArrival = () => {
   return (
     <div
       ref={sectionRef}
-      className="min-h-[800px] w-full bg-gradient-to-b from-white to-[#f8f9ff] py-20 relative overflow-hidden"
+      className="min-h-[800px] w-full bg-gradient-to-b from-white to-[#f8f9ff] py-20 relative overflow-visible"
     >
       {/* Parallax Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
@@ -116,6 +116,7 @@ const NewArrival = () => {
           <motion.div
             className="flex gap-8"
             animate={{ x: ["0%", "-50%"] }}
+            whileHover={{ x: "0%" }}
             transition={{
               duration: 10,
               repeat: Infinity,

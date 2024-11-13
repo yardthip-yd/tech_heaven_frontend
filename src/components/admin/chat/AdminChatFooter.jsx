@@ -4,6 +4,7 @@ import { SocketContext } from "@/contexts/SocketContext";
 import useAuthStore from "@/stores/authStore";
 import useChatStore from "@/stores/chatStore";
 import React, { useContext, useState } from "react";
+import { Send } from "lucide-react";
 
 function AdminChatFooter() {
   const [sendMessage, setSendMessage] = useState("");
@@ -34,16 +35,18 @@ function AdminChatFooter() {
   };
 
   return (
-    <div className="flex justify-between items-center p-2 gap-2">
-      <Input
+    <div className="relative flex justify-between items-center p-2 gap-2">
+      <input
         type="text"
-        placeholder="Type your message here."
-        className="flex-1"
+        placeholder="Type your message . . ."
+        className="w-full p-2 rounded-full bg-blue-100 placeholder:text-sm placeholder:pl-3"
         value={sendMessage}
         onChange={handleChange}
         onKeyPress={handleEnterKey}
       />
-      <Button onClick={handleSubmit}>Send</Button>
+      <div className="absolute p-[8px] rounded-full bg-blue-500 right-[12px]" onClick={handleSubmit}>
+        <Send className="h-4 w-4 text-white" />
+      </div>
     </div>
   );
 }

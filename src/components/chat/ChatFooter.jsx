@@ -1,15 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { SocketContext } from "@/contexts/SocketContext";
 import useAuthStore from "@/stores/authStore";
-import useChatStore from "@/stores/chatStore";
+import { Send } from "lucide-react";
 
 function ChatFooter() {
   const [sendMessage, setSendMessage] = useState("");
   const { socket, chatId } = useContext(SocketContext);
   const currentUser = useAuthStore((state) => state.user);
-  // const chatId = useChatStore((state) => state.chatId);
 
   const handleEnterKey = (e) => {
     if (e.key === "Enter") {
@@ -23,7 +20,6 @@ function ChatFooter() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(sendMessage);
     socket.emit("user-send-message", {
       message: sendMessage,
       userId: currentUser.id,
@@ -33,16 +29,21 @@ function ChatFooter() {
   };
 
   return (
-    <div className="flex justify-between items-center p-2 gap-2">
-      <Input
+    <div className="relative flex justify-between items-center p-2 gap-2">
+      <input
         type="text"
-        placeholder="Type your message here."
-        className="flex-1"
+        placeholder="Type your message . . ."
+        className="w-full p-2 rounded-full bg-blue-100 placeholder:text-sm placeholder:pl-3"
         value={sendMessage}
         onChange={handleChange}
         onKeyPress={handleEnterKey}
       />
-      <Button onClick={handleSubmit}>Send</Button>
+      <div
+        className="absolute p-[8px] rounded-full bg-blue-500 right-[12px] cursor-pointer"
+        onClick={handleSubmit}
+      >
+        <Send className="h-4 w-4 text-white" />
+      </div>
     </div>
   );
 }
