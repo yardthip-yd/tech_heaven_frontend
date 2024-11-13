@@ -49,7 +49,7 @@ const FormDashboard = () => {
     labels: ['New Users in Last 7 Days'],
     datasets: [
       {
-        label: 'จำนวนผู้ที่ลงทะเบียน 7 วันที่ผ่านมา',
+        label: 'จำนวนผู้ลงทะเบียน 7 วันที่ผ่านมา',
         data: [newUserCount],
         backgroundColor: '#0D9488',
       },
@@ -144,7 +144,7 @@ const FormDashboard = () => {
 
         <div className="bg-white shadow-md p-6 rounded-lg flex items-center justify-between hover:shadow-lg transition-all hover:bg-gray-100 transform hover:scale-105">
           <div>
-            <h3 className="text-xl font-medium text-gray-700">จำนวนผู้ที่ลงทะเบียน 7 วันที่ผ่านมา</h3>
+            <h3 className="text-xl font-medium text-gray-700">จำนวนผู้ลงทะเบียน 7 วันที่ผ่านมา</h3>
             <p className="text-2xl font-bold text-blue-500">{newUserCount}</p>
           </div>
         </div>
