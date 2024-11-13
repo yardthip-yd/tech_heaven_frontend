@@ -7,7 +7,7 @@ const EditPromotionDialog = ({ isOpen, onClose, promotionId }) => {
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-semibold text-gray-800">Edit Promotion</DialogTitle>
+                    <DialogTitle className="text-2xl font-semibold text-slate-800">Edit Promotion</DialogTitle>
                     <DialogClose onClick={onClose} />
                 </DialogHeader>
                 <form className="space-y-4">

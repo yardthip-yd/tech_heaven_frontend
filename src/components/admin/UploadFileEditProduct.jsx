@@ -84,13 +84,13 @@ const UploadFileEditProduct = ({ form, setForm, setForm2, inputImageRef, imageFo
       </div>
 
       <div className="flex items-center">
-        <span className="text-sm font-medium mr-2 text-gray-700">Upload Product Image: </span>
+        <span className="text-sm font-medium mr-2 text-slate-700">Upload Product Image: </span>
         <button
           type="button"
           onClick={() => inputImageRef.current.click()}
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 hover:bg-gray-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-200 hover:bg-slate-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         >
-          <Camera className="w-6 h-6 text-gray-600" />
+          <Camera className="w-6 h-6 text-slate-600" />
         </button>
         <input
           onChange={handleOnChange}

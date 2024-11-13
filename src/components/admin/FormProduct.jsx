@@ -268,7 +268,7 @@ const FormProduct = () => {
         <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
           <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle className="text-2xl font-semibold text-gray-800">Edit Product Information</DialogTitle>
+              <DialogTitle className="text-2xl font-semibold text-slate-800">Edit Product Information</DialogTitle>
               <DialogClose onClick={closeDialog} />
             </DialogHeader>
             <FormEditProduct productId={selectedProductId} closeDialog={closeDialog} />

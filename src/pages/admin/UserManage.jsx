@@ -85,7 +85,7 @@ function UserManage() {
         </CardHeader>
         <CardContent>
           {loading ? (
-            <div className="text-center py-8 text-gray-500">Loading users...</div>
+            <div className="text-center py-8 text-slate-500">Loading users...</div>
           ) : (
             <Table>
               <TableHeader className="h-14 bg-slate-100">

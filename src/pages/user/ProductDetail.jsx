@@ -51,32 +51,6 @@ const ProductDetail = () => {
         }
     }, [products, id]);
 
-    if (isLoading) {
-        return (
-            <div className="px-8 py-12 max-w-7xl mx-auto">
-                <div className="flex gap-8">
-                    <div className="w-1/2">
-                        <Skeleton className="w-full h-[600px] rounded-lg" />
-                        <div className="flex gap-4 mt-4">
-                            {[1, 2, 3].map((i) => (
-                                <Skeleton key={i} className="w-20 h-20 rounded-lg" />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="w-1/2 space-y-4">
-                        <Skeleton className="h-10 w-3/4" />
-                        <Skeleton className="h-20 w-full" />
-                        <Skeleton className="h-8 w-1/4" />
-                        <div className="flex gap-4">
-                            <Skeleton className="h-12 w-1/2" />
-                            <Skeleton className="h-12 w-1/2" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     if (!productData) return null;
 
     const relatedProducts = products.filter(
@@ -102,6 +76,22 @@ const ProductDetail = () => {
             } catch (error) {
                 toast.error("Failed to add to wishlist");
             }
+        }
+    };
+
+    const handleBuyNow = () => {
+        if (!user) {
+            setIsLoginModalOpen(true);
+        } else {
+            const cartItems = useCartStore.getState().cartItems; // ดึงข้อมูล cartItems จาก state
+            if (cartItems.length === 0) {
+                // ถ้า cart ว่าง ให้เพิ่มสินค้าใหม่เข้าไป
+                addToCart({ ...productData, quantity });
+            } else {
+                // ถ้า cart มีสินค้าแล้ว ให้เพิ่มสินค้าใหม่เข้าไป
+                addToCart({ ...productData, quantity });
+            }
+            navigate("/user/payment");
         }
     };
 
@@ -194,6 +184,7 @@ const ProductDetail = () => {
                         <Button
                             variant="secondary"
                             className="flex-1 h-14 text-lg bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white transition-all hover:scale-105"
+                            onClick={handleBuyNow}
                         >
                             Buy Now
                         </Button>

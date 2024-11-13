@@ -5,65 +5,45 @@ import moment from "moment";
 
 function ChatMessage(props) {
   const { message: MessageProp } = props;
-  // console.log(MessageProp);
-
   const currentUser = useAuthStore((state) => state.user);
-  //if todat show only time
   const time = moment(MessageProp.createdAt).format("LT");
-  // else show date and time
-  const date = moment(MessageProp.createdAt).calendar();
-  const isToday = moment(MessageProp.createdAt).isSame(new Date(), "day");
 
   return (
     <div className="flex flex-col w-full h-fit justify-end">
       {currentUser.id === MessageProp.userId ? (
         // SENDER
-        <div className="flex flex-col items-end">
-          <div className="flex flex-col items-end max-w-[60%] gap-1">
+        <div className="flex items-end ml-auto gap-2">
+          <div className="flex flex-col items-end">
             {/* MESSAGE */}
-            <div className="bg-lime-400 p-1 px-2 rounded-md w-fit break-words">
+            <div className="bg-blue-500 text-white p-2 rounded-lg shadow-md w-fit break-words">
               {MessageProp.message}
             </div>
             {/* TIME */}
-            <div className="text-xs text-end">
-              {isToday ? (
-                <div className="text-xs text-slate-500">{time}</div>
-              ) : (
-                <div className="text-xs text-slate-500">{date}</div>
-              )}
-            </div>
+            <div className="text-xs text-slate-400 mt-1">{time}</div>
           </div>
+          <Avatar
+            imgSrc={MessageProp.user.profileImage}
+            className="w-10 h-10 rounded-full"
+          />
         </div>
       ) : (
         // RECEIVER
-        <div className="flex flex-col items-start">
-          <div className="flex flex-col items-start max-w-[60%] gap-1">
-            {/* PROFILE */}
-            <div className="flex gap-2">
-              <Avatar
-                imgSrc={MessageProp.user.profileImage}
-                className="w-10 h-10 rounded-full flex items-center shadow-lg"
-              />
-              {/* NAME */}
-              <div className="">{MessageProp.user.firstName}</div>
-              {MessageProp.user.role === "ADMIN" ? (
-                <div className="text-[0.6rem] text-red-500">Admin</div>
-              ) : (
-                <div className="text-[0.6rem] text-slate-500">User</div>
-              )}
+        <div className="flex items-start gap-2">
+          <Avatar
+            imgSrc={MessageProp.user.profileImage}
+            className="w-10 h-10 rounded-full"
+          />
+          <div className="flex flex-col">
+            {/* NAME */}
+            <div className="text-sm text-slate-700 font-semibold">
+              {MessageProp.user.firstName}
             </div>
             {/* MESSAGE */}
-            <div className="bg-sky-300 p-1 px-2 rounded-md w-fit break-words">
+            <div className="bg-slate-100 text-slate-900 p-2 rounded-lg shadow-md w-fit break-words">
               {MessageProp.message}
             </div>
             {/* TIME */}
-            <div className="text-xs text-end">
-              {isToday ? (
-                <div className="text-xs text-slate-500">{time}</div>
-              ) : (
-                <div className="text-xs text-slate-500">{date}</div>
-              )}
-            </div>
+            <div className="text-xs text-slate-400 mt-1">{time}</div>
           </div>
         </div>
       )}
