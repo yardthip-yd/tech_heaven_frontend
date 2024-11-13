@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button";
 const CartSidebar = () => {
     // State and Store Hooks
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const cartItems = useCartStore((state) => state.cartItems || []);
+    const cartItems = useCartStore((state) => state.cartItems);
     const removeFromCart = useCartStore((state) => state.removeFromCart);
     const increaseAmount = useCartStore((state) => state.increaseAmount);
     const decreaseAmount = useCartStore((state) => state.decreaseAmount);
     const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-
+    // console.log("----------------------------------------------------------------------------",cartItems)
     // Auth State
     const currentUser = useAuthStore((state) => state.user);
     const isLoggedIn = !!currentUser;
@@ -74,7 +74,7 @@ const CartSidebar = () => {
                             </div>
                         ) : (
                             <div className="divide-y">
-                                {cartItems.map((item, index) => (
+                                {cartItems?.map((item, index) => (
                                     <div key={index} className="py-4 group">
                                         <div className="flex gap-4">
                                             <div className="relative aspect-square h-24 w-24 overflow-hidden rounded-lg">

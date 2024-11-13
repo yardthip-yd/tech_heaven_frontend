@@ -1,6 +1,9 @@
 
+import {  createUserCart, getCart } from "@/API/cart-api";
+import { applyCoupon } from "@/API/coupon-api";
+import axios from "axios";
 import { create } from "zustand";
-
+import { persist } from "zustand/middleware";
 const cartStore = (set, get) => ({
   // Initialize cartItems from localStorage or as an empty array
   cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
@@ -9,7 +12,7 @@ const cartStore = (set, get) => ({
   addToCart: (item) => {
     const currentItems = get().cartItems;
     const existingItem = currentItems.find((i) => i.id === item.id);
-
+   
     let updatedItems;
     if (existingItem) {
       // If item already in cart, increase its quantity
@@ -20,7 +23,8 @@ const cartStore = (set, get) => ({
       // If item is new, add it with an initial quantity of 1
       updatedItems = [...currentItems, { ...item, quantity: 1 }];
     }
-
+    
+    console.log(updatedItems)
     set({ cartItems: updatedItems });
     localStorage.setItem("cartItems", JSON.stringify(updatedItems));
   },
@@ -79,9 +83,46 @@ const cartStore = (set, get) => ({
 
   // Cart details (for additional data management, if needed)
   cartDetails: [],
+  cartTotal : 0,
+  discount : 0,
   setCartDetails: (details) => set({ cartDetails: details }),
-});
 
-const useCartStore = create(cartStore);
+  getCart1 : async(userId) => {
+    
+    const cartItem = await getCart(userId)
+    console.log(cartItem.data.cart)
+    set({cartTotal : cartItem.data.cart.total}) 
+    const data = cartItem.data.cart.CartItems.map((item)=> 
+      {
+        item.product.quantity = item.quantity
+       return item.product
+      })
+    // console.log(data)
+    set({cartItems : data})
+  },
+
+
+  applyCoupon1 : async(promotionCode) => {
+    try {
+      const response = await applyCoupon(promotionCode);
+      console.log(response.data)
+      const discount = response.data?.discount; 
+      set({ discount: discount });
+      return { discount };
+    } catch (err) {
+      console.log("Error applying coupon:", err);
+      
+    }
+  },
+  
+  createCart : async(cartData) => {
+    const cart = await createUserCart(cartData) 
+    console.log(cart.data)
+    set({discount : 0})
+  }
+
+});
+  
+const useCartStore = create(persist(cartStore,{name : "coupon"}));
 
 export default useCartStore;

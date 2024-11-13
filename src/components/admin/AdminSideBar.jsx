@@ -1,14 +1,14 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  UserRoundCog, 
-  Package, 
+import {
+  LayoutDashboard,
+  UserRoundCog,
+  Package,
   CalendarDays,
-  Cpu, 
+  Cpu,
   Database,
   ChevronRight,
-  Tag
+  Tag,
 } from "lucide-react";
 
 import {
@@ -30,29 +30,22 @@ function AdminSidebar() {
           </SidebarGroupLabel>
           <SidebarMenu className="mt-4 space-y-1">
             {menuItems.map((item) => (
-              <SidebarMenuItem 
-                key={item.path}
-                className="relative py-2 px-4 group"
-              >
+              <SidebarMenuItem key={item.path} className="relative py-2 px-4 group">
                 <NavLink
                   to={item.path}
                   className={({ isActive }) =>
-                    `flex items-center w-full rounded-lg p-2 text-sm font-medium transition-all duration-200
-                    ${isActive 
-                      ? 'bg-blue-50 text-blue-600' 
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    `flex items-center w-full rounded-lg p-2 text-sm font-medium transition-all duration-200 ${
+                      isActive
+                        ? "bg-blue-50 text-blue-600"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`
                   }
+                  end
                 >
-                  <span className="flex items-center gap-3">
-                    <item.icon className={`w-5 h-5 transition-colors duration-200
-                      group-hover:text-blue-500`}
-                    />
-                    <span>{item.label}</span>
-                  </span>
-                  <ChevronRight className={`ml-auto w-4 h-4 transition-transform duration-200
-                    group-hover:translate-x-1 opacity-0 group-hover:opacity-100`}
-                  />
+                  {/* Icon and label for each menu item */}
+                  <item.icon className="w-5 h-5 transition-colors duration-200 group-hover:text-blue-500" />
+                  <span className="ml-3">{item.label}</span>
+                  <ChevronRight className="ml-auto w-4 h-4 transition-transform duration-200 group-hover:translate-x-1 opacity-0 group-hover:opacity-100" />
                 </NavLink>
               </SidebarMenuItem>
             ))}
@@ -63,42 +56,43 @@ function AdminSidebar() {
   );
 }
 
+// Define the menu items array with icons, labels, and paths
 const menuItems = [
   {
     label: "Dashboard",
     icon: LayoutDashboard,
-    path: "/admin"
+    path: "/admin",
   },
   {
     label: "User Management",
     icon: UserRoundCog,
-    path: "/admin/usermng"
+    path: "/admin/usermng",
   },
   {
     label: "Products",
     icon: Cpu,
-    path: "/admin/product"
+    path: "/admin/product",
   },
   {
     label: "Categories",
     icon: Database,
-    path: "/admin/category"
+    path: "/admin/category",
   },
   {
     label: "Bookings",
     icon: CalendarDays,
-    path: "/admin/bookingsmng"
+    path: "/admin/bookingsmng",
   },
   {
     label: "Orders",
     icon: Package,
-    path: "/admin/ordermng"
+    path: "/admin/ordermng",
   },
   {
     label: "Promotion",
     icon: Tag,
-    path: "/admin/promotion"
-  }
+    path: "/admin/promotion",
+  },
 ];
 
 export default AdminSidebar;
