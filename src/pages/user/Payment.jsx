@@ -11,41 +11,55 @@ import { Input } from "@/components/ui/input";
 import { ShoppingBag, Package, CreditCard, Tag, Truck } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useAddressStore from "@/stores/addressStore";
+import useCartStore from "@/stores/cartStore";
 
-const stripePromise = loadStripe("pk_test_51QGAMTELH1fq6Tmu7Xaz1rROW2MVJaFwzpfDQUZwedBoszrmUk2zwr5DZ80QgJKBIT6vXki7Dnh2IeKftlchuuk100DI5LWtM0");
+const stripePromise = loadStripe(
+  "pk_test_51QGAMTELH1fq6Tmu7Xaz1rROW2MVJaFwzpfDQUZwedBoszrmUk2zwr5DZ80QgJKBIT6vXki7Dnh2IeKftlchuuk100DI5LWtM0"
+);
 
 const Payment = () => {
   const { state } = useLocation();
-  const cartItems = state?.cartItems || [];
+  const cartItems = useCartStore((state) => state.cartItems || []);
   const navigate = useNavigate();
 
   const [promotionCode, setPromotionCode] = useState("");
   const [discount, setDiscount] = useState(0);
 
-  const totalPriceBeforeDiscount = cartItems
-    .reduce((total, item) => total + item.price * item.quantity, 0)
-    .toLocaleString("en-US", { minimumFractionDigits: 2 });
-  const totalPriceAfterDiscount = (totalPriceBeforeDiscount - discount)
-    .toLocaleString("en-US", { minimumFractionDigits: 2 });
+  const totalPriceBeforeDiscount =
+    cartItems.length > 0
+      ? cartItems.reduce(
+          (total, item) =>
+            total + (Number(item.price) * Number(item.quantity) || 0),
+          0
+        )
+      : (0).toLocaleString("en-US", { minimumFractionDigits: 2 });
+  const totalPriceAfterDiscount = (
+    totalPriceBeforeDiscount - discount
+  ).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
   const token = useAuthStore((state) => state.token);
-  const address = useAddressStore((state) => state.address)
-  const actionAddAddress = useAddressStore((state) => state.actionAddAddress)
-  const actionGetAllAddress = useAddressStore((state) => state.actionGetAllAddress)
-  const actionUpdateAddress = useAddressStore((state) => state.actionUpdateAddress)
-  const actionDeleteAddree = useAddressStore((state) => state.actionDeleteAddress)
+  const address = useAddressStore((state) => state.address);
+  const actionAddAddress = useAddressStore((state) => state.actionAddAddress);
+  const actionGetAllAddress = useAddressStore(
+    (state) => state.actionGetAllAddress
+  );
+  const actionUpdateAddress = useAddressStore(
+    (state) => state.actionUpdateAddress
+  );
+  const actionDeleteAddress = useAddressStore(
+    (state) => state.actionDeleteAddress
+  );
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect((token) => {
-    actionGetAllAddress(token)
-  }, [])
-
-  useEffect((token) => {
-    actionGetAllAddress(token)
-    console.log(address)
-  }, [actionGetAllAddress, actionUpdateAddress])
+  useEffect(() => {
+    if (token) {
+      console.log("Fetching address for token:", token);
+      actionGetAllAddress(token);
+    }
+  }, [token, actionGetAllAddress]);
 
   useEffect(() => {
     if (!token) return;
@@ -59,13 +73,22 @@ const Payment = () => {
         setError("Failed to fetch payment information. Please try again.");
         setLoading(false);
       });
-  }, [token]);
+  }, [token, actionGetAllAddress]);
 
   const appearance = { theme: "stripe" };
 
   const handleApplyPromotion = () => {
     // Promotion Apply Function
   };
+
+  const handleAddAddress = () => {
+    try {
+      actionAddAddress(token, address);
+      actionGetAllAddress(token);
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   if (loading) {
     return (
@@ -84,12 +107,16 @@ const Payment = () => {
 
   return (
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-8 overflow-y-auto max-h-[80vh]">
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
       <div className="max-w-4xl mx-auto space-y-6 h-full">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={() => navigate("/store")}
             className="flex items-center gap-2"
           >
@@ -117,10 +144,16 @@ const Payment = () => {
             ) : (
               <div className="space-y-4">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow">
+                  <div
+                    key={item.id}
+                    className="flex items-start gap-4 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow"
+                  >
                     <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 overflow-hidden rounded-lg">
                       <img
-                        src={item.ProductImages[0]?.imageUrl || "https://via.placeholder.com/150"}
+                        src={
+                          item.ProductImages[0]?.imageUrl ||
+                          "https://via.placeholder.com/150"
+                        }
                         alt={item.name}
                         className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-200"
                       />
@@ -129,10 +162,16 @@ const Payment = () => {
                       <h3 className="font-semibold text-lg text-gray-900 mb-1">
                         {item.name}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-3">{item.description}</p>
+                      <p className="text-gray-600 text-sm mb-3">
+                        {item.description}
+                      </p>
                       <div className="flex justify-between items-center">
                         <p className="text-lg font-medium text-blue-600">
-                          THB {(item.price * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                          THB{" "}
+                          {(item.price * item.quantity).toLocaleString(
+                            "en-US",
+                            { minimumFractionDigits: 2 }
+                          )}
                         </p>
                         <span className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
                           Qty: {item.quantity}
@@ -145,10 +184,8 @@ const Payment = () => {
             )}
           </CardContent>
         </Card>
-
         <div className="flex flex-col gap-6">
-
-        <Card className="shadow-lg">
+          <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Truck className="w-5 h-5" />
@@ -159,20 +196,45 @@ const Payment = () => {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">THB {totalPriceBeforeDiscount}</span>
+                  <span className="font-medium">
+                    THB {totalPriceBeforeDiscount}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Discount</span>
-                  <span className="font-medium text-red-600">- THB {discount.toFixed(2)}</span>
+                  <span className="font-medium text-red-600">
+                    - THB {discount.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
                   <span className="text-gray-600">Calculated at checkout</span>
                 </div>
+                {address && address.length > 0 ? (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Shipping Address</span>
+                    <button>Add Address</button>
+                    <select name="address">
+                      <option>Select Address</option>
+                      {address.map((address) => (
+                        <option key={address.id} value={address.id}>
+                          {address.address}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                ) : (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Shipping Address</span>
+                    <span className="text-gray-600">No address found</span>
+                  </div>
+                )}
                 <div className="pt-3 border-t">
                   <div className="flex justify-between items-center">
                     <span className="font-semibold">Total</span>
-                    <span className="font-bold text-xl text-blue-600">THB {totalPriceAfterDiscount}</span>
+                    <span className="font-bold text-xl text-blue-600">
+                      THB {totalPriceAfterDiscount}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -212,7 +274,10 @@ const Payment = () => {
           </CardHeader>
           <CardContent>
             {clientSecret && (
-              <Elements options={{ clientSecret, appearance }} stripe={stripePromise}>
+              <Elements
+                options={{ clientSecret, appearance }}
+                stripe={stripePromise}
+              >
                 <CheckoutForm />
               </Elements>
             )}

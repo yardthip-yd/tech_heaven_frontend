@@ -43,6 +43,7 @@ function AdminSidebar() {
                       : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                     }`
                   }
+                  end
                 >
                   <span className="flex items-center gap-3">
                     <item.icon className={`w-5 h-5 transition-colors duration-200

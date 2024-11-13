@@ -9,7 +9,7 @@ export const addAddress = async (token, data) => {
 };
 
 export const getAllAddress = async (token) => {
-  return await axios.get("user/address", {
+  return await axios.get("user/all-address", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -24,10 +24,10 @@ export const updateAddress = async (token, id, data) => {
   });
 };
 
-export const deleteAddress = async(token, id) => {
-    return await axios.delete("user/address/" +id, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-}
+export const deleteAddress = async (token, id) => {
+  return await axios.delete("user/address/" + id, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

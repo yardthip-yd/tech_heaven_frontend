@@ -20,11 +20,11 @@ const useAddressStore = create((set, get) => ({
   },
   actionGetAllAddress: async (token, id) => {
     try {
-      const result = await getAllAddress(token, id);
-      console.log(result);
-      set({ address: result.data });
+      const response = await getAllAddress(token, id);
+      console.log(response);
+      set({ address: response.data });
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   },
   actionUpdateAddress: async (token, id, data) => {

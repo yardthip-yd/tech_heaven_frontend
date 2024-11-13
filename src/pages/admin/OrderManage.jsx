@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAuthStore from "@/stores/authStore";
 import useOrderStore from "@/stores/orderStore";
+import useAddressStore from "@/stores/addressStore";
 import {
   Table,
   TableBody,
@@ -18,11 +19,17 @@ const OrderManage = () => {
   const token = useAuthStore((state) => state.token);
   const actionGetOrderAdmin = useOrderStore((state) => state.actionGetOrderAdmin);
   const actionUpdateOrder = useOrderStore((state) => state.actionUpdateOrder);
+  const actionGetAllAddress = useAddressStore((state) => state.actionGetAllAddress);
   const orders = useOrderStore((state) => state.orders);
 
   const [searchOrder, setSearchOrder] = useState("");
   const [openDetails, setOpenDetails] = useState({});
   console.log(openDetails);
+  console.log(orders)
+
+  useEffect(() => {
+    actionGetAllAddress(token);
+  }, [token, actionGetAllAddress]);
 
   useEffect(() => {
     actionGetOrderAdmin(token);
@@ -85,6 +92,7 @@ const OrderManage = () => {
                   <TableHead className="font-semibold text-slate-700 text-base text-center">Name</TableHead>
                   <TableHead className="font-semibold text-slate-700 text-base text-center">Status</TableHead>
                   <TableHead className="font-semibold text-slate-700 text-base text-center">Payment Method</TableHead>
+                  <TableHead className="font-semibold text-slate-700 text-base text-center">Address</TableHead>
                   <TableHead className="font-semibold text-slate-700 text-base text-center">Details</TableHead>
                 </TableRow>
               </TableHeader>
@@ -117,6 +125,7 @@ const OrderManage = () => {
                           </select>
                         </TableCell>
                         <TableCell className="text-center text-slate-600">{order.paymentMethod}</TableCell>
+                        <TableCell className="text-center text-slate-600">{order.OrderAddress[0]?.address}</TableCell>
                         <TableCell className="text-center">
                           {openDetails[order.id] ? (
                             <ChevronUp
@@ -133,7 +142,7 @@ const OrderManage = () => {
                       </TableRow>
                       {openDetails[order.id] && (
                         <TableRow>
-                          <TableCell colSpan={5} className="bg-slate-50">
+                          <TableCell colSpan={6} className="bg-slate-50">
                             <div className="p-4">
                               <h3 className="font-bold">User Details</h3>
                               <p><strong>Name :</strong> {order.user.firstName} {order.user.lastName}</p>
