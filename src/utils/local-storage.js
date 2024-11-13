@@ -45,3 +45,21 @@ export const setAccessVoucherId = (numberVoucher) =>
   localStorage.setItem(NUMBER_VOUCHER, numberVoucher);
 
 export const getAccessVoucherId = () => localStorage.getItem(NUMBER_VOUCHER);
+
+export function setLocalStorage(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function getLocalStorage(key, initialValue) {
+  try {
+    const value = window.localStorage.getItem(key);
+    return value ? JSON.parse(value) : initialValue;
+  } catch (e) {
+    // if error, return initial value
+    return initialValue;
+  }
+}
