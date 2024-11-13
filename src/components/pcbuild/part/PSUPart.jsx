@@ -8,6 +8,7 @@ function PSUPart() {
   const handleClick = async (e) => {
     e.preventDefault();
     setPartContent(4);
+    setSearchItem("");
   };
 
   const handleRemovePSU = (e) => {

@@ -3,13 +3,18 @@ import { PCBuildContext } from "@/contexts/PCContext";
 import React, { useContext, useEffect, useState } from "react";
 import ProductCardBuild from "../product/ProductCardBuild";
 import useDeepCompareEffect from "use-deep-compare-effect";
+import PartFilter from "./PartFilter";
+import MyPCBuild from "./MyPCBuild";
 
 function PartList() {
   // const { partContent, filter, productList, setProductList, filterJSON } =
   //   useContext(PCBuildContext);
-  const { partContent, filter, filterJSON } = useContext(PCBuildContext);
+
+  const { partContent, filter, filterJSON, searchItem } =
+    useContext(PCBuildContext);
 
   const [productList, setProductList] = useState([]);
+  const [filterProductList, setFilterProductList] = useState([]);
 
   const getPart = async () => {
     switch (partContent) {
@@ -35,8 +40,8 @@ function PartList() {
   };
 
   const fetchPart = async () => {
-    console.log("partContent", partContent);
-    console.log("filter", filter);
+    // console.log("partContent", partContent);
+    // console.log("filter", filter);
     const response = await getPart();
     // console.log(response.data.products);
     setProductList(response.data.products);
@@ -46,14 +51,34 @@ function PartList() {
     fetchPart();
   }, [partContent, filter, filterJSON]);
 
+  // filter search item
+  const setFilterItem = () => {
+    const filteredList = productList.filter((product) =>
+      product.name.toLowerCase().includes(searchItem.toLowerCase())
+    );
+    setFilterProductList(filteredList);
+  };
+
+  useEffect(() => {
+    // console.log(searchItem);
+    setFilterItem();
+  }, [productList, searchItem]);
+
   // useEffect(() => {}, [productList, filterJSON]);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 bg-gray-100 p-2">
-      {productList.map((product) => (
-        <ProductCardBuild key={product.id} product={product} />
-      ))}
-    </div>
+    <>
+      <MyPCBuild />
+      <PartFilter
+        setFilterProductList={setFilterProductList}
+        productList={productList}
+      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 bg-gray-100 p-2">
+        {filterProductList.map((product) => (
+          <ProductCardBuild key={product.id} product={product} />
+        ))}
+      </div>
+    </>
   );
 }
 

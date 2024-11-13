@@ -8,6 +8,7 @@ function PCCasePart() {
   const handleClick = async (e) => {
     e.preventDefault();
     setPartContent(5);
+    setSearchItem("");
   };
 
   const handleRemovePCCase = (e) => {

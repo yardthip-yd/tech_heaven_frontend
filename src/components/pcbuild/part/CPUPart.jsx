@@ -3,12 +3,19 @@ import { PCBuildContext } from "@/contexts/PCContext";
 import React, { useContext } from "react";
 
 function CPUPart() {
-  const { setPartContent, CPU, setCPU, setFilter, setFilterJSON } =
-    useContext(PCBuildContext);
+  const {
+    setPartContent,
+    CPU,
+    setCPU,
+    setFilter,
+    setFilterJSON,
+    setSearchItem,
+  } = useContext(PCBuildContext);
 
   const handleClick = (e) => {
     e.preventDefault();
     setPartContent(1);
+    setSearchItem("");
   };
 
   const handleRemoveCPU = (e) => {

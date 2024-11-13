@@ -3,8 +3,14 @@ import { PCBuildContext } from "@/contexts/PCContext";
 import React, { useContext } from "react";
 
 function HDDPart() {
-  const { setFilter, setPartContent, HDD, setHDD, setFilterJSON } =
-    useContext(PCBuildContext);
+  const {
+    setFilter,
+    setPartContent,
+    HDD,
+    setHDD,
+    setFilterJSON,
+    setSearchItem,
+  } = useContext(PCBuildContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -14,6 +20,7 @@ function HDDPart() {
       return prev;
     });
     setPartContent(9);
+    setSearchItem("");
   };
 
   const handleRemoveHDD = (e) => {

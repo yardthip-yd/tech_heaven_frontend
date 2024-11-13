@@ -10,11 +10,13 @@ function MainboardPart() {
     filterJSON,
     setFilter,
     setFilterJSON,
+    setSearchItem,
   } = useContext(PCBuildContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
     setPartContent(8);
+    setSearchItem("");
   };
 
   const handleRemoveMainboard = (e) => {

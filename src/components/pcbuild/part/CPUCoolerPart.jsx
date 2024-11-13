@@ -3,11 +3,12 @@ import { PCBuildContext } from "@/contexts/PCContext";
 import React, { useContext } from "react";
 
 function CPUCoolerPart() {
-  const { setPartContent, cooler, setCooler, setFilter } =
+  const { setPartContent, cooler, setCooler, setFilter, setSearchItem } =
     useContext(PCBuildContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
+    setSearchItem("");
     setPartContent(3);
   };
 

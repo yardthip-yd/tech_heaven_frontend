@@ -14,6 +14,7 @@ function SSDPart() {
       return prev;
     });
     setPartContent(9);
+    setSearchItem("");
   };
 
   const handleRemoveSSD = (e) => {

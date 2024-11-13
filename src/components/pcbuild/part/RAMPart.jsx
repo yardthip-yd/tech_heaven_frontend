@@ -8,6 +8,7 @@ function RAMPart() {
   const handleClick = async (e) => {
     e.preventDefault();
     setPartContent(7);
+    setSearchItem("");
   };
 
   const handleRemoveMainboard = (e) => {

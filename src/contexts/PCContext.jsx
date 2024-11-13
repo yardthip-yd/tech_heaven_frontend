@@ -1,51 +1,56 @@
-import { getProductByCategory } from "@/API/product-api";
-import { getLocalStorage, setLocalStorage } from "@/utils/local-storage";
+import { getSessionStorage, setSessionStorage } from "@/utils/session-storage";
 import { createContext, useEffect, useState } from "react";
-import useDeepCompareEffect from "use-deep-compare-effect";
 
 export const PCBuildContext = createContext();
 
 export const PCBuildProvider = ({ children }) => {
   const [partContent, setPartContent] = useState(() =>
-    getLocalStorage("partContent", 1)
+    getSessionStorage("partContent", 1)
   );
-  const [CPU, setCPU] = useState(() => getLocalStorage("CPU", null));
+  const [CPU, setCPU] = useState(() => getSessionStorage("CPU", null));
   const [mainboard, setMainboard] = useState(() =>
-    getLocalStorage("mainboard", null)
+    getSessionStorage("mainboard", null)
   );
-  const [VGA, setVGA] = useState(() => getLocalStorage("VGA", null));
-  const [RAM, setRAM] = useState(() => getLocalStorage("RAM", null));
-  const [SSD, setSSD] = useState(() => getLocalStorage("SSD", null));
-  const [HDD, setHDD] = useState(() => getLocalStorage("HDD", null));
-  const [PSU, setPSU] = useState(() => getLocalStorage("PSU", null));
-  const [PCCase, setPCCase] = useState(() => getLocalStorage("PCCase", null));
-  const [cooler, setCooler] = useState(() => getLocalStorage("cooler", null));
+  const [VGA, setVGA] = useState(() => getSessionStorage("VGA", null));
+  const [RAM, setRAM] = useState(() => getSessionStorage("RAM", null));
+  const [SSD, setSSD] = useState(() => getSessionStorage("SSD", null));
+  const [HDD, setHDD] = useState(() => getSessionStorage("HDD", null));
+  const [PSU, setPSU] = useState(() => getSessionStorage("PSU", null));
+  const [PCCase, setPCCase] = useState(() => getSessionStorage("PCCase", null));
+  const [cooler, setCooler] = useState(() => getSessionStorage("cooler", null));
   const [monitor, setMonitor] = useState(() =>
-    getLocalStorage("monitor", null)
+    getSessionStorage("monitor", null)
   );
   const [productList, setProductList] = useState(() =>
-    getLocalStorage("productList", [])
+    getSessionStorage("productList", [])
   );
-  const [filter, setFilter] = useState(() => getLocalStorage("filter", {}));
+  const [filter, setFilter] = useState(() => getSessionStorage("filter", {}));
   const [filterJSON, setFilterJSON] = useState(() =>
-    getLocalStorage("filterJSON", {})
+    getSessionStorage("filterJSON", {})
   );
 
+  const [buildList, setBuildList] = useState(() =>
+    getSessionStorage("buildList", [])
+  );
+
+  const [searchItem, setSearchItem] = useState("");
+
   useEffect(() => {
-    setLocalStorage("partContent", partContent);
-    setLocalStorage("CPU", CPU);
-    setLocalStorage("mainboard", mainboard);
-    setLocalStorage("VGA", VGA);
-    setLocalStorage("RAM", RAM);
-    setLocalStorage("SSD", SSD);
-    setLocalStorage("HDD", HDD);
-    setLocalStorage("PSU", PSU);
-    setLocalStorage("PCCase", PCCase);
-    setLocalStorage("cooler", cooler);
-    setLocalStorage("monitor", monitor);
-    // setLocalStorage("productList", productList);
-    setLocalStorage("filter", filter);
-    setLocalStorage("filterJSON", filterJSON);
+    setSessionStorage("partContent", partContent);
+    setSessionStorage("CPU", CPU);
+    setSessionStorage("mainboard", mainboard);
+    setSessionStorage("VGA", VGA);
+    setSessionStorage("RAM", RAM);
+    setSessionStorage("SSD", SSD);
+    setSessionStorage("HDD", HDD);
+    setSessionStorage("PSU", PSU);
+    setSessionStorage("PCCase", PCCase);
+    setSessionStorage("cooler", cooler);
+    setSessionStorage("monitor", monitor);
+    // setSessionStorage("productList", productList);
+    setSessionStorage("filter", filter);
+    setSessionStorage("filterJSON", filterJSON);
+    setSessionStorage("buildList", buildList);
   }, [
     CPU,
     mainboard,
@@ -93,6 +98,10 @@ export const PCBuildProvider = ({ children }) => {
         productList,
         setProductList,
         // fetchPart,
+        buildList,
+        setBuildList,
+        searchItem,
+        setSearchItem,
       }}
     >
       {children}

@@ -9,6 +9,7 @@ function MonitorPart() {
   const handleClick = async (e) => {
     e.preventDefault();
     setPartContent(2);
+    setSearchItem("");
   };
 
   const handleRemoveMonitor = (e) => {

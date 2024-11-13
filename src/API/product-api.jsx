@@ -120,4 +120,8 @@ export const getAllProduct = async (count) => {
 
 /////FOR PC BUILD
 export const getProductByCategory = async (categoryId, filter) =>
-  await axios.post(`/products-by-category/${categoryId}`, filter);
+  await axios.post(`/pcbuild/products-by-category/${categoryId}`, filter);
+export const createPCBuild = async (form) =>
+  await axios.post("/pcbuild/create-build", form);
+export const getPCBuildList = async () =>
+  await axios.get("/pcbuild/get-build-list");

@@ -8,6 +8,7 @@ function VGAPart() {
   const handleClick = async (e) => {
     e.preventDefault();
     setPartContent(6);
+    setSearchItem("");
   };
 
   const handleRemoveVGA = (e) => {
