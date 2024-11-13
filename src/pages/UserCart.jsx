@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "@/stores/cartStore";
 import useAuthStore from "@/stores/authStore";
 import { Trash, Truck, Plus, Minus, ShoppingBag } from "lucide-react";
-import { createCart } from "@/API/cart-api";
+// import { createCart } from "@/API/cart-api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const UserCart = () => {
   const cartItems = useCartStore((state) => state.cartItems || []);
+  const createCart = useCartStore(state => state.createCart)
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const increaseAmount = useCartStore((state) => state.increaseAmount);
   const decreaseAmount = useCartStore((state) => state.decreaseAmount);

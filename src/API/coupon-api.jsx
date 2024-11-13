@@ -8,6 +8,13 @@ export const getCoupon = async() => {
     return axios.get("/admin/getCoupon")
 }
 
-export const applyCoupon = async() => {
-    return axios.patch("/cart/applyCoupon")
+export const deleteCoupon = async(couponId)=> {
+    return axios.delete(`/admin/deleteCoupon/${couponId}`)
+}
+
+export const applyCoupon = async(promotionCode) => {
+    return axios.patch("/cart/applyCoupon", {coupon : promotionCode})
+}
+export const editCoupon = async(couponId,form) => {
+    return axios.put(`/admin/editCoupon/${couponId}`,form)
 }

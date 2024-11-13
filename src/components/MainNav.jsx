@@ -33,7 +33,7 @@ const MainNav = () => {
   useEffect(() => {
     if (currentUser) {
       setIsLoggedIn(true);
-      console.log("Current user:", currentUser);
+      // console.log("Current user:", currentUser);
     }
   }, [currentUser]);
 

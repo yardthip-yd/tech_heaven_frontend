@@ -69,7 +69,6 @@ const router = createBrowserRouter([
       { path: "ordermng", element: <OrderManage /> },
       { path: "promotion", element: <Promotion /> },
       { path: "chat", element: <AdminChat /> },
-      { path: "couponManage", element: <CouponPage /> },
     ],
   },
   {
