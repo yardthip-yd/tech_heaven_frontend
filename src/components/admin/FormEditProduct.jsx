@@ -730,7 +730,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
               </div>
             )}
 
-            {/* ===== Case ===== */}
+            {/* ===== Monitor ===== */}
             {selectedCategory === "2" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                 <h2 className="text-lg font-medium text-slate-800 col-span-2">
