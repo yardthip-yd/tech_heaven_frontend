@@ -804,6 +804,39 @@ const FormEditProduct = ({ closeDialog, productId }) => {
               </div>
             )}
 
+            {/* ===== Accessories ===== */}
+            {selectedCategory === "10" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                  Accessory Information
+                </h2>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Accessory Type:
+                  </label>
+                  <select
+                    value={form.accessoriesType}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    name="accessoriesType"
+                    onChange={handleOnChange}
+                    required
+                  >
+                    <option value="" disabled>
+                      Please Select
+                    </option>
+                    <option value="MOUSE">Mouse</option>
+                    <option value="KEYBOARD">Keyboard</option>
+                    <option value="CHAIR">Chair</option>
+                    <option value="HEADPHONE">Headphone</option>
+                    <option value="MICROPHONE">Microphone</option>
+                    <option value="SPEAKER">Speaker</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
             {/* ===== End of Part section ===== */}
 
             {/* Additional conditional rendering blocks for other categories */}
