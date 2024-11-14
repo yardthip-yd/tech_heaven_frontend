@@ -13,6 +13,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Package, ShoppingBag, ChevronDown, ChevronUp } from "lucide-react";
+import OrderDetailsDialog from "@/components/order/OrderDetailsDialog";
+import { Button } from "@/components/ui/button";
 
 const Purchase = () => {
   const { actionGetOrderByUserId, orders } = useOrderStore();

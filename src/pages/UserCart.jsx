@@ -86,7 +86,7 @@ const UserCart = () => {
                       {/* Product Image */}
                       <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0">
                         <img
-                          src={item.ProductImages[0]?.imageUrl || "/api/placeholder/150/150"}
+                          src={item.ProductImages?.imageUrl || "/api/placeholder/150/150"}
                           alt={item.name}
                           className="w-full h-full object-cover rounded-lg shadow-sm"
                         />

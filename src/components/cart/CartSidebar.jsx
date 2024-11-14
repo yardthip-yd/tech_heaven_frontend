@@ -79,7 +79,7 @@ const CartSidebar = () => {
                                         <div className="flex gap-4">
                                             <div className="relative aspect-square h-24 w-24 overflow-hidden rounded-lg">
                                                 <img
-                                                    src={item.ProductImages[0]?.imageUrl || "/api/placeholder/150/150"}
+                                                    src={item.ProductImages?.imageUrl || "/api/placeholder/150/150"}
                                                     alt={item.name}
                                                     className="object-cover transition-transform group-hover:scale-105"
                                                 />
