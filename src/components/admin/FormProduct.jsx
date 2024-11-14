@@ -71,22 +71,39 @@ const FormProduct = () => {
   }, []);
 
   const handleOnChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    // setForm({
+    //   ...form,
+    //   [e.target.name]: e.target.value,
+    // });
     if (e.target.name === "categoryId") {
       setSelectedCategory(e.target.value);
+      setForm((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: e.target.value,
+        };
+      });
+    } else {
+      setForm((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: e.target.value,
+          accessoriesType: "MOUSE",
+        };
+      });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(form);
     const allProducts = {
       image: image,
       form: form,
       selectedCategory: selectedCategory,
     };
+
+    console.log(allProducts);
     try {
       let response;
       switch (selectedCategory) {
@@ -178,6 +195,9 @@ const FormProduct = () => {
       </div>
     );
   }
+
+  console.log(form);
+
   return (
     <>
       <div className="flex flex-row gap-8 mx-auto p-6">
@@ -434,7 +454,7 @@ const FormProduct = () => {
                     placeholder="product model"
                   />
                   <InputField
-                    label="Size(CM)"
+                    label="Size"
                     value={form.size}
                     onChange={handleOnChange}
                     name="size"
@@ -621,7 +641,7 @@ const FormProduct = () => {
                   <select
                     value={form.accessoriesType}
                     className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    name="form.accessoriesType"
+                    name="accessoriesType"
                     onChange={handleOnChange}
                     required
                   >
