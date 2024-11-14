@@ -63,6 +63,7 @@ const authStore = (set, get) => ({
         },
       }
     );
+    console.log(res)
     const result = await authApi.loginGoogle(res.data);
     console.log(result, "Check result");
     set({
