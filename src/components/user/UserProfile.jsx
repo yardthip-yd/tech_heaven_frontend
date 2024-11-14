@@ -15,11 +15,12 @@ const UserProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [phone, setPhone] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isCropping, setIsCropping] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
+console.log(user)
   useEffect(() => {
     const getUser = async () => {
       await getCurrentUser();
@@ -34,6 +35,7 @@ const UserProfile = () => {
       setEmail(user.email);
       setProfileImage(user.profileImage);
       setProfileImagePreview(user.profileImage);
+      setPhone(user.phone);
     }
   }, [user]);
 
@@ -62,6 +64,7 @@ const UserProfile = () => {
     updatedData.append("firstName", firstName);
     updatedData.append("lastName", lastName);
     updatedData.append("email", email);
+    updatedData.append("phone", phone);
 
     if (password && password !== confirmPassword) {
       toast.error("Passwords do not match!");
@@ -172,6 +175,14 @@ const UserProfile = () => {
               className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             />
           </div>
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            maxLength={10}
+            placeholder="phone"
+            className="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          />
           <input
             type="email"
             value={email}

@@ -11,6 +11,7 @@ import CPUCoolerPart from "./part/CPUCoolerPart";
 import MonitorPart from "./part/MonitorPart";
 import { PCBuildContext } from "@/contexts/PCContext";
 import useDeepCompareEffect from "use-deep-compare-effect";
+
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,19 @@ import useCartStore from "@/stores/cartStore";
 import { toast } from "react-toastify";
 import useAuthStore from "@/stores/authStore";
 import { createPCBuild } from "@/API/product-api";
+import { Card } from "@/components/ui/card";
+import {
+  ShoppingCart,
+  Save,
+  Trash2,
+  ChevronRight,
+  Cpu,
+  HardDrive,
+  Monitor,
+  Box,
+  Zap,
+  Fan
+} from "lucide-react";
 
 function PartBar() {
   const [totalPrice, setTotalPrice] = useState(0);
@@ -83,15 +97,15 @@ function PartBar() {
     const monitorPrice = monitor?.price || 0;
     setTotalPrice(
       cpuPrice +
-        mainboardPrice +
-        vgaPrice +
-        ramPrice +
-        ssdPrice +
-        hddPrice +
-        psuPrice +
-        pccasePrice +
-        coolerPrice +
-        monitorPrice
+      mainboardPrice +
+      vgaPrice +
+      ramPrice +
+      ssdPrice +
+      hddPrice +
+      psuPrice +
+      pccasePrice +
+      coolerPrice +
+      monitorPrice
     );
   }, [
     CPU,
@@ -207,221 +221,149 @@ function PartBar() {
     await createBuild();
   };
 
-  return (
-    <>
-      <div className="w-[300px] bg-gray-400 flex flex-col">
-        <div>Choose your spec</div>
-        <button className="p-2 bg-green-500" onClick={() => setModalOpen(true)}>
-          Summary
-        </button>
-        <button className="p-2 bg-red-500" onClick={() => handleClearBuild()}>
-          Clear
-        </button>
-        <div className="flex justify-between">
-          <div>Total Price:</div>
-          <div>{totalPrice}</div>
+  const BuildSummaryItem = ({ product }) => {
+    if (!product) return null;
+    return (
+      <div className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+        <div className="flex items-center gap-3">
+          {product.ProductImages?.length > 0 && (
+            <img
+              className="w-12 h-12 object-cover rounded-md border border-slate-200"
+              src={product.ProductImages[0].imageUrl}
+              alt={product.name}
+            />
+          )}
+          <span className="font-medium text-slate-700 line-clamp-1">{product.name}</span>
         </div>
-        <div className="flex flex-col">
-          <CPUPart />
-          <MainboardPart />
-          <VGAPart />
-          <RAMPart />
-          <HDDPart />
-          <SSDPart />
-          <PSUPart />
-          <PCCasePart />
-          <CPUCoolerPart />
-          <MonitorPart />
+        <span className="font-semibold text-slate-900">฿{product.price?.toLocaleString()}</span>
+      </div>
+    );
+  };
+
+
+  return (
+    <Card className="lg:w-[300px] bg-white shadow-xl rounded-xl w-full relative ">
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-2">Your Computer Spec</h2>
+        <p className="text-slate-400 text-sm">Create your perfect build</p>
+      </div>
+
+      <div className="px-4 space-y-4">
+        <div className="flex flex-col gap-3">
+          <Button
+            className="flex-1 h-12 text-white bg-gradient-to-r  from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-colors duration-200"
+            onClick={() => setModalOpen(true)}
+          >
+            <span className="flex items-center gap-2">
+              <HardDrive className="w-4 h-4" />
+              Build Summary
+            </span>
+          </Button>
+          <Button
+            variant="outline"
+            className="flex-1 h-12 bg-white hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200"
+            onClick={handleClearBuild}
+          >
+            <span className="flex items-center gap-2">
+              <Trash2 className="w-4 h-4" />
+              Clear All
+            </span>
+          </Button>
+        </div>
+
+        <div className="relative p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-sm rounded-xl" />
+          <div className="relative">
+            <p className="text-sm font-medium text-blue-600 mb-1">Total Cost</p>
+            <p className="text-3xl font-bold text-slate-900">
+              ฿{totalPrice.toLocaleString()}
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4 max-h-[500px]">
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-slate-500 px-1">Core Components</h3>
+            <CPUPart />
+            <MainboardPart />
+            <VGAPart />
+            <RAMPart />
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-slate-500 px-1">Storage</h3>
+            <HDDPart />
+            <SSDPart />
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-slate-500 px-1">Other Components</h3>
+            <PSUPart />
+            <PCCasePart />
+            <CPUCoolerPart />
+            <MonitorPart />
+          </div>
         </div>
       </div>
-      {/* MODAL */}
+
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[600px] p-6">
           <DialogHeader>
-            <DialogTitle>Build Summary</DialogTitle>
+            <DialogTitle className="text-2xl font-bold flex flex-row items-center gap-2">
+              <HardDrive className="w-8 h-8" />
+              <span>Build Summary </span>
+            </DialogTitle>
+            <DialogDescription>
+              Review your component selection and total cost
+            </DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col gap-2">
-            {/* === CPU === */}
-            {CPU && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {CPU.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={CPU.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {CPU.name}
-                </span>
-                <span>฿{CPU?.price}</span>
-              </div>
-            )}
 
-            {/* === Mainboard === */}
-            {mainboard && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {mainboard.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={mainboard.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {mainboard.name}
-                </span>
-                <span>฿{mainboard?.price}</span>
-              </div>
-            )}
+          <div className="space-y-4 my-6">
+            <div classname="overflow-y-auto max-h-[80vh]">
+              <BuildSummaryItem product={CPU} icon={Cpu} />
+              <BuildSummaryItem product={mainboard} icon={HardDrive} />
+              <BuildSummaryItem product={VGA} icon={Monitor} />
+              <BuildSummaryItem product={RAM} icon={Box} />
+              <BuildSummaryItem product={SSD} icon={HardDrive} />
+              <BuildSummaryItem product={HDD} icon={HardDrive} />
+              <BuildSummaryItem product={PSU} icon={Zap} />
+              <BuildSummaryItem product={PCCase} icon={Box} />
+              <BuildSummaryItem product={cooler} icon={Fan} />
+              <BuildSummaryItem product={monitor} icon={Monitor} />
+            </div>
 
-            {/* === VGA === */}
-            {VGA && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {VGA.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={VGA.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {VGA.name}
-                </span>
-                <span>฿{VGA?.price}</span>
-              </div>
-            )}
-
-            {/* === RAM === */}
-            {RAM && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {RAM.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={RAM.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {RAM.name}
-                </span>
-                <span>฿{RAM?.price}</span>
-              </div>
-            )}
-
-            {/* === SSD === */}
-            {SSD && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {SSD.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={SSD.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {SSD.name}
-                </span>
-                <span>฿{SSD?.price}</span>
-              </div>
-            )}
-
-            {/* === HDD === */}
-            {HDD && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {HDD.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={HDD.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {HDD.name}
-                </span>
-                <span>฿{HDD?.price}</span>
-              </div>
-            )}
-
-            {/* === PSU === */}
-            {PSU && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {PSU.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={PSU.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {PSU.name}
-                </span>
-                <span>฿{PSU?.price}</span>
-              </div>
-            )}
-
-            {/* === Case === */}
-            {PCCase && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {PCCase.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={PCCase.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {PCCase.name}
-                </span>
-                <span>฿{PCCase?.price}</span>
-              </div>
-            )}
-
-            {/* === Cooler === */}
-            {cooler && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {cooler.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={cooler.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {cooler.name}
-                </span>
-                <span>฿{cooler?.price}</span>
-              </div>
-            )}
-
-            {/* === Monitor === */}
-            {monitor && (
-              <div className="flex justify-between">
-                <span className="flex items-center gap-2">
-                  {monitor.ProductImages.length > 0 && (
-                    <img
-                      className="w-10 h-10"
-                      src={monitor.ProductImages[0].imageUrl}
-                      alt=""
-                    />
-                  )}
-                  {monitor.name}
-                </span>
-                <span>฿{monitor?.price}</span>
-              </div>
-            )}
-            <div className="flex justify-between font-bold">
-              <span>Total Price:</span>
-              <span>฿{totalPrice}</span>
+            <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+              <p className="text-sm font-medium text-blue-600 mb-1">Total Build Cost</p>
+              <p className="text-3xl font-bold text-slate-900">
+                ฿{totalPrice.toLocaleString()}
+              </p>
             </div>
           </div>
-          <div className="flex gap-4 justify-center">
-            <Button onClick={handleAddToCart}>Add to Cart</Button>
-            <Button onClick={handleSaveBuild}>Save Build</Button>
+
+          <div className="flex gap-4 justify-end">
+            <Button
+              variant="outline"
+              className="h-12 px-6 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 w-full"
+              onClick={handleSaveBuild}
+            >
+              <span className="flex items-center gap-2">
+                <Save size={18} />
+                Save Build
+              </span>
+            </Button>
+            <Button
+              className="h-12 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-colors duration-200 w-full"
+              onClick={handleAddToCart}
+            >
+              <span className="flex items-center gap-2">
+                <ShoppingCart size={18} />
+                Add to Cart
+              </span>
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </Card>
   );
 }
 

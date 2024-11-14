@@ -23,6 +23,7 @@ const Register = () => {
         email: "",
         password: "",
         confirmPassword: "",
+        phone : "",
     });
 
     // Fn handleChange update input when user fill information
@@ -68,7 +69,8 @@ const Register = () => {
                     input.dateOfBirth &&
                     input.email &&
                     input.password &&
-                    input.confirmPassword
+                    input.confirmPassword &&
+                    input.phone
                 )
             ) {
                 // return alert("Please fill all informations")
@@ -93,6 +95,7 @@ const Register = () => {
                     password: "",
                     confirmPassword: "",
                     dateOfBirth: "",
+                    phone : ""
                 });
 
                 console.log("Register Successful!");
@@ -172,6 +175,18 @@ const Register = () => {
                             placeholder="Birthday"
                             name="dateOfBirth"
                             value={input.dateOfBirth}
+                            onChange={hdlChange}
+                        />
+                    </div>
+                    {/* Phone */}
+                    <div className="relative">
+                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+                        <input
+                            className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
+                            type="text"
+                            placeholder="phone"
+                            name="phone"
+                            value={input.phone}
                             onChange={hdlChange}
                         />
                     </div>

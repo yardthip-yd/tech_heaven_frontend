@@ -1,6 +1,7 @@
 import { IconSSD } from "@/components/ui/Icon";
 import { PCBuildContext } from "@/contexts/PCContext";
 import React, { useContext } from "react";
+import { Trash } from "lucide-react";
 
 function SSDPart() {
   const { setFilter, setPartContent, SSD, setSSD, setFilterJSON } =
@@ -25,15 +26,33 @@ function SSDPart() {
 
   return (
     <div
-      className="flex text-lg font-bold items-center gap-2 cursor-pointer"
+      className="relative flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100 transition-colors duration-200 cursor-pointer group border-b"
       onClick={handleClick}
     >
-      <div className="w-9 h-9 flex items-center justify-center">
-        <IconSSD />
+      <div className="w-6 h-6 flex items-center justify-center rounded-full text-blue-600">
+        <IconSSD className={`${SSD ? "w-4 h-4" : "w-6 h-6"}`}/>
       </div>
-      {SSD && SSD.name}
-      <div>SSD</div>
-      <div onClick={handleRemoveSSD}>X</div>
+
+      <div className="flex-grow">
+        <div className="text-base font-semibold text-slate-800">
+          {SSD ? SSD.name : "Select SSD"}
+        </div>
+        {!SSD && (
+          <div className="text-xs text-slate-500">
+            Click to choose your SSD
+          </div>
+        )}
+      </div>
+
+      {SSD && (
+        <button
+          onClick={handleRemoveSSD}
+          className="w-3 h-3 text-slate-400 hover:text-red-500 transition-colors duration-200"
+          aria-label="Remove SSD"
+        >
+          <Trash className="w-4 h-4" />
+        </button>
+      )}
     </div>
   );
 }

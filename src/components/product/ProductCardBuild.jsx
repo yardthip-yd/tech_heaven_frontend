@@ -14,9 +14,11 @@ import useCartStore from "@/stores/cartStore";
 import useWishlistStore from "@/stores/wishlistStore";
 import useAuthStore from "@/stores/authStore";
 import LoginModal from "@/components/auth/LoginModal";
+
 import { PCBuildContext } from "@/contexts/PCContext";
 
 const ProductCardBuild = ({ product }) => {
+
   const {
     partContent,
     setPartContent,
@@ -57,6 +59,7 @@ const ProductCardBuild = ({ product }) => {
   }, []);
 
   const handleAddToCart = () => {
+    console.log(product)
     addToCart({ ...product, quantity: 1 });
     toast.success("Added to cart!");
   };
@@ -151,25 +154,23 @@ const ProductCardBuild = ({ product }) => {
   };
 
   return (
-    <Card className="border-none shadow-none overflow-hidden rounded-md w-[272px] p-4">
+    <Card className="border-none overflow-hidden rounded-md w-[272px] p-4 shadow-lg">
       <CardHeader className="p-0">
-        <div className="relative group">
-          {product.ProductImages?.[0]?.imageUrl ? (
-            <img
-              src={product.ProductImages[0].imageUrl}
-              alt={product.name}
-              className="w-[240px] h-[240px] object-cover rounded-md"
-              onClick={handleCardClick}
-            />
-          ) : (
-            <img
-              src="https://via.placeholder.com/150"
-              alt="No Image Available"
-              className="w-[240px] h-[240px] object-cover rounded-md"
-              onClick={handleCardClick}
-            />
-          )}
-        </div>{" "}
+        {product.ProductImages?.[0]?.imageUrl ? (
+          <img
+            src={product.ProductImages[0].imageUrl}
+            alt={product.name}
+            className="w-[240px] h-[240px] object-cover rounded-md"
+            onClick={handleCardClick}
+          />
+        ) : (
+          <img
+            src="https://via.placeholder.com/150"
+            alt="No Image Available"
+            className="w-[240px] h-[240px] object-cover rounded-md"
+            onClick={handleCardClick}
+          />
+        )}
       </CardHeader>
       <CardContent className="h-26 p-0 mt-2" onClick={handleCardClick}>
         <CardDescription>{product.ProductCategory?.name}</CardDescription>
@@ -178,9 +179,9 @@ const ProductCardBuild = ({ product }) => {
         </CardTitle>
         <p className="py-1">{truncateText(product.description, 40)}</p>
       </CardContent>
-      <CardFooter className="text-lg font-bold p-0 py-2 flex flex-col">
-        <div className="flex flex-row items-center justify-between  p-0 py-2">
-          <div className="text-lg">THB {product.price}</div>
+      <div className="flex flex-col">
+        <div className="text-lg font-bold p-0 py-4 flex flex-row items-center justify-between">
+          <div className="text-lg">THB {product.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
           <div className="flex space-x-2">
             <button onClick={handleAddToCart}>
               <ShoppingCart className="w-6 h-6 hover:scale-110 transition-transform hover:text-blue-500" />
@@ -190,13 +191,14 @@ const ProductCardBuild = ({ product }) => {
             </button>
           </div>
         </div>
+
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
+          className="bg-black text-white w-full p-2 rounded-md hover:bg-gray-800 transition-colors"
           onClick={handleAddtoSpec}
         >
           Add to Build
         </button>
-      </CardFooter>
+      </div>
 
       {/* Login Modal */}
       {isLoginModalOpen && (
@@ -211,3 +213,4 @@ const ProductCardBuild = ({ product }) => {
 };
 
 export default ProductCardBuild;
+

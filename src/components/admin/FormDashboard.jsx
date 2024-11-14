@@ -1,6 +1,6 @@
 import useDashboardStore from '@/stores/dashboard';
 import React, { useEffect } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Bar, Line, Pie, Doughnut } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 const FormDashboard = () => {
@@ -10,8 +10,11 @@ const FormDashboard = () => {
     activePromotions,
     totalOrders,
     totalRevenue,
+    averageOrderValue,
     pcBuildCount,
     pendingOrders,
+    couponUsedCount,
+    orderStatusCounts,
     loading,
     error,
     fetchDashboardData,
@@ -112,6 +115,39 @@ const FormDashboard = () => {
     ],
   };
 
+  const averageOrderValueData = {
+    labels: ['Average Order Value'],
+    datasets: [
+      {
+        label: 'ค่าเฉลี่ยการสั่งซื้อ',
+        data: [averageOrderValue],
+        backgroundColor: '#6B7280',
+      },
+    ],
+  };
+
+  const couponUsedData = {
+    labels: ['Coupons Used'],
+    datasets: [
+      {
+        label: 'จำนวนคูปองที่ใช้แล้ว',
+        data: [couponUsedCount],
+        backgroundColor: '#FB923C',
+      },
+    ],
+  };
+
+  const orderStatusData = {
+    labels: orderStatusCounts.map((status) => status.status),
+    datasets: [
+      {
+        label: 'จำนวนคำสั่งซื้อแยกตามสถานะ',
+        data: orderStatusCounts.map((status) => status.count),
+        backgroundColor: ['#60A5FA', '#F87171', '#34D399', '#FBBF24'],
+      },
+    ],
+  };
+
   // Chart options with animations and tooltips
   const chartOptions = {
     responsive: true,
@@ -158,6 +194,13 @@ const FormDashboard = () => {
 
         <div className="bg-white shadow-md p-6 rounded-lg flex items-center justify-between hover:shadow-lg transition-all hover:bg-gray-100 transform hover:scale-105">
           <div>
+            <h3 className="text-xl font-medium text-gray-700">คูปองที่ใช้แล้ว</h3>
+            <p className="text-2xl font-bold text-teal-500">{couponUsedCount}</p>
+          </div>
+        </div>
+
+        <div className="bg-white shadow-md p-6 rounded-lg flex items-center justify-between hover:shadow-lg transition-all hover:bg-gray-100 transform hover:scale-105">
+          <div>
             <h3 className="text-xl font-medium text-gray-700">จำนวนออเดอร์</h3>
             <p className="text-2xl font-bold text-yellow-500">{totalOrders}</p>
           </div>
@@ -167,6 +210,13 @@ const FormDashboard = () => {
           <div>
             <h3 className="text-xl font-medium text-gray-700">คำสั่งซื้อที่ยังไม่ชำระเงิน</h3>
             <p className="text-2xl font-bold text-yellow-500">{pendingOrders}</p>
+          </div>
+        </div>
+
+        <div className="bg-white shadow-md p-6 rounded-lg flex items-center justify-between hover:shadow-lg transition-all hover:bg-gray-100 transform hover:scale-105">
+          <div>
+            <h3 className="text-xl font-medium text-gray-700">ค่าเฉลี่ยการสั่งซื้อ</h3>
+            <p className="text-2xl font-bold text-teal-500">{averageOrderValue.toLocaleString()}</p>
           </div>
         </div>
 
@@ -183,36 +233,62 @@ const FormDashboard = () => {
             <p className="text-2xl font-bold text-teal-500">{pcBuildCount}</p>
           </div>
         </div>
+
       </div>
+
+
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+
+        {/* จำนวนผู้ใช้งาน */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <Bar data={userData} options={chartOptions} />
         </div>
 
+        {/* จำนวนผู้ลงทะเบียน 7 วันที่ผ่านมา */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <Bar data={newUserData} options={chartOptions} />
         </div>
 
+        {/* จำนวนโปรโมชั่นที่ใช้งาน */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <Pie data={promotionData} options={chartOptions} />
         </div>
 
+        {/* คูปองที่ใช้แล้ว */}
+        <div className="bg-white shadow-md p-6 rounded-lg">
+          <Pie data={couponUsedData} options={chartOptions} />
+        </div>
+
+        {/* จำนวนออเดอร์ */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <Line data={orderData} options={chartOptions} />
         </div>
 
+        {/* คำสั่งซื้อที่ยังไม่ชำระเงิน */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <Bar data={pendingOrderData} options={chartOptions} />
         </div>
 
+        {/* ค่าเฉลี่ยการสั่งซื้อ */}
+        <div className="bg-white shadow-md p-6 rounded-lg">
+          <Bar data={averageOrderValueData} options={chartOptions} />
+        </div>
+
+        {/* รายได้รวม */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <Pie data={revenueData} options={chartOptions} />
         </div>
 
+        {/* จำนวน PC Build */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <Bar data={pcBuildData} options={chartOptions} />
+        </div>
+
+        {/* ข้อมูลคำสั่งซื้อแยกตามสถานะ */}
+        <div className="bg-white shadow-md p-6 rounded-lg">
+          <Doughnut data={orderStatusData} options={chartOptions} />
         </div>
       </div>
     </div>

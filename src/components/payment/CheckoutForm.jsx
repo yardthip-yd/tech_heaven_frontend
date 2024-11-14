@@ -10,6 +10,7 @@ import useAuthStore from "@/stores/authStore";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useCartStore from "@/stores/cartStore";
 
 export default function CheckoutForm({ dpmCheckerLink }) {
   const actionCreateOrder = useOrderStore((state) => state.actionCreateOrder);
@@ -17,9 +18,8 @@ export default function CheckoutForm({ dpmCheckerLink }) {
   const elements = useElements();
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
-
   const [isLoading, setIsLoading] = useState(false);
-
+  // const clearCart = useCartStore((state) => state.clearCart);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
@@ -44,7 +44,9 @@ export default function CheckoutForm({ dpmCheckerLink }) {
       } else if (payload.paymentIntent.status === "succeeded") {
         setIsLoading(false);
         await actionCreateOrder(token, payload);
-        navigate("/user/order-success");
+        localStorage.removeItem("cartItems"); 
+        // clearCart(); 
+        navigate("/user/purchase");
       }
     } catch (err) {
       clearTimeout(timeout);
