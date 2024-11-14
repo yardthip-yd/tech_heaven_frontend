@@ -134,7 +134,6 @@ const CartSidebar = () => {
                                 <Trash className="h-4 w-4  group-hover/btn:text-red-600 transition-colors" />
                               </Button>
                             </div>
-<<<<<<< HEAD
                             <div className="mt-2">
                               <p className="text-base  text-blue-500 font-medium">
                                 THB{" "}
@@ -143,56 +142,6 @@ const CartSidebar = () => {
                                   { minimumFractionDigits: 2 }
                                 )}
                               </p>
-=======
-                        ) : (
-                            <div className="divide-y">
-                                {cartItems?.map((item, index) => (
-                                    <div key={index} className="py-4 group">
-                                        <div className="flex gap-4">
-                                            <div className="relative aspect-square h-24 w-24 overflow-hidden rounded-lg">
-                                                <img
-                                                    src={item.ProductImages?.imageUrl || "/api/placeholder/150/150"}
-                                                    alt={item.name}
-                                                    className="object-cover transition-transform group-hover:scale-105"
-                                                />
-                                            </div>
-                                            <div className="flex flex-1 flex-col justify-between">
-                                                <h3 className="text-sm font-medium mb-2">{item.name}</h3>
-                                                <div className="flex items-center gap-2">
-                                                    <Button
-                                                        variant="outline"
-                                                        size="icon"
-                                                        className="h-8 w-8 rounded-full"
-                                                        onClick={() => decreaseAmount(item.id)}
-                                                    >
-                                                        <Minus className="h-3 w-3" />
-                                                    </Button>
-                                                    <span className="w-8 text-center text-sm">{item.quantity}</span>
-                                                    <Button
-                                                        variant="outline"
-                                                        size="icon"
-                                                        className="h-8 w-8 rounded-full"
-                                                        onClick={() => increaseAmount(item.id)}
-                                                    >
-                                                        <Plus className="h-3 w-3" />
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        className="h-8 w-8 rounded-full ml-12 hover:bg-red-100 transition-colors group/btn p-2"
-                                                        onClick={() => removeFromCart(item.id)}
-                                                    >
-                                                        <Trash className="h-4 w-4  group-hover/btn:text-red-600 transition-colors" />
-                                                    </Button>
-                                                </div>
-                                                <div className="mt-2">
-                                                    <p className="text-base  text-blue-500 font-medium">THB {(item.price * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
                             </div>
                           </div>
                         </div>

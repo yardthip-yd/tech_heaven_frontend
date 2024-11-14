@@ -12,22 +12,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-<<<<<<< HEAD
 export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddressError }) {
-=======
-
-export default function CheckoutForm({ dpmCheckerLink }) {
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
   const actionCreateOrder = useOrderStore((state) => state.actionCreateOrder);
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
-<<<<<<< HEAD
-=======
-  const clearCart = useCartStore((state) => state.clearCart);
-
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
   const [isLoading, setIsLoading] = useState(false);
   const clearCart = useCartStore((state) => state.clearCart);
   const handleSubmit = async (e) => {
@@ -65,7 +55,6 @@ export default function CheckoutForm({ dpmCheckerLink }) {
         console.log("Error:", payload.error.message);
       } else if (payload.paymentIntent.status === "succeeded") {
         setIsLoading(false);
-<<<<<<< HEAD
         
         // สร้าง orderData ที่จะส่งไป
         const orderData = {
@@ -85,11 +74,6 @@ export default function CheckoutForm({ dpmCheckerLink }) {
           navigate("/user/purchase");
           toast.success("ชำระเงินสำเร็จ");
         }
-=======
-        await actionCreateOrder(token, payload);
-        clearCart()
-        navigate("/user/purchase");
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
       }
     } catch (err) {
       clearTimeout(timeout);

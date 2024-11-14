@@ -10,7 +10,6 @@ const useAddressStore = create((set, get) => ({
   address: [],
   actionAddAddress: async (token, data) => {
     try {
-<<<<<<< HEAD
       console.log("Store receiving data:", { token, data });
 
       if (!data.address || !data.userId) {
@@ -52,23 +51,6 @@ const useAddressStore = create((set, get) => ({
     } catch (err) {
       console.error("Error getting addresses:", err);
       throw err;
-=======
-      console.log(data);
-      const result = await addAddress(token, data);
-      console.log(result);
-      set((state) => ({ address: [...state.address, result.data.created] }));
-    } catch (err) {
-      console.log(err);
-    }
-  },
-  actionGetAllAddress: async (token, id) => {
-    try {
-      const response = await getAllAddress(token, id);
-      console.log(response);
-      set({ address: response.data });
-    } catch (err) {
-      console.error(err);
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
     }
   },
   actionUpdateAddress: async (token, id, data) => {

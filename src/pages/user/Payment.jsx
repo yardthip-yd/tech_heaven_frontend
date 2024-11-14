@@ -44,20 +44,11 @@ const Payment = () => {
         }, 0)
       : 0;
 
-<<<<<<< HEAD
   const totalPriceAfterDiscount = (
     totalPriceBeforeDiscount -
     totalPriceBeforeDiscount * (discount / 100)
   ).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
-=======
-  const totalPriceAfterDiscount = (totalPriceBeforeDiscount - (totalPriceBeforeDiscount * (discount / 100)))
-    .toLocaleString("en-US", { minimumFractionDigits: 2 });
-  const user = useAuthStore((state) => state.user)
-  const token = useAuthStore((state) => state.token);
-  const address = useAddressStore((state) => state.address);
-  const actionAddAddress = useAddressStore((state) => state.actionAddAddress);
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
   const actionGetAllAddress = useAddressStore(
     (state) => state.actionGetAllAddress
   );
@@ -117,7 +108,6 @@ const Payment = () => {
     }
   };
 
-<<<<<<< HEAD
   const handleAddAddress = async () => {
     try {
       if (!addressData.address) {
@@ -163,27 +153,6 @@ const Payment = () => {
     console.log('Selected address:', addressId);
     setSelectedAddress(addressId);
   };
-=======
-  const handleAddAddress = () => {
-    try {
-      actionAddAddress(token, address);
-      actionGetAllAddress(token);
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gray-50">
-        <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 bg-blue-200 rounded-full mb-4"></div>
-          <div className="h-4 w-48 bg-blue-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
 
   if (error) {
     toast.error(error);
@@ -194,15 +163,12 @@ const Payment = () => {
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
-<<<<<<< HEAD
         newestOnTop
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-=======
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
       />
       <div className="max-w-4xl mx-auto space-y-6 h-full">
         <div className="flex items-center justify-between mb-8">
@@ -243,11 +209,7 @@ const Payment = () => {
                     <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 overflow-hidden rounded-lg">
                       <img
                         src={
-<<<<<<< HEAD
                           item.ProductImages[0]?.imageUrl ||
-=======
-                          item.ProductImages?.imageUrl ||
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
                           "https://via.placeholder.com/150"
                         }
                         alt={item.name}
@@ -310,7 +272,6 @@ const Payment = () => {
                 {address && address.length > 0 ? (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Shipping Address</span>
-<<<<<<< HEAD
                     <div className="flex gap-2">
                       <select
                         name="address"
@@ -333,22 +294,10 @@ const Payment = () => {
                         Add New
                       </Button>
                     </div>
-=======
-                    <button>Add Address</button>
-                    <select name="address">
-                      <option>Select Address</option>
-                      {address.map((address) => (
-                        <option key={address.id} value={address.id}>
-                          {address.address}
-                        </option>
-                      ))}
-                    </select>
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
                   </div>
                 ) : (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Shipping Address</span>
-<<<<<<< HEAD
                     <Input
                       value={addressData.address}
                       onChange={(e) =>
@@ -368,9 +317,6 @@ const Payment = () => {
                     <Button onClick={handleUpdateAddress}>
                       Update Address
                     </Button>
-=======
-                    <span className="text-gray-600">No address found</span>
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
                   </div>
                 )}
                 <div className="pt-3 border-t">
@@ -422,7 +368,6 @@ const Payment = () => {
                 options={{ clientSecret, appearance }}
                 stripe={stripePromise}
               >
-<<<<<<< HEAD
                 <CheckoutForm
                   selectedAddressId={selectedAddress}
                   onAddressError={() =>
@@ -431,9 +376,6 @@ const Payment = () => {
                   amount={cartTotal}
                   currency="thb"
                 />
-=======
-                <CheckoutForm />
->>>>>>> 0a521668673868ba634c00c86584bcccf05c192c
               </Elements>
             )}
           </CardContent>
