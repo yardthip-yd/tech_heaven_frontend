@@ -81,6 +81,7 @@ const FormProduct = () => {
         return {
           ...prev,
           [e.target.name]: e.target.value,
+          accessoriesType: "MOUSE",
         };
       });
     } else {
@@ -88,7 +89,6 @@ const FormProduct = () => {
         return {
           ...prev,
           [e.target.name]: e.target.value,
-          accessoriesType: "MOUSE",
         };
       });
     }
