@@ -39,7 +39,7 @@ function ChatButton({ setActive }) {
         <img
           src={ChatAvatar}
           alt="ChatAvatar"
-          className="w-32 h-32 object-contain drop-shadow-2xl"
+          className="w-20 h-20 object-contain drop-shadow-2xl"
         />
       </div>
 

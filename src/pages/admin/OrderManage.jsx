@@ -117,17 +117,19 @@ const OrderManage = () => {
                         </TableCell>
                         <TableCell className="text-center text-slate-600">{order.paymentMethod}</TableCell>
                         <TableCell className="text-center">
-                          {openDetails[order.id] ? (
-                            <ChevronUp
-                              onClick={() => handleToggleDetails(order.id)}
-                              className="cursor-pointer text-blue-500"
-                            />
-                          ) : (
-                            <ChevronDown
-                              onClick={() => handleToggleDetails(order.id)}
-                              className="cursor-pointer text-blue-500"
-                            />
-                          )}
+                          <button
+                            onClick={() => handleToggleDetails(order.id)}
+                            className="flex items-center justify-center space-x-1 mx-auto hover:bg-slate-100 p-2 rounded-lg transition-colors duration-200"
+                          >
+                            <span className="text-sm font-medium text-blue-500">
+                              {openDetails[order.id] ? 'Hide Details' : 'View Details'}
+                            </span>
+                            {openDetails[order.id] ? (
+                              <ChevronUp className="h-4 w-4 text-blue-500" />
+                            ) : (
+                              <ChevronDown className="h-4 w-4 text-blue-500" />
+                            )}
+                          </button>
                         </TableCell>
                       </TableRow>
                       {openDetails[order.id] && (
