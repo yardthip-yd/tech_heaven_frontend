@@ -242,7 +242,7 @@ const Store = () => {
           y: circleY,
           rotate: circleRotate,
         }}
-        className="absolute w-28 h-28 top-[700px] right-[80px] z-10 will-change-transform"
+        className="absolute w-24 h-24 top-[1030px] right-[80px] z-10 will-change-transform"
       >
         <img
           src={circleImg}
@@ -252,17 +252,16 @@ const Store = () => {
       </motion.div>
 
       <motion.div
-        className="absolute w-20 h-20 top-[20px] -right-[5px] z-10"
+        className="absolute w-16 h-16 top-[20px] right-[15px] z-10"
         style={{
           y: pyramidY,
-          rotate: 120,
           scale: pyramidScale,
         }}
       >
         <img
           src={pyramidImg}
           alt="Pyramid"
-          className="w-full h-full object-contain opacity-80"
+          className="w-full h-full object-contain opacity-80 filter"
         />
       </motion.div>
 
@@ -281,7 +280,7 @@ const Store = () => {
       </motion.div>
 
       <motion.div
-        className="absolute w-40 h-40 top-[1600px] left-[300px] z-10"
+        className="absolute w-28 h-28 top-[2030px] left-[300px] z-10"
         style={{
           y: noodleY,
           rotate: 120,
@@ -300,7 +299,7 @@ const Store = () => {
           y: cubeY,
           rotate: cubeRotate,
         }}
-        className="absolute w-40 h-40 top-[2700px] -right-[50px] z-10 will-change-transform"
+        className="absolute w-40 h-40 top-[3030px] -right-[50px] z-10 will-change-transform"
       >
         <img
           src={cubeImg}
@@ -314,11 +313,25 @@ const Store = () => {
           y: tubeY,
           rotate: 270,
         }}
-        className="absolute w-52 h-52 top-[3500px] left-[5px] z-10 will-change-transform"
+        className="absolute w-52 h-52 top-[4030px] left-[5px] z-10 will-change-transform"
       >
         <img
           src={tubeImg}
           alt="Tube"
+          className="w-full h-full object-contain drop-shadow-2xl"
+        />
+      </motion.div>
+
+      <motion.div
+        style={{
+          y: starY,
+          rotate: 270,
+        }}
+        className="absolute w-28 h-28 top-[5030px] right-[220px] z-10 will-change-transform"
+      >
+        <img
+          src={starImg}
+          alt="Star"
           className="w-full h-full object-contain drop-shadow-2xl"
         />
       </motion.div>

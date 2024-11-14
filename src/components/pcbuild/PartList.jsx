@@ -67,18 +67,14 @@ function PartList() {
   // useEffect(() => {}, [productList, filterJSON]);
 
   return (
-    <>
+    <div className="min-h-[1500px]">
       <MyPCBuild />
-      <PartFilter
-        setFilterProductList={setFilterProductList}
-        productList={productList}
-      />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 bg-gray-100 p-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4 relative z-10">
         {filterProductList.map((product) => (
           <ProductCardBuild key={product.id} product={product} />
         ))}
       </div>
-    </>
+    </div>
   );
 }
 

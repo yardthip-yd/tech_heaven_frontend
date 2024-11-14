@@ -10,7 +10,7 @@ function ChatHeader({ setActive }) {
     <div className="relative flex justify-between items-center p-2 h-[61.25px] bg-blue-50 rounded-t-lg shadow-md">
       <div className="flex flex-row items-center gap-2 pl-2">
       <MessagesSquare className="w-6 h-6 "/>
-      <div className="font-semibold text-slate-700">Contact Admin</div>
+      <div className="font-semibold text-slate-700">Support</div>
       </div>
       <div
         onClick={handleClick}
