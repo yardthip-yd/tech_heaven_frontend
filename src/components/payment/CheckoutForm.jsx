@@ -44,7 +44,7 @@ export default function CheckoutForm({ dpmCheckerLink }) {
       } else if (payload.paymentIntent.status === "succeeded") {
         setIsLoading(false);
         await actionCreateOrder(token, payload);
-        navigate("/user/order-success");
+        navigate("/user/purchase");
       }
     } catch (err) {
       clearTimeout(timeout);
