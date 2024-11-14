@@ -699,7 +699,7 @@ const FormProduct = () => {
                     </TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="py-2">
                   {filteredProducts.map((item, index) => (
                     <TableRow
                       key={index}
@@ -770,7 +770,7 @@ const FormProduct = () => {
 
         {/* Edit Product Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
-          <DialogContent className="max-w-lg">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle className="text-2xl font-semibold text-slate-800">
                 Edit Product Information
