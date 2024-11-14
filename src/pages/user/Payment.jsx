@@ -14,9 +14,8 @@ import "react-toastify/dist/ReactToastify.css";
 import useAddressStore from "@/stores/addressStore";
 import useCartStore from "@/stores/cartStore";
 
-const stripePromise = loadStripe(
-  "pk_test_51QGAMTELH1fq6Tmu7Xaz1rROW2MVJaFwzpfDQUZwedBoszrmUk2zwr5DZ80QgJKBIT6vXki7Dnh2IeKftlchuuk100DI5LWtM0"
-);
+
+const stripePromise = loadStripe("pk_test_51QGAMTELH1fq6Tmu7Xaz1rROW2MVJaFwzpfDQUZwedBoszrmUk2zwr5DZ80QgJKBIT6vXki7Dnh2IeKftlchuuk100DI5LWtM0");
 
 const Payment = () => {
   const cartTotal = useCartStore((state) => state.cartTotal);

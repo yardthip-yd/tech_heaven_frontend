@@ -2,16 +2,22 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Camera, User, Eye, EyeOff, Pencil } from "lucide-react";
 import useAuthStore from "@/stores/authStore";
+<<<<<<< HEAD
 import useAddressStore from "@/stores/addressStore";
+=======
+>>>>>>> dev
 import Avatar from '../Avatar';
 import UserImageCropper from '@/components/user/UserImageCropper';
 
 const UserProfile = () => {
   const { user, getCurrentUser, actionUpdateUser } = useAuthStore();
+<<<<<<< HEAD
   const address = useAddressStore((state) => state.address);
   const actionAddAddress = useAddressStore((state) => state.actionAddAddress);
 
   // useState for user profile information
+=======
+>>>>>>> dev
   const [firstName, setFirstName] = useState(user?.firstName || "");
   const [lastName, setLastName] = useState(user?.lastName || "");
   const [email, setEmail] = useState(user?.email || "");
