@@ -187,6 +187,7 @@ const Register = () => {
                             placeholder="phone"
                             name="phone"
                             value={input.phone}
+                            maxLength={10}
                             onChange={hdlChange}
                         />
                     </div>
