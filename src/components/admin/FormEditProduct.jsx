@@ -6,8 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import useProductStore from "@/stores/productStore";
 import UploadFileEditProduct from "./UploadfileEditProduct";
 
-const FormEditProduct = ({closeDialog}) => {
-  const { id } = useParams();
+const FormEditProduct = ({ closeDialog, productId }) => {
   const navigate = useNavigate();
   const getCategory = useCategoryStore((state) => state.getCategory);
   const categories = useCategoryStore((state) => state.categories);
@@ -34,7 +33,7 @@ const FormEditProduct = ({closeDialog}) => {
 
   const getProduct = async () => {
     try {
-      const resp = await actionReadProducts(id);
+      const resp = await actionReadProducts(productId);
       setSelectedCategory(String(resp.categoryId));
 
       const formattedImages = resp.ProductImages.map((img) => ({
@@ -132,7 +131,13 @@ const FormEditProduct = ({closeDialog}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.description || !form.price || !selectedCategory || !form.stock) {
+    if (
+      !form.name ||
+      !form.description ||
+      !form.price ||
+      !selectedCategory ||
+      !form.stock
+    ) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -160,7 +165,9 @@ const FormEditProduct = ({closeDialog}) => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Product Name:</label>
+                <label className="block text-sm font-medium text-slate-700">
+                  Product Name:
+                </label>
                 <input
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={form.name || ""}
@@ -169,9 +176,11 @@ const FormEditProduct = ({closeDialog}) => {
                   name="name"
                 />
               </div>
-              
+
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Price:</label>
+                <label className="block text-sm font-medium text-slate-700">
+                  Price:
+                </label>
                 <input
                   type="number"
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -183,7 +192,9 @@ const FormEditProduct = ({closeDialog}) => {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">Stock Quantity:</label>
+                <label className="block text-sm font-medium text-slate-700">
+                  Stock Quantity:
+                </label>
                 <input
                   type="number"
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -195,7 +206,9 @@ const FormEditProduct = ({closeDialog}) => {
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700">Description:</label>
+                <label className="block text-sm font-medium text-slate-700">
+                  Description:
+                </label>
                 <textarea
                   className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   value={form.description || ""}
@@ -217,12 +230,17 @@ const FormEditProduct = ({closeDialog}) => {
               />
             </div>
 
+            {/* ===== CPU ===== */}
             {selectedCategory === "1" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">CPU Information</h2>
-                
+                <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                  CPU Information
+                </h2>
+
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">Model:</label>
+                  <label className="block text-sm font-medium text-slate-700">
+                    Model:
+                  </label>
                   <input
                     className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={form.model || ""}
@@ -233,7 +251,9 @@ const FormEditProduct = ({closeDialog}) => {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">Socket:</label>
+                  <label className="block text-sm font-medium text-slate-700">
+                    Socket:
+                  </label>
                   <input
                     className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value={form.socket || ""}
@@ -243,12 +263,66 @@ const FormEditProduct = ({closeDialog}) => {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Core:
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.cores || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter core"
+                    name="cores"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Thread:
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.threads || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter thread"
+                    name="threads"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Base Clock:
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.baseClock || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter base clock"
+                    name="baseClock"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Boost Clock:
+                  </label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.boostClock || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter boost clock"
+                    name="boostClock"
+                  />
+                </div>
+
                 {/* Similar styling for other CPU fields */}
               </div>
             )}
 
+            {/* ===== End of Part section ===== */}
+
             {/* Additional conditional rendering blocks for other categories */}
-            
+
             <div className="flex flex-col gap-4 mt-6">
               <button
                 type="submit"
