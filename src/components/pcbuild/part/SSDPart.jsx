@@ -4,8 +4,14 @@ import React, { useContext } from "react";
 import { Trash } from "lucide-react";
 
 function SSDPart() {
-  const { setFilter, setPartContent, SSD, setSSD, setFilterJSON } =
-    useContext(PCBuildContext);
+  const {
+    setFilter,
+    setPartContent,
+    SSD,
+    setSSD,
+    setFilterJSON,
+    setSearchItem,
+  } = useContext(PCBuildContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -30,7 +36,7 @@ function SSDPart() {
       onClick={handleClick}
     >
       <div className="w-6 h-6 flex items-center justify-center rounded-full text-blue-600">
-        <IconSSD className={`${SSD ? "w-4 h-4" : "w-6 h-6"}`}/>
+        <IconSSD className={`${SSD ? "w-4 h-4" : "w-6 h-6"}`} />
       </div>
 
       <div className="flex-grow">
@@ -38,9 +44,7 @@ function SSDPart() {
           {SSD ? SSD.name : "Select SSD"}
         </div>
         {!SSD && (
-          <div className="text-xs text-slate-500">
-            Click to choose your SSD
-          </div>
+          <div className="text-xs text-slate-500">Click to choose your SSD</div>
         )}
       </div>
 

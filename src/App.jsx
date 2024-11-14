@@ -148,9 +148,9 @@ const App = () => {
 
   useEffect(() => {
     // console.log(currentUser, "CHECK USER");
-    // if (currentUser) {
-    getChatNotification();
-    // }
+    if (currentUser) {
+      getChatNotification();
+    }
   }, [currentUser]);
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import useChatStore from "@/stores/chatStore";
 import useAuthStore from "@/stores/authStore";
 import { SocketContext } from "@/contexts/SocketContext";
 import ChatAvatar from "@/assets/image/icon-customer-service.png";
+import { toast } from "react-toastify";
 
 function ChatButton({ setActive }) {
   const { socket, chatNotify, setChatNotify, chatId } =
@@ -15,6 +16,7 @@ function ChatButton({ setActive }) {
   const currentUser = useAuthStore((state) => state.user);
 
   const handleClick = () => {
+    if (!currentUser) return toast.error("Please login to chat");
     setActive(true);
     if (currentUser.role !== "ADMIN") {
       if (chatNotify.length > 0) {
@@ -32,10 +34,14 @@ function ChatButton({ setActive }) {
   }, [chatNotify]);
 
   return (
-    <div className="absolute p-2 pt-3 bottom-16 right-16 flex justify-center items-center hover:cursor-pointer z-20" >
-
-      <div className="flex flex-col items-center justify-center" onClick={handleClick}>
-        <span className="font-jost font-semibold shadow-2xl px-3 py-1 text-white bg-gradient-to-r  from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 bg-hover rounded-xl ">Chat with us</span>
+    <div className="absolute p-2 pt-3 bottom-16 right-16 flex justify-center items-center hover:cursor-pointer z-20">
+      <div
+        className="flex flex-col items-center justify-center"
+        onClick={handleClick}
+      >
+        <span className="font-jost font-semibold shadow-2xl px-3 py-1 text-white bg-gradient-to-r  from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 bg-hover rounded-xl ">
+          Chat with us
+        </span>
         <img
           src={ChatAvatar}
           alt="ChatAvatar"
