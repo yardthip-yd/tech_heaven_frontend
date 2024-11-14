@@ -76,7 +76,7 @@ function ChatBody() {
         return (
           <React.Fragment key={message.id}>
             {showDate && (
-              <div className="text-center text-xs text-gray-500 my-2">
+              <div className="text-center text-xs text-slate-500 my-2">
                 {messageDate}
               </div>
             )}

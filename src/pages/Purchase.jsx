@@ -10,18 +10,15 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, CreditCard, Package, ShoppingBag } from "lucide-react";
-import OrderDetailsDialog from "@/components/order/OrderDetailsDialog";
+import { Calendar, Package, ShoppingBag, ChevronDown, ChevronUp } from "lucide-react";
 
 const Purchase = () => {
     const { actionGetOrderByUserId, orders } = useOrderStore();
     const token = useAuthStore((state) => state.token);
     const userId = useAuthStore((state) => state.user.id);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [openDetails, setOpenDetails] = useState({});
 
     useEffect(() => {
         if (token && userId) {
@@ -29,19 +26,27 @@ const Purchase = () => {
         }
     }, [token, userId, actionGetOrderByUserId]);
 
-    const handleViewOrder = (order) => {
-        setSelectedOrder(order);
-        setIsDialogOpen(true);
+    const handleToggleDetails = (orderId) => {
+        setOpenDetails((prevState) => ({
+            ...prevState,
+            [orderId]: !prevState[orderId],
+        }));
     };
 
     const getStatusColor = (status) => {
         const statusColors = {
-            'pending': 'bg-yellow-100 text-yellow-800',
-            'processing': 'bg-blue-100 text-blue-800',
-            'completed': 'bg-green-100 text-green-800',
-            'cancelled': 'bg-red-100 text-red-800'
+            'pending': 'bg-yellow-500/10 text-yellow-700',
+            'processing': 'bg-blue-500/10 text-blue-700',
+            'shipped': 'bg-indigo-500/10 text-indigo-700',
+            'delivered': 'bg-cyan-500/10 text-cyan-700',
+            'cancelled': 'bg-red-500/10 text-red-700',
+            'refunded': 'bg-orange-500/10 text-orange-700',
+            'returned': 'bg-rose-500/10 text-rose-700',
+            'exchanged': 'bg-violet-500/10 text-violet-700',
+            'completed': 'bg-green-500/10 text-green-700',
+            'succeded': 'bg-green-500/10 text-green-700'
         };
-        return statusColors[status.toLowerCase()] || 'bg-gray-100 text-gray-800';
+        return statusColors[status.toLowerCase()] || 'bg-gray-500/10 text-gray-700';
     };
 
     const OrderStats = () => (
@@ -112,38 +117,39 @@ const Purchase = () => {
                                         .slice()
                                         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                                         .map((order, index) => (
-                                            <TableRow key={order.id} className="hover:bg-slate-50">
-                                                <TableCell className="font-medium text-center">{index + 1}</TableCell>
-                                                <TableCell className="text-center">{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-                                                <TableCell className="text-center">
-                                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                                                        {order.status}
-                                                    </span>
-                                                </TableCell>
-                                                <TableCell className="text-center">{order.paymentMethod}</TableCell>
-                                                <TableCell className="text-center">
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        onClick={() => handleViewOrder(order)}
-                                                        className="bg-slate-700 hover:bg-black"
-                                                    >
-                                                        View Details
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
+                                            <React.Fragment key={order.id}>
+                                                <TableRow className="hover:bg-slate-50">
+                                                    <TableCell className="font-medium text-center">{index + 1}</TableCell>
+                                                    <TableCell className="text-center">{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+                                                    <TableCell className="text-center">
+                                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                                                            {order.status}
+                                                        </span>
+                                                    </TableCell>
+                                                    <TableCell className="text-center">{order.paymentMethod}</TableCell>
+                                                    <TableCell className="text-center">
+                                                        <button
+                                                            onClick={() => handleToggleDetails(order.id)}
+                                                            className="flex items-center justify-center space-x-1 mx-auto hover:bg-slate-100 p-2 rounded-lg transition-colors duration-200"
+                                                        >
+                                                            <span className="text-sm font-medium text-blue-500">
+                                                                {openDetails[order.id] ? 'Hide Details' : 'View Details'}
+                                                            </span>
+                                                            {openDetails[order.id] ? (
+                                                                <ChevronUp className="h-4 w-4 text-blue-500" />
+                                                            ) : (
+                                                                <ChevronDown className="h-4 w-4 text-blue-500" />
+                                                            )}
+                                                        </button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            </React.Fragment>
                                         ))}
                                 </TableBody>
                             </Table>
                         </CardContent>
                     </Card>
                 </div>
-
-                <OrderDetailsDialog
-                    isOpen={isDialogOpen}
-                    onClose={() => setIsDialogOpen(false)}
-                    order={selectedOrder}
-                />
             </div>
         </div>
     );
