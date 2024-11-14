@@ -58,6 +58,8 @@ const UserProfile = () => {
   };
 
   const hdlUpdateProfile = async () => {
+    setIsLoading(true);
+
     const updatedData = new FormData();
     updatedData.append("firstName", firstName);
     updatedData.append("lastName", lastName);
@@ -85,6 +87,7 @@ const UserProfile = () => {
       setIsLoading(false);
     }
   };
+
 
   const passwordChecks = {
     length: password.length >= 8,
@@ -256,8 +259,8 @@ const UserProfile = () => {
           <button
             onClick={hdlUpdateProfile}
             className={`w-full py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 ${isLoading
-                ? "bg-slate-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white"
+              ? "bg-slate-600  text-white cursor-not-allowed"
+              : "bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white"
               }`}
             disabled={isLoading}
           >
