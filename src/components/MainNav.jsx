@@ -49,25 +49,25 @@ const MainNav = () => {
         <ul className="flex items-center gap-4">
           <Link
             to={"/"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
             HOME
           </Link>
           <Link
             to={"/store"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
             STORE
           </Link>
           <Link
             to={"/pcbuild"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
-            PC BUILD
+            CUTOMIZE YOUR SPEC
           </Link>
           <Link
             to={"/booking"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
             BOOKING
           </Link>
