@@ -1,33 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import axios from "../../config/axios";
+import { UserRoundCog } from "lucide-react";
+import { toast } from "react-toastify";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 function UserManage() {
   const navigate = useNavigate();
   const [members, setMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const result = await axios.get("/admin/getUser");
-      console.log(result)
-      setMembers(result.data); 
+      setMembers(result.data);
     } catch (err) {
       console.error("Error fetching user data:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   const hdlRemoveMember = async (userId) => {
     try {
       await axios.delete(`/admin/user/${userId}`);
+      toast.success("User deleted successfully");
       fetchData();
     } catch (err) {
       console.error("Error deleting user:", err);
+      toast.error("Failed to delete user");
     }
   };
 
@@ -35,9 +59,11 @@ function UserManage() {
     try {
       const body = { role, isActive };
       await axios.put(`/admin/user/${userId}`, body);
+      toast.success("User updated successfully");
       fetchData();
     } catch (err) {
       console.error("Error updating user:", err);
+      toast.error("Failed to update user");
     }
   };
 
@@ -46,52 +72,101 @@ function UserManage() {
   }, [navigate]);
 
   return (
-    <div className="admin-manage-user w-full p-6">
-      <h2 className="text-2xl font-semibold mb-4">Manage Users</h2>
-
-      <Accordion type="single" collapsible className="w-full">
-        {members.map((user) => ( 
-      
-          <AccordionItem key={user.id} value={`user-${user.id}`}>
-            <AccordionTrigger>
-              {user.firstName} {user.lastName} - {user.role} {user.isActive ? "(Active)" : "(Inactive)"}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-2">
-                <p>Email: {user.email}</p>
-                <p>Role: {user.role}</p>
-                <p>Firstname: {user.firstName}</p>
-                <p>Lastname: {user.lastName}</p>
-                <p>DateofBirth: {new Date(user.dateOfBirth).toLocaleDateString()}</p>
-                <p>Status: {user.isActive ? "Active" : "Inactive"}</p>
-
-                <div className="flex gap-2 mt-2">
-                  <select
-                    className="p-2 border rounded"
-                    value={user.role}
-                    onChange={(e) => hdlUpdateUser(user.id, e.target.value, user.isActive)}
-                  >
-                    <option value="USER">USER</option>
-                    <option value="ADMIN">ADMIN</option>
-                  </select>
-                  <button
-                    onClick={() => hdlUpdateUser(user.id, user.role, !user.isActive)}
-                    className={`px-2 py-1 rounded ${user.isActive ? "bg-red-500" : "bg-green-500"} text-white`}
-                  >
-                    {user.isActive ? "Deactivate" : "Activate"}
-                  </button>
-                  <button
-                    onClick={() => hdlRemoveMember(user.id)}
-                    className="bg-gray-500 text-white px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+    <div className="p-6 mx-auto">
+      <Card>
+        <CardHeader className="space-y-1">
+          <div className="flex items-center space-x-2">
+            <UserRoundCog className="h-6 w-6 text-blue-500" />
+            <CardTitle className="text-2xl">Manage Users</CardTitle>
+          </div>
+          <CardDescription>
+            Manage user accounts, change roles, activate or deactivate accounts, and delete users from the system.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <div className="text-center py-8 text-slate-500">Loading users...</div>
+          ) : (
+            <Table>
+              <TableHeader className="h-14 bg-slate-100">
+                <TableRow>
+                  <TableHead className="font-semibold text-slate-700 w-[150px] text-base text-center">
+                    Firstname
+                  </TableHead>
+                  <TableHead className="font-semibold text-slate-700 text-base text-center">
+                    Lastname
+                  </TableHead>
+                  <TableHead className="font-semibold text-slate-700 text-base text-center">
+                    Email
+                  </TableHead>
+                  <TableHead className="font-semibold text-slate-700 text-base text-center">
+                    Role
+                  </TableHead>
+                  <TableHead className="font-semibold text-slate-700 text-base text-center">
+                    Status
+                  </TableHead>
+                  <TableHead className="font-semibold text-slate-700 text-base text-center">
+                    Actions
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {members.map((user) => (
+                  <TableRow key={user.id} className="hover:bg-slate-50 transition-colors duration-150 h-14">
+                    <TableCell className="font-medium text-slate-900 text-center">
+                      {user.firstName}
+                    </TableCell>
+                    <TableCell className="text-slate-600 text-center">{user.lastName}</TableCell>
+                    <TableCell className="text-slate-600 text-center">{user.email}</TableCell>
+                    <TableCell className="flex justify-center">
+                      <Select
+                        value={user.role}
+                        onValueChange={(value) => hdlUpdateUser(user.id, value, user.isActive)}
+                      >
+                        <SelectTrigger className="w-24">
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="USER">User</SelectItem>
+                          <SelectItem value="ADMIN">Admin</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${user.isActive ? "bg-green-100 text-green-700" : "bg-blue-100 text-blue-700"
+                          }`}
+                      >
+                        {user.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="flex items-center gap-2 justify-center">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-800 text-white hover:text-white"
+                          onClick={() => hdlUpdateUser(user.id, user.role, !user.isActive)}
+                        >
+                          {user.isActive ? "Deactivate" : "Activate"}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="bg-slate-100 hover:bg-slate-300"
+                          onClick={() => hdlRemoveMember(user.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

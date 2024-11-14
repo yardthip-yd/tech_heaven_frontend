@@ -1,16 +1,16 @@
 import React from "react";
-import AdminNav from "@/components/admin/AdminNav";
 import { Outlet } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AdminSidebar from "@/components/admin/AdminSideBar";
 import ChatButtonContainer from "@/components/chat/ChatButtonContainer";
+import MainNav from "@/components/MainNav";
 
 function AdminLayout() {
   return (
     <div className="h-screen w-screen">
       <div className="flex flex-col flex-1">
         {/* Navbar*/}
-        <AdminNav />
+        <MainNav />
 
         {/* Main content*/}
         <SidebarProvider>

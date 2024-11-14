@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CartIcon } from "../ui/Icon";
+import { ShoppingBag } from "lucide-react";
 import LoginModal from "../auth/LoginModal";
 import UserDropdown from "../auth/UserDropdown";
 import useAuthStore from "../../stores/authStore";
+import TechLogo from "@/assets/image/logo.png";
 
 const AdminNav = () => {
   const currentUser = useAuthStore((state) => state.user);
@@ -20,13 +21,13 @@ const AdminNav = () => {
     setIsDialogOpen(true);
   };
 
-  // Fn Mockup will change after we have admin
+  // Fn handle login
   const hdlLogin = () => {
-    const userRole = "Admin";
-
-    setIsLoggedIn(true);
-    setIsDialogOpen(false);
-    setIsAdmin(userRole === "Admin");
+    if (currentUser) {
+      setIsLoggedIn(true);
+      setIsDialogOpen(false);
+      setIsAdmin(currentUser.role === "ADMIN");
+    }
   };
 
   useEffect(() => {
@@ -37,30 +38,29 @@ const AdminNav = () => {
   }, [currentUser]);
 
   return (
-    <div
-      id="adminNav"
-      className="flex h-12 w-full items-center px-8 justify-between"
-    >
-      {/* Logo */}
-      <a className="text-2xl font-bold">LOGO</a>
+    <div className="flex h-12 w-full items-center px-8 py-6 justify-between sticky top-0 bg-white/70 backdrop-blur-lg shadow-lg rounded-md z-10">
+      {/* Logo with link to Home */}
+      <Link to="/">
+        <img src={TechLogo} alt="Tech Logo" className="h-10 w-10 cursor-pointer" />
+      </Link>
 
       {/* NavBar  */}
       <div>
         <ul className="flex items-center gap-4">
           <Link
-            to={"/"}
+            to="/"
             className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
           >
             HOME
           </Link>
           <Link
-            to={"/store"}
+            to="/store"
             className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
           >
             STORE
           </Link>
           <Link
-            to={"/booking"}
+            to="/booking"
             className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
           >
             BOOKING
@@ -86,7 +86,7 @@ const AdminNav = () => {
             )}
           </li>
           <li>
-            <CartIcon className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+            <ShoppingBag className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
           </li>
         </ul>
       </div>

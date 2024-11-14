@@ -3,31 +3,25 @@ import { toast } from "react-toastify";
 import Resize from "react-image-file-resizer";
 import { removeFiles, uploadFiles } from "@/API/product-api";
 import useAuthStore from "@/stores/authStore";
-import { Loader } from 'lucide-react';
+import { Loader, Camera } from 'lucide-react';
 
-const Uploadfile = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
-  // javascript
+const Uploadfile = ({ form, setForm, setForm2, inputImageRef, imageForm }) => {
   const token = useAuthStore((state) => state.token);
   const [isLoading, setIsLoading] = useState(false);
-  // console.log(inputImageRef)
 
   const handleOnChange = (e) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const files = e.target.files;
     if (files) {
       setIsLoading(true);
-      let allFiles = form.images; //[] empty array
+      let allFiles = form.images;
       for (let i = 0; i < files.length; i++) {
-        // console.log(files[i])
-
-        // Validate
         const file = files[i];
         if (!file.type.startsWith("image/")) {
-          toast.error(`File ${file.name} Not Image`);
+          toast.error(`File ${file.name} is not an image`);
           continue;
         }
 
-        // Image Resize
         Resize.imageFileResizer(
           files[i],
           720,
@@ -36,22 +30,19 @@ const Uploadfile = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
           100,
           0,
           (data) => {
-            // endpoint Backend
             uploadFiles(data)
               .then((res) => {
-                console.log(res);
-
                 allFiles.push(res.data);
                 setForm({
                   ...form,
                   images: allFiles,
                 });
-                setIsLoading(false)
-                toast.success("Upload image Success!!!");
+                setIsLoading(false);
+                toast.success("Image uploaded successfully!");
               })
               .catch((err) => {
                 console.log(err);
-                setIsLoading(false)
+                setIsLoading(false);
               });
           },
           "base64"
@@ -60,73 +51,54 @@ const Uploadfile = ({ form, setForm,setForm2, inputImageRef, imageForm}) => {
     }
   };
 
-  // console.log(form);
-  // console.log('imageForm', imageForm)
-
-  const handleDelete = async(public_id) => {
-    const images = form?.images
+  const handleDelete = async (public_id) => {
     await removeFiles(public_id)
-    .then((res) => {
-      // const filterImages = images.filter((item) => {
-      //   console.log(item)
-      //   return item.public_id !== public_id
-      // })
-      // console.log('imageForm', imageForm)
-      // console.log('filterImages', filterImages)
-      // // setForm({
-      // //   ...form,
-      // //   // images: filterImages
-      // // })
-      if(imageForm) {
-        console.log('imageForm555555', imageForm)
-      }
-      setForm2(prev  => {
-        console.log("prev",prev)
-        return prev.images.filter(item => item.public_id !== public_id)
+      .then((res) => {
+        setForm2((prev) => ({
+          ...prev,
+          images: prev.images.filter((item) => item.public_id !== public_id),
+        }));
+        toast.error(res.data);
       })
-      toast.error(res.data)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="my-4">
       <div className="flex mx-4 gap-4 my-4">
-        {
-          isLoading && <Loader className="w-16 h-16 animate-spin"/>
-        }
-        
-        {/* image */}
-        {
-          (imageForm || (form?.images?.length > 0 ? form.images : []))?.map((item, index) =>
-            <div className="relative" key={index}>
-              <img
-                className="w-24 h-24 hover:scale-105" 
-                src={item.imageUrl || item.secure_url} 
-              />
-              <span
-                onClick={async() => {
-                  handleDelete(item.public_id).then(() => {console.log('form!!!!!!!', form)})
-                }} 
-                
-                className="absolute top-0 right-0 bg-red-500 p-1 rounded-md">X</span>
-            </div>
-          )
-        }
+        {isLoading && <Loader className="w-16 h-16 animate-spin" />}
 
-        
+        {(imageForm || form.images)?.map((item, index) => (
+          <div className="relative" key={index}>
+            <img className="w-24 h-24 hover:scale-105" src={item.imageUrl || item.secure_url} alt="Uploaded" />
+            <span
+              onClick={() => handleDelete(item.public_id)}
+              className="absolute top-0 right-0 bg-red-500 p-1 rounded-md cursor-pointer"
+            >
+              X
+            </span>
+          </div>
+        ))}
       </div>
 
-      <div>
+      <div className="flex items-center">
+        <span className="text-sm font-medium mr-2 text-slate-700">Upload Product Image: </span>
+        <button
+          type="button"
+          onClick={() => inputImageRef.current.click()}
+          className="flex items-center justify-center w-12 h-12 rounded-full bg-slate-200 hover:bg-slate-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <Camera className="w-6 h-6 text-slate-600" />
+        </button>
         <input
           onChange={handleOnChange}
           type="file"
           name="images"
           multiple
           ref={inputImageRef}
+          className="hidden"
         />
       </div>
     </div>

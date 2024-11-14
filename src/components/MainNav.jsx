@@ -4,6 +4,7 @@ import UserDropdown from "./auth/UserDropdown";
 import useAuthStore from "../stores/authStore";
 import { Link } from "react-router-dom";
 import CartSidebar from "./cart/CartSidebar";
+import TechLogo from "@/assets/image/logo.png"
 
 const MainNav = () => {
   const currentUser = useAuthStore((state) => state.user);
@@ -32,39 +33,41 @@ const MainNav = () => {
   useEffect(() => {
     if (currentUser) {
       setIsLoggedIn(true);
-      console.log("Current user:", currentUser);
+      // console.log("Current user:", currentUser);
     }
   }, [currentUser]);
 
   return (
-    <div className="flex h-12 w-full items-center px-8 justify-between">
+    <div className="flex h-12 w-full items-center px-8 py-6 justify-between sticky bg-white/70 backdrop-blur-lg shadow-lg rounded-md">
       {/* Logo */}
-      <a className="text-2xl font-bold">LOGO</a>
+      <Link to="/">
+        <img src={TechLogo} alt="Tech Logo" className="h-10 w-10 cursor-pointer" />
+      </Link>
 
       {/* NavBar  */}
       <div>
         <ul className="flex items-center gap-4">
           <Link
             to={"/"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
             HOME
           </Link>
           <Link
             to={"/store"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
             STORE
           </Link>
           <Link
             to={"/pcbuild"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
-            PC BUILD
+            CUTOMIZE YOUR SPEC
           </Link>
           <Link
             to={"/booking"}
-            className="hover:scale-105 hover:-translate-y-1 hover:duration-200"
+            className="hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500"
           >
             BOOKING
           </Link>

@@ -2,22 +2,27 @@ import axios from "axios";
 
 // USER ORDER
 export const createOrder = async (token, payload) => {
-    try {
-      const response = await axios.post('http://localhost:8000/user/create-order', {
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/user/create-order",
+      {
         paymentIntent: payload.paymentIntent,
+        addressId: Number(payload.addressId), // แปลงเป็นตัวเลข
         token,
-      }, {
+      },
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      
-      return response;
-    } catch (err) {
-      console.error("Error in createOrder:", err);
-      throw err;
-    }
-  };
+      }
+    );
+
+    return response;
+  } catch (err) {
+    console.error("Error in createOrder:", err);
+    throw err;
+  }
+};
 
 export const getOrderByUserId = async (token) => {
   return await axios.get("http://localhost:8000/user/get-orders", {
