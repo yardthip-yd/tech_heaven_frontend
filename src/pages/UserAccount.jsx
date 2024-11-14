@@ -2,6 +2,7 @@
 import UserProfile from '@/components/user/UserProfile';
 import UserSidebar from '@/components/user/UserSidebar';
 import Wishlist from '@/pages/Wishlist';
+import Purchase from '@/pages/Purchase';
 import React, { useState } from 'react';
 
 const UserAccount = () => {
@@ -12,7 +13,7 @@ const UserAccount = () => {
   const contentMap = {
     profile: <UserProfile />,
     wishlist: <Wishlist />,
-    // purchase: <Purchase />,
+    purchase: <Purchase />,
   };
 
   return (
