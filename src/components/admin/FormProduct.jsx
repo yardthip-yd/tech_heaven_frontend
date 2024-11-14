@@ -669,7 +669,7 @@ const FormProduct = () => {
           </CardContent>
         </Card>
 
-        <Card className="w-full lg:w-3/4 h-screen">
+        <Card className="w-full lg:w-3/4 h-[92vh] relative">
           <CardHeader className="pb-4 flex flex-row items-center justify-between">
             <CardTitle className="text-2xl font-bold text-slate-800">
               Product Lists
@@ -686,7 +686,7 @@ const FormProduct = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="overflow-y-auto h-screen">
+            <div className="overflow-y-auto relative h-[84vh]">
               <Table className="w-full">
                 <TableHeader className="h-14 bg-slate-100">
                   <TableRow>
@@ -719,7 +719,7 @@ const FormProduct = () => {
                     </TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="py-2 relative">
                   {filteredProducts.map((item, index) => (
                     <TableRow
                       key={index}
@@ -790,7 +790,7 @@ const FormProduct = () => {
 
         {/* Edit Product Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
-          <DialogContent className="max-w-lg">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle className="text-2xl font-semibold text-slate-800">
                 Edit Product Information
