@@ -243,9 +243,110 @@ const FormEditProduct = ({closeDialog}) => {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">Cores:</label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.cores || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter Cores"
+                    name="cores"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">Threads:</label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.threads || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter Threads"
+                    name="threads"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">BaseClock:</label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.baseClock || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter BaseClock"
+                    name="baseClock"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-slate-700">BoostClock:</label>
+                  <input
+                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={form.boostClock || ""}
+                    onChange={handleOnChange}
+                    placeholder="Enter BoostClock"
+                    name="boostClock"
+                  />
+                </div>
+
                 {/* Similar styling for other CPU fields */}
               </div>
             )}
+
+            {/*Monitor Product*/}
+        {selectedCategory === "2" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+            <h2 className="text-lg font-medium text-slate-800 col-span-2">Monitor Information</h2>
+            <label>Name:</label>
+            <input
+              className="border"
+              value={form.name || ""}
+              onChange={handleOnChange}
+              placeholder="Name"
+              name="name"
+            />
+            <label>Model:</label>
+            <input
+              className="border"
+              value={form.model || ""}
+              onChange={handleOnChange}
+              placeholder="Model"
+              name="model"
+            />
+            <label>Size:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.size || ""}
+              onChange={handleOnChange}
+              placeholder="Size"
+              name="size"
+            />
+            <label>Resolution:</label>
+            <input
+              className="border"
+              value={form.resolution || ""}
+              onChange={handleOnChange}
+              placeholder="Resolution"
+              name="resolution"
+            />
+            <label>RefreshRate:</label>
+            <input
+              type="number"
+              className="border"
+              value={form.refreshRate || ""}
+              onChange={handleOnChange}
+              placeholder="RefreshRate"
+              name="refreshRate"
+            />
+            <label>PanelType:</label>
+            <input
+              className="border"
+              value={form.panelType || ""}
+              onChange={handleOnChange}
+              placeholder="PanelType"
+              name="panelType"
+            />
+          </div>
+        )}
 
             {/* Additional conditional rendering blocks for other categories */}
             

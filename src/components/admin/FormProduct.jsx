@@ -154,11 +154,16 @@ const FormProduct = () => {
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.categoryId.toString() === searchTerm
   );
-
+  if(isLoading) {
+    return <div className="flex items-center justify-center space-x-2">
+            <div className="w-8 h-8 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+              <span className="text-gray-500">Loading...</span>
+            </div>
+  }
   return (
     <>
       <div className="flex flex-row gap-8 mx-auto p-6">
-        <Card className="w-full lg:w-1/4 h-[650px]">
+        <Card className="w-full lg:w-1/4 h-[650px] overflow-y-auto">
           <CardHeader className="pb-4">
             <div className="flex items-center space-x-2">
               <Cpu className="h-6 w-6 text-blue-500" />
@@ -192,21 +197,216 @@ const FormProduct = () => {
               <div className="mb-4">
                 <Uploadfile form={form} setForm={setImage} setForm2={setForm} inputImageRef={inputImageRef} className="mb-4" />
               </div>
-              <Button type="submit" className="w-full text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 p-4 rounded-lg shadow-md transition duration-200 font-medium">
-                Add Product
-              </Button>
-            </form>
-          </CardContent>
+
+		{/* selectedCategory หายไป */}
+
+         {/*CPU Product*/}
+         {selectedCategory === "1" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Socket" value={form.socket} onChange={handleOnChange} name="socket" placeholder="product socket" />
+            <InputField label="Cores" value={form.cores} onChange={handleOnChange} name="cores" placeholder="product cores" />
+            <InputField label="Threads" value={form.threads} onChange={handleOnChange} name="threads" placeholder="product threads" />
+            <InputField label="BaseClock(GHz)" value={form.baseClock} onChange={handleOnChange} name="baseClock" placeholder="product baseClock" />
+            <InputField label="boostClock(GHz)" value={form.boostClock} onChange={handleOnChange} name="boostClock" placeholder="product boostClock" />
+          </div>
+        )}
+
+        {/*Monitor Product*/}
+        {selectedCategory === "2" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Size" value={form.size} onChange={handleOnChange} name="size" placeholder="product size" />
+            <InputField label="Resolution" value={form.resolution} onChange={handleOnChange} name="resolution" placeholder="product resolution" />
+            <InputField label="RefreshRate(Hz)" value={form.refreshRate} onChange={handleOnChange} name="refreshRate" placeholder="product refreshRate" />
+            <InputField label="PanelType" value={form.panelType} onChange={handleOnChange} name="panelType" placeholder="product panelType" />
+          </div>
+        )}
+
+        {/*CPUCooler Product*/}
+        {selectedCategory === "3" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Socket" value={form.socket} onChange={handleOnChange} name="socket" placeholder="product socket" />
+            <InputField label="Radiator" value={form.radiator} onChange={handleOnChange} name="radiator" placeholder="product radiator" />
+
+            {/* Radio buttons for Type */}
+            <div>
+              <label>Type:</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    name="type"
+                    value="AIR"
+                    checked={form.type === "AIR"}
+                    onChange={handleOnChange}
+                  />
+                  AIR
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="type"
+                    value="LIQUID"
+                    checked={form.type === "LIQUID"}
+                    onChange={handleOnChange}
+                  />
+                  LIQUID
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/*PowerSupply Product*/}
+        {selectedCategory === "4" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Wattage(W)" value={form.wattage} onChange={handleOnChange} name="wattage" placeholder="product wattage" />
+          </div>
+        )}
+
+        {/*Case Product*/}
+        {selectedCategory === "5" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Size(CM)" value={form.size} onChange={handleOnChange} name="size" placeholder="product size" />
+          </div>
+        )}
+
+        {/*GPU Product*/}
+        {selectedCategory === "6" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Vram(GB)" value={form.vram} onChange={handleOnChange} name="vram" placeholder="product vram" />
+            <InputField label="Power(W)" value={form.power} onChange={handleOnChange} name="power" placeholder="product power" />
+          </div>
+        )}
+
+        {/*Memory Product*/}
+        {selectedCategory === "7" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Memory(GB)" value={form.memory} onChange={handleOnChange} name="memory" placeholder="product memory" />
+            <InputField label="BusSpeed(MB/s)" value={form.busSpeed} onChange={handleOnChange} name="busSpeed" placeholder="product busSpeed" />
+            <InputField label="Type" value={form.type} onChange={handleOnChange} name="type" placeholder="product type" />
+          </div>
+        )}
+
+        {/*Motherboard Product*/}
+        {selectedCategory === "8" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Socket" value={form.socket} onChange={handleOnChange} name="socket" placeholder="product socket" />
+            <InputField label="Chipset" value={form.chipset} onChange={handleOnChange} name="chipset" placeholder="product chipset" />
+          </div>
+        )}
+
+        {/*Drive Product*/}
+        {selectedCategory === "9" && (
+          <div>
+            <InputField label="Model" value={form.model} onChange={handleOnChange} name="model" placeholder="product model" />
+            <InputField label="Size" value={form.size} onChange={handleOnChange} name="size" placeholder="product size" />
+
+            {/* Radio buttons for Type */}
+            <div>
+              <label>Type:</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    name="type"
+                    value="HDD"
+                    checked={form.type === "HDD"}
+                    onChange={handleOnChange}
+                  />
+                  HDD
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="type"
+                    value="SSD"
+                    checked={form.type === "SSD"}
+                    onChange={handleOnChange}
+                  />
+                  SSD
+                </label>
+              </div>
+            </div>
+
+            {/* Radio buttons for Format */}
+            <div>
+              <label>Format:</label>
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    name="format"
+                    value="SATA"
+                    checked={form.format === "SATA"}
+                    onChange={handleOnChange}
+                  />
+                  SATA
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="format"
+                    value="M_2"
+                    checked={form.format === "M_2"}
+                    onChange={handleOnChange}
+                  />
+                  M.2
+                </label>
+              </div>
+            </div>
+            <InputField label="Speed" value={form.speed} onChange={handleOnChange} name="speed" placeholder="product speed" />
+          </div>
+        )}
+
+        {/*Accessory Product*/}
+        {selectedCategory === "10" && (
+            <div className="mb-4">
+              <label className="text-sm font-medium text-slate-700 mb-1">Accessories Type:</label>
+              <select
+                value={form.accessoriesType}
+                className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                name="form.accessoriesType"
+                onChange={handleOnChange}
+                required
+              >
+                <option value="" disabled>
+                  Please Select
+                </option>
+                <option value="MOUSE">Mouse</option>
+                <option value="KEYBOARD">Keyboard</option>
+                <option value="CHAIR">Chair</option>
+                <option value="HEADPHONE">Headphone</option>
+                <option value="MICROPHONE">Microphone</option>
+                <option value="SPEAKER">Speaker</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+        )}
+        
+
+               <Button type="submit" className="w-full text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 p-4 rounded-lg shadow-md transition duration-200 font-medium">
+                 Add Product
+               </Button>
+             </form>
+           </CardContent>
         </Card>
 
-        <Card className="w-full lg:w-3/4 h-screen">
-          <CardHeader className="pb-4 flex flex-row items-center justify-between">
-            <CardTitle className="text-2xl font-bold text-slate-800">Product Lists</CardTitle>
-            <div className="relative w-full md:w-1/3">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Search products..."
+         <Card className="w-full lg:w-3/4 h-screen">
+           <CardHeader className="pb-4 flex flex-row items-center justify-between">
+             <CardTitle className="text-2xl font-bold text-slate-800">Product Lists</CardTitle>
+             <div className="relative w-full md:w-1/3">
+               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+               <input
+                 type="text"
+                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={handleSearch}
                 className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"

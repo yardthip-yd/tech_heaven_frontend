@@ -7,8 +7,11 @@ const useDashboardStore = create((set) => ({
     activePromotions: 0,
     totalOrders: 0,
     totalRevenue: 0,
+    averageOrderValue: 0,
     pendingOrders: 0,
     pcBuildCount: 0,
+    couponUsedCount: 0,
+    orderStatusCounts: [],
     loading: false,
     error: null,
 
@@ -18,15 +21,18 @@ const useDashboardStore = create((set) => ({
         try {
             const response = await getDashBoard()
             console.log('API Response', response.data);  // ตรวจสอบว่าได้รับข้อมูลจาก API หรือไม่
-            const { userCount, newUserCount, activePromotions, totalOrders, totalRevenue, pendingOrders, pcBuildCount } = response.data
+            const { userCount, newUserCount, activePromotions, totalOrders, totalRevenue, averageOrderValue, pendingOrders, pcBuildCount, couponUsedCount, orderStatusCounts} = response.data
             set({
                 userCount,
                 newUserCount,
                 activePromotions,
                 totalOrders,
                 totalRevenue,
+                averageOrderValue,
                 pendingOrders,
                 pcBuildCount,
+                couponUsedCount,
+                orderStatusCounts,
                 loading: false
             })
         } catch (err) {
