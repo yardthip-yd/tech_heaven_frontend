@@ -29,7 +29,8 @@ const ProductCard = ({ product }) => {
   }, [user, getCurrentUser]);
 
   const handleAddToCart = () => {
-    addToCart({ ...product, quantity: 1 });
+    console.log(product)
+    addToCart( {...product, quantity :1} );
     toast.success("Added to cart!");
   };
 

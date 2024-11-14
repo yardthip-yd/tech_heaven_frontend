@@ -19,25 +19,34 @@ const stripePromise = loadStripe(
 );
 
 const Payment = () => {
-  const { state } = useLocation();
-  const cartItems = useCartStore((state) => state.cartItems || []);
+  // const { state } = useLocation();
+  // const cartItems = state?.cartItems || [];
+  const cartTotal = useCartStore(state=> state.cartTotal)
+  const cartItems = useCartStore(state => state.cartItems)
+  const discount = useCartStore(state=> state.discount)
+  // console.log(cartItems)
+  const getCart1 = useCartStore(state => state.getCart1)
   const navigate = useNavigate();
+  const applyCoupon1 = useCartStore(state => state.applyCoupon1)
 
   const [promotionCode, setPromotionCode] = useState("");
-  const [discount, setDiscount] = useState(0);
+ 
+
 
   const totalPriceBeforeDiscount =
     cartItems.length > 0
       ? cartItems.reduce(
-          (total, item) =>
-            total + (Number(item.price) * Number(item.quantity) || 0),
-          0
-        )
+        (total, item) => {
+          console.log(item.quantity)
+          return total + (Number(item.price) * Number(item.quantity))
+        },
+        0
+      )
       : (0).toLocaleString("en-US", { minimumFractionDigits: 2 });
-  const totalPriceAfterDiscount = (
-    totalPriceBeforeDiscount - discount
-  ).toLocaleString("en-US", { minimumFractionDigits: 2 });
 
+  const totalPriceAfterDiscount = (totalPriceBeforeDiscount - (totalPriceBeforeDiscount * (discount / 100)))
+    .toLocaleString("en-US", { minimumFractionDigits: 2 });
+  const user = useAuthStore((state) => state.user)
   const token = useAuthStore((state) => state.token);
   const address = useAddressStore((state) => state.address);
   const actionAddAddress = useAddressStore((state) => state.actionAddAddress);
@@ -53,7 +62,10 @@ const Payment = () => {
   const [clientSecret, setClientSecret] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  // console.log(user)
+  useEffect(() => {
+    getCart1(user.id)
+  }, [])
   useEffect(() => {
     if (token) {
       console.log("Fetching address for token:", token);
@@ -77,8 +89,22 @@ const Payment = () => {
 
   const appearance = { theme: "stripe" };
 
-  const handleApplyPromotion = () => {
-    // Promotion Apply Function
+
+
+
+  const handleApplyPromotion = async () => {
+    try {
+      const result = await applyCoupon1(promotionCode);
+      console.log(result.discount)
+      if (result?.discount) {
+        getCart1(user.id)
+        toast.success("Promotion code applied successfully!");
+      } else {
+        toast.error("Invalid promotion code.");
+      }
+    } catch (err) {
+      toast.error(err || "Failed to apply promotion code. Please try again.");
+    }
   };
 
   const handleAddAddress = () => {
@@ -144,10 +170,8 @@ const Payment = () => {
             ) : (
               <div className="space-y-4">
                 {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-start gap-4 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow"
-                  >
+                  <div key={item.id} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow">
+                    {/* <span>{console.log(item)}</span> */}
                     <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 overflow-hidden rounded-lg">
                       <img
                         src={
@@ -167,14 +191,10 @@ const Payment = () => {
                       </p>
                       <div className="flex justify-between items-center">
                         <p className="text-lg font-medium text-blue-600">
-                          THB{" "}
-                          {(item.price * item.quantity).toLocaleString(
-                            "en-US",
-                            { minimumFractionDigits: 2 }
-                          )}
+                          THB {(item?.price * item?.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                         </p>
                         <span className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
-                          Qty: {item.quantity}
+                          Qty: {item?.quantity}
                         </span>
                       </div>
                     </div>
@@ -185,6 +205,7 @@ const Payment = () => {
           </CardContent>
         </Card>
         <div className="flex flex-col gap-6">
+
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -202,9 +223,7 @@ const Payment = () => {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Discount</span>
-                  <span className="font-medium text-red-600">
-                    - THB {discount.toFixed(2)}
-                  </span>
+                  <span className="font-medium text-red-600"> {discount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
@@ -232,9 +251,7 @@ const Payment = () => {
                 <div className="pt-3 border-t">
                   <div className="flex justify-between items-center">
                     <span className="font-semibold">Total</span>
-                    <span className="font-bold text-xl text-blue-600">
-                      THB {totalPriceAfterDiscount}
-                    </span>
+                    <span className="font-bold text-xl text-blue-600">THB {cartTotal}</span>
                   </div>
                 </div>
               </div>

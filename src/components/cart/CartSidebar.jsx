@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button";
 const CartSidebar = () => {
     // State and Store Hooks
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const cartItems = useCartStore((state) => state.cartItems || []);
+    const cartItems = useCartStore((state) => state.cartItems);
     const removeFromCart = useCartStore((state) => state.removeFromCart);
     const increaseAmount = useCartStore((state) => state.increaseAmount);
     const decreaseAmount = useCartStore((state) => state.decreaseAmount);
     const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
     const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-
+    // console.log("----------------------------------------------------------------------------",cartItems)
     // Auth State
     const currentUser = useAuthStore((state) => state.user);
     const isLoggedIn = !!currentUser;
@@ -44,8 +44,8 @@ const CartSidebar = () => {
     return (
         <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
             <SheetTrigger asChild>
-                <div className="cursor-pointer relative">
-                    <ShoppingBag className="w-5 h-5 hover:scale-105 hover:-translate-y-1 hover:duration-200" />
+                <div className="cursor-pointer relative hover:scale-105 hover:-translate-y-1 hover:duration-200 hover:text-blue-500">
+                    <ShoppingBag className="w-5 h-5" />
                     {itemCount > 0 && (
                         <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
                             {itemCount}
@@ -74,7 +74,7 @@ const CartSidebar = () => {
                             </div>
                         ) : (
                             <div className="divide-y">
-                                {cartItems.map((item, index) => (
+                                {cartItems?.map((item, index) => (
                                     <div key={index} className="py-4 group">
                                         <div className="flex gap-4">
                                             <div className="relative aspect-square h-24 w-24 overflow-hidden rounded-lg">

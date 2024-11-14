@@ -2,7 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import useProductStore from "@/stores/productStore";
 import ProductCard from "@/components/product/ProductCard";
 import FiltersSidebar from "@/components/product/FilterSidebar";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search } from "lucide-react";
 import circleImg from "@/assets/image/circle.avif";
@@ -49,7 +55,7 @@ const Store = () => {
   const pyramidScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
   useEffect(() => {
-    actionGetAllProducts();
+    actionGetAllProducts(1000);
   }, [actionGetAllProducts]);
 
   useEffect(() => {
@@ -74,7 +80,9 @@ const Store = () => {
 
   const toggleCategory = (value) => {
     setCategory((prev) =>
-      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
     );
   };
 
@@ -94,7 +102,9 @@ const Store = () => {
 
     // Filter by category
     if (category.length > 0) {
-      filtered = filtered.filter((item) => category.includes(item.ProductCategory?.name));
+      filtered = filtered.filter((item) =>
+        category.includes(item.ProductCategory?.name)
+      );
     }
 
     // Filter by price range
@@ -136,7 +146,10 @@ const Store = () => {
   }, [isFetchingMore, filteredProducts]);
 
   return (
-    <div ref={sectionRef} className="relative w-full bg-gradient-to-b from-white to-[#f8f9ff] py-8">
+    <div
+      ref={sectionRef}
+      className="relative w-full bg-gradient-to-b from-white to-[#f8f9ff] py-8"
+    >
       {/* Floating Light Effects */}
       <motion.div
         className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl z-0"
@@ -214,7 +227,9 @@ const Store = () => {
 
             {filteredProducts.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-slate-500">No products found matching your criteria.</p>
+                <p className="text-slate-500">
+                  No products found matching your criteria.
+                </p>
               </div>
             )}
           </div>
@@ -227,7 +242,7 @@ const Store = () => {
           y: circleY,
           rotate: circleRotate,
         }}
-        className="absolute w-28 h-28 top-[700px] right-[80px] z-10 will-change-transform"
+        className="absolute w-24 h-24 top-[1030px] right-[80px] z-10 will-change-transform"
       >
         <img
           src={circleImg}
@@ -237,17 +252,16 @@ const Store = () => {
       </motion.div>
 
       <motion.div
-        className="absolute w-20 h-20 top-[20px] -right-[5px] z-10"
+        className="absolute w-16 h-16 top-[20px] right-[15px] z-10"
         style={{
           y: pyramidY,
-          rotate: 120,
           scale: pyramidScale,
         }}
       >
         <img
           src={pyramidImg}
           alt="Pyramid"
-          className="w-full h-full object-contain opacity-80"
+          className="w-full h-full object-contain opacity-80 filter"
         />
       </motion.div>
 
@@ -266,7 +280,7 @@ const Store = () => {
       </motion.div>
 
       <motion.div
-        className="absolute w-40 h-40 top-[1600px] left-[300px] z-10"
+        className="absolute w-28 h-28 top-[2030px] left-[300px] z-10"
         style={{
           y: noodleY,
           rotate: 120,
@@ -281,47 +295,60 @@ const Store = () => {
       </motion.div>
 
       <motion.div
-                style={{
-                    y: cubeY,
-                    rotate: cubeRotate,
-                }}
-                className="absolute w-40 h-40 top-[2700px] -right-[50px] z-10 will-change-transform"
-            >
-                <img
-                    src={cubeImg}
-                    alt="Cube"
-                    className="w-full h-full object-contain drop-shadow-2xl"
-                />
-            </motion.div>
+        style={{
+          y: cubeY,
+          rotate: cubeRotate,
+        }}
+        className="absolute w-40 h-40 top-[3030px] -right-[50px] z-10 will-change-transform"
+      >
+        <img
+          src={cubeImg}
+          alt="Cube"
+          className="w-full h-full object-contain drop-shadow-2xl"
+        />
+      </motion.div>
 
-            <motion.div
-                style={{
-                    y: tubeY,
-                    rotate:270,
-                }}
-                className="absolute w-52 h-52 top-[3500px] left-[5px] z-10 will-change-transform"
-            >
-                <img
-                    src={tubeImg}
-                    alt="Tube"
-                    className="w-full h-full object-contain drop-shadow-2xl"
-                />
-            </motion.div>
+      <motion.div
+        style={{
+          y: tubeY,
+          rotate: 270,
+        }}
+        className="absolute w-52 h-52 top-[4030px] left-[5px] z-10 will-change-transform"
+      >
+        <img
+          src={tubeImg}
+          alt="Tube"
+          className="w-full h-full object-contain drop-shadow-2xl"
+        />
+      </motion.div>
 
-            <motion.div
-                style={{
-                    y: starY,
-                    rotate: 270,
-                }}
-                className="absolute w-28 h-28 top-[4400px] right-[220px] z-10 will-change-transform"
-            >
-                <img
-                    src={starImg}
-                    alt="Star"
-                    className="w-full h-full object-contain drop-shadow-2xl"
-                />
-            </motion.div>
+      <motion.div
+        style={{
+          y: starY,
+          rotate: 270,
+        }}
+        className="absolute w-28 h-28 top-[5030px] right-[220px] z-10 will-change-transform"
+      >
+        <img
+          src={starImg}
+          alt="Star"
+          className="w-full h-full object-contain drop-shadow-2xl"
+        />
+      </motion.div>
 
+      <motion.div
+        style={{
+          y: starY,
+          rotate: 270,
+        }}
+        className="absolute w-28 h-28 top-[4400px] right-[220px] z-10 will-change-transform"
+      >
+        <img
+          src={starImg}
+          alt="Star"
+          className="w-full h-full object-contain drop-shadow-2xl"
+        />
+      </motion.div>
     </div>
   );
 };
