@@ -34,8 +34,8 @@ const OrderManage = () => {
 
   const [searchOrder, setSearchOrder] = useState("");
   const [openDetails, setOpenDetails] = useState({});
-  console.log(openDetails);
-  console.log(orders);
+  // console.log(openDetails);
+  // console.log(orders)
 
   useEffect(() => {
     actionGetAllAddress(token);
