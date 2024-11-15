@@ -9,23 +9,6 @@ import { create } from "zustand";
 
 const useOrderStore = create((set, get) => ({
   orders: [],
-  // actionCreateOrder: async (token, payload) => {
-  //   try {
-  //     const result = await createOrder(token, payload);
-  //     if (result && result.data && result.data.created) {
-  //       set((state) => ({
-  //         orders: [...state.orders, result.data.created],
-  //       }));
-  //       return result.data.created;
-  //     } else {
-  //       console.warn("Unexpected result structure:", result);
-  //       return undefined;
-  //     }
-  //   } catch (err) {
-  //     console.error("Error creating order:", err.response?.data || err.message);
-  //     throw err;
-  //   }
-  // },
   actionCreateOrder: async (token, orderData) => {
     try {
       console.log('Creating order with data:', orderData);
