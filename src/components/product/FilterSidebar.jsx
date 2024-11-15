@@ -40,23 +40,25 @@ const FiltersSidebar = ({
           {/* Category Section */}
           <div>
             <h3 className="text-base sm:text-lg font-medium mb-3">Category</h3>
-            <ScrollArea className="pr-4 max-h-[250px] sm:max-h-[250px]">
+            <ScrollArea className="pr-4 max-h-[250px] sm:max-h-[260px]">
               <div className="space-y-2">
-                {categories.sort((a, b) => a.localeCompare(b)).map((cat) => (
-                  <div key={cat} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={cat}
-                      checked={category.includes(cat)}
-                      onCheckedChange={() => toggleCategory(cat)}
-                    />
-                    <label
-                      htmlFor={cat}
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {cat}
-                    </label>
-                  </div>
-                ))}
+                {categories
+                  .sort((a, b) => a.localeCompare(b))
+                  .map((cat) => (
+                    <div key={cat} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={cat}
+                        checked={category.includes(cat)}
+                        onCheckedChange={() => toggleCategory(cat)}
+                      />
+                      <label
+                        htmlFor={cat}
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {cat}
+                      </label>
+                    </div>
+                  ))}
               </div>
             </ScrollArea>
           </div>

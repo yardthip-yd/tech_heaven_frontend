@@ -36,7 +36,7 @@ import {
   Monitor,
   Box,
   Zap,
-  Fan
+  Fan,
 } from "lucide-react";
 
 function PartBar() {
@@ -97,15 +97,15 @@ function PartBar() {
     const monitorPrice = monitor?.price || 0;
     setTotalPrice(
       cpuPrice +
-      mainboardPrice +
-      vgaPrice +
-      ramPrice +
-      ssdPrice +
-      hddPrice +
-      psuPrice +
-      pccasePrice +
-      coolerPrice +
-      monitorPrice
+        mainboardPrice +
+        vgaPrice +
+        ramPrice +
+        ssdPrice +
+        hddPrice +
+        psuPrice +
+        pccasePrice +
+        coolerPrice +
+        monitorPrice
     );
   }, [
     CPU,
@@ -233,13 +233,16 @@ function PartBar() {
               alt={product.name}
             />
           )}
-          <span className="font-medium text-slate-700 line-clamp-1">{product.name}</span>
+          <span className="font-medium text-slate-700 line-clamp-1">
+            {product.name}
+          </span>
         </div>
-        <span className="font-semibold text-slate-900">฿{product.price?.toLocaleString()}</span>
+        <span className="font-semibold text-slate-900">
+          ฿{product.price?.toLocaleString()}
+        </span>
       </div>
     );
   };
-
 
   return (
     <Card className="lg:w-[300px] bg-white shadow-xl rounded-xl w-full relative ">
@@ -283,7 +286,9 @@ function PartBar() {
 
         <div className="space-y-4 max-h-[500px]">
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-slate-500 px-1">Core Components</h3>
+            <h3 className="text-sm font-medium text-slate-500 px-1">
+              Core Components
+            </h3>
             <CPUPart />
             <MainboardPart />
             <VGAPart />
@@ -297,7 +302,9 @@ function PartBar() {
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-sm font-medium text-slate-500 px-1">Other Components</h3>
+            <h3 className="text-sm font-medium text-slate-500 px-1">
+              Other Components
+            </h3>
             <PSUPart />
             <PCCasePart />
             <CPUCoolerPart />
@@ -318,8 +325,8 @@ function PartBar() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 my-6">
-            <div classname="overflow-y-auto max-h-[80vh]">
+          <div className="space-y-4 my-2 max-h-[44vh] overflow-y-auto">
+            <div classname="">
               <BuildSummaryItem product={CPU} icon={Cpu} />
               <BuildSummaryItem product={mainboard} icon={HardDrive} />
               <BuildSummaryItem product={VGA} icon={Monitor} />
@@ -331,13 +338,14 @@ function PartBar() {
               <BuildSummaryItem product={cooler} icon={Fan} />
               <BuildSummaryItem product={monitor} icon={Monitor} />
             </div>
-
-            <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-              <p className="text-sm font-medium text-blue-600 mb-1">Total Build Cost</p>
-              <p className="text-3xl font-bold text-slate-900">
-                ฿{totalPrice.toLocaleString()}
-              </p>
-            </div>
+          </div>
+          <div className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+            <p className="text-sm font-medium text-blue-600 mb-1">
+              Total Build Cost
+            </p>
+            <p className="text-3xl font-bold text-slate-900">
+              ฿{totalPrice.toLocaleString()}
+            </p>
           </div>
 
           <div className="flex gap-4 justify-end">

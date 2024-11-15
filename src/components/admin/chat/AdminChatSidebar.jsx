@@ -41,17 +41,17 @@ function AdminChatSidebar({ setActive }) {
   }, [newChatNotify]);
 
   return (
-    <Card className="fixed z-30 right-10 bottom-10 border min-w-[300px] shadow-xl border-slate-100 bg-slate-50">
-      <div className="flex justify-between items-center flex-row border-b border-slate-100 shadow-md p-[14px] bg-blue-50">
+    <Card className="fixed z-30 right-6 bottom-10 border min-w-[300px] shadow-xl border-slate-100 bg-slate-50">
+      <div className="flex justify-between items-center flex-row border-b border-slate-100 shadow-md p-[14px] rounded-t-xl bg-blue-500">
         <CardTitle className="flex flex-row items-center gap-2 pl-2">
-          <MessagesSquare className="w-6 h-6 "/>
-          <span className="text-lg font-semibold">Chats</span>
+          <MessagesSquare className="w-6 h-6 text-white" />
+          <span className="text-lg font-semibold text-white">Chats</span>
         </CardTitle>
         <div
           onClick={hdlCollaspse}
           className="p-[1px] rounded-md hover:border cursor-pointer duration-200 absolute right-3 top-2"
         >
-          <X className="w-4 h-4 text-slate-600" />
+          <X className="w-4 h-4 text-white" />
         </div>
       </div>
 
@@ -59,9 +59,7 @@ function AdminChatSidebar({ setActive }) {
         {chatList.length === 0 ? (
           <div className="text-slate-500">No chats available</div>
         ) : (
-          chatList.map((chat) => (
-            <AdminChatList key={chat.id} chat={chat} />
-          ))
+          chatList.map((chat) => <AdminChatList key={chat.id} chat={chat} />)
         )}
       </div>
     </Card>

@@ -68,11 +68,7 @@ const FormProduct = () => {
 
   useEffect(() => {
     getCategory();
-<<<<<<< HEAD
     actionListProducts(9999);
-=======
-    actionListProducts(999);
->>>>>>> dev
   }, []);
 
   const handleOnChange = (e) => {
