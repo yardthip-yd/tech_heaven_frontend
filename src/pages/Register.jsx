@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import Authvdo from "@/assets/video/auth2.mp4";
 import useAuthStore from "@/stores/authStore";
 import LoginModal from "@/components/auth/LoginModal";
-import { Eye, EyeOff, User, Mail, Calendar, Lock } from "lucide-react";
+import { Eye, EyeOff, User, Mail, Calendar, Lock, Phone  } from "lucide-react";
 
 const Register = () => {
     // State from Stores
@@ -180,7 +180,7 @@ const Register = () => {
                     </div>
                     {/* Phone */}
                     <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
                         <input
                             className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
                             type="text"

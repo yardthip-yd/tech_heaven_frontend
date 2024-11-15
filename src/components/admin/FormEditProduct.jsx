@@ -37,7 +37,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
   const getProduct = async () => {
     try {
       const resp = await actionReadProducts(productId);
-      setSelectedCategory(String(resp.categoryId));
+      setSelectedCategory(resp.categoryId);
 
       const formattedImages = resp.ProductImages.map((img) => ({
         public_id: img.public_id,
@@ -55,8 +55,8 @@ const FormEditProduct = ({ closeDialog, productId }) => {
       };
 
       // ใช้ switch-case เพื่อจัดการกับ categoryId
-      switch (String(resp.categoryId)) {
-        case "1": // CPU
+      switch (resp.categoryId) {
+        case 1: // CPU
           formBody.model = resp.CPU[0].model;
           formBody.socket = resp.CPU[0].socket;
           formBody.cores = resp.CPU[0].cores;
@@ -64,54 +64,63 @@ const FormEditProduct = ({ closeDialog, productId }) => {
           formBody.baseClock = resp.CPU[0].baseClock;
           formBody.boostClock = resp.CPU[0].boostClock;
           break;
-        case "2": // Monitor
+        case 2: // Monitor
           formBody.model = resp.Monitor[0].model;
           formBody.size = resp.Monitor[0].size;
           formBody.resolution = resp.Monitor[0].resolution;
           formBody.refreshRate = resp.Monitor[0].refreshRate;
           formBody.panelType = resp.Monitor[0].panelType;
           break;
-        case "3": // CPU Cooler
+        case 3: // CPU Cooler
           formBody.model = resp.CPUCooler[0].model;
           formBody.socket = resp.CPUCooler[0].socket;
           formBody.radiator = resp.CPUCooler[0].radiator;
           formBody.type = resp.CPUCooler[0].type;
           break;
-        case "4": // Power Supply
+        case 4: // Power Supply
           formBody.model = resp.PowerSupply[0].model;
           formBody.wattage = resp.PowerSupply[0].wattage;
           break;
-        case "5": // Case
+        case 5: // Case
           formBody.model = resp.Case[0].model;
           formBody.size = resp.Case[0].size;
           break;
-        case "6": // GPU
+        case 6: // GPU
           formBody.model = resp.GPU[0].model;
           formBody.vram = resp.GPU[0].vram;
           formBody.power = resp.GPU[0].power;
           break;
-        case "7": // Memory
+        case 7: // Memory
           formBody.model = resp.Memory[0].model;
           formBody.memory = resp.Memory[0].memory;
           formBody.busSpeed = resp.Memory[0].busSpeed;
           formBody.type = resp.Memory[0].type;
           break;
-        case "8": // Motherboard
+        case 8: // Motherboard
           formBody.model = resp.Motherboard[0].model;
           formBody.socket = resp.Motherboard[0].socket;
           formBody.chipset = resp.Motherboard[0].chipset;
           break;
-        case "9": // Drive
+        case 9: // Drive
           formBody.model = resp.Drive[0].model;
           formBody.size = resp.Drive[0].size;
           formBody.type = resp.Drive[0].type;
           formBody.format = resp.Drive[0].format;
           formBody.speed = resp.Drive[0].speed;
           break;
-        case "10": // Accessory
+        case 10: // Accessory
           formBody.accessoriesType = resp.Accessory[0].accessoriesType;
           break;
         default:
+          if (selectedCategory === 0) {
+            // console.log("Loading...");
+            break;
+          }
+          if (selectedCategory >= 11) {
+            // console.log("Other category");
+            break;
+          }
+
           throw new Error("Invalid categoryId");
       }
 
@@ -127,7 +136,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
       [e.target.name]: e.target.value,
     });
     if (e.target.name === "categoryId") {
-      setSelectedCategory(e.target.value);
+      setSelectedCategory(+e.target.value);
     }
   };
 
@@ -162,648 +171,686 @@ const FormEditProduct = ({ closeDialog, productId }) => {
     }
   };
 
+  // console.log("selectedCategory", selectedCategory);
+
   return (
     <div>
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto bg-white">
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">
-                  Product Name:
-                </label>
-                <input
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.name || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter product name"
-                  name="name"
-                />
-              </div>
+            <div className="flex flex-col gap-4 overflow-y-auto max-h-[480px] no-scrollbar">
+              <div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">
+                      Product Name:
+                    </label>
+                    <input
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={form.name || ""}
+                      onChange={handleOnChange}
+                      placeholder="Enter product name"
+                      name="name"
+                    />
+                  </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">
-                  Price:
-                </label>
-                <input
-                  type="number"
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.price || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter price"
-                  name="price"
-                />
-              </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">
+                      Price:
+                    </label>
+                    <input
+                      type="number"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={form.price || ""}
+                      onChange={handleOnChange}
+                      placeholder="Enter price"
+                      name="price"
+                    />
+                  </div>
 
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700">
-                  Stock Quantity:
-                </label>
-                <input
-                  type="number"
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.stock || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter stock quantity"
-                  name="stock"
-                />
-              </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-slate-700">
+                      Stock Quantity:
+                    </label>
+                    <input
+                      type="number"
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={form.stock || ""}
+                      onChange={handleOnChange}
+                      placeholder="Enter stock quantity"
+                      name="stock"
+                    />
+                  </div>
 
-              <div className="space-y-2 md:col-span-2">
-                <label className="block text-sm font-medium text-slate-700">
-                  Description:
-                </label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  value={form.description || ""}
-                  onChange={handleOnChange}
-                  placeholder="Enter product description"
-                  name="description"
-                  rows="3"
-                />
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="block text-sm font-medium text-slate-700">
+                      Description:
+                    </label>
+                    <textarea
+                      className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      value={form.description || ""}
+                      onChange={handleOnChange}
+                      placeholder="Enter product description"
+                      name="description"
+                      rows="3"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <UploadFileEditProduct
+                    imageForm={image}
+                    form={form}
+                    setForm2={setForm}
+                    setForm={setImage}
+                    inputImageRef={inputImageRef}
+                  />
+                </div>
+              </div>
+              <div>
+                {/* ===== CPU ===== */}
+                {selectedCategory === 1 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      CPU Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Socket:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.socket || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter socket"
+                        name="socket"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Core:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.cores || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter core"
+                        name="cores"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Thread:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.threads || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter thread"
+                        name="threads"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Base Clock (GHz):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.baseClock || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter base clock"
+                        name="baseClock"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Boost Clock (GHz):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.boostClock || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter boost clock"
+                        name="boostClock"
+                      />
+                    </div>
+
+                    {/* Similar styling for other CPU fields */}
+                  </div>
+                )}
+
+                {/* ===== Mainbaord ===== */}
+                {selectedCategory === 8 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      Mainbaord Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Socket:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.socket || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter socket"
+                        name="socket"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Chipset:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.chipset || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter chipset"
+                        name="chipset"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== VGA ===== */}
+                {selectedCategory === 6 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      Graphic Card Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        VRAM (GB):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.vram || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter VRAM"
+                        name="vram"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Power Consumption (Watt):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.power || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter power consumption"
+                        name="power"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== RAM ===== */}
+                {selectedCategory === 7 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      RAM Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Memory Size (GB):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.memory || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter memory size"
+                        name="memory"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Memory Type:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.type || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter memory type"
+                        name="type"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        BUS (MHz):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.busSpeed || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter BUS"
+                        name="busSpeed"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== Drive ===== */}
+                {selectedCategory === 9 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      Storage Drive Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Type:
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        <label>
+                          <input
+                            type="radio"
+                            name="type"
+                            value="HDD"
+                            checked={form.type === "HDD"}
+                            onChange={handleOnChange}
+                          />{" "}
+                          HDD
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="type"
+                            value="SSD"
+                            checked={form.type === "SSD"}
+                            onChange={handleOnChange}
+                          />{" "}
+                          SSD
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Format Type:
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        <label>
+                          <input
+                            type="radio"
+                            name="format"
+                            value="SATA"
+                            checked={form.format === "SATA"}
+                            onChange={handleOnChange}
+                          />{" "}
+                          SATA
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="format"
+                            value="M_2"
+                            checked={form.format === "M_2"}
+                            onChange={handleOnChange}
+                          />{" "}
+                          M.2
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Capacity:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.size || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter capacity"
+                        name="size"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Speed:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.speed || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter Speed"
+                        name="speed"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== POWER SUPPLY ===== */}
+                {selectedCategory === 4 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      Power Supply Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Wattage (Watt):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.wattage || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter wattage"
+                        name="wattage"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== Case ===== */}
+                {selectedCategory === 5 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      Case Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Size:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.size || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter size"
+                        name="size"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== CPU Cooler ===== */}
+                {selectedCategory === 3 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      CPU Cooler Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Socket Support:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.socket || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter Socket Support"
+                        name="socket"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Radiator Size (mm):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.radiator || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter radiator size"
+                        name="radiator"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Type:
+                      </label>
+                      <div className="flex items-center space-x-4">
+                        <label>
+                          <input
+                            type="radio"
+                            name="type"
+                            value="AIR"
+                            checked={form.type === "AIR"}
+                            onChange={handleOnChange}
+                          />{" "}
+                          AIR
+                        </label>
+                        <label>
+                          <input
+                            type="radio"
+                            name="type"
+                            value="LIQUID"
+                            checked={form.type === "LIQUID"}
+                            onChange={handleOnChange}
+                          />{" "}
+                          LIQUID
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== Monitor ===== */}
+                {selectedCategory === 2 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
+                    <h2 className="text-lg font-medium text-slate-800 col-span-2">
+                      Monitor Information
+                    </h2>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Model:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.model || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter model"
+                        name="model"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Screen Size (''):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.size || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter size"
+                        name="size"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Resolution:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.resolution || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter resolution"
+                        name="resolution"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Refresh Rate (Hz):
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.refreshRate || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter refresh rate"
+                        name="refreshRate"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-slate-700">
+                        Panel Type:
+                      </label>
+                      <input
+                        className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={form.panelType || ""}
+                        onChange={handleOnChange}
+                        placeholder="Enter panel type"
+                        name="panelType"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-
-            <div>
-              <UploadFileEditProduct
-                imageForm={image}
-                form={form}
-                setForm2={setForm}
-                setForm={setImage}
-                inputImageRef={inputImageRef}
-              />
-            </div>
-
-            {/* ===== CPU ===== */}
-            {selectedCategory === "1" && (
+            {/* ===== Accessories ===== */}
+            {selectedCategory === 10 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                 <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  CPU Information
+                  Accessory Information
                 </h2>
 
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-slate-700">
-                    Model:
+                    Accessory Type:
                   </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
+                  <select
+                    value={form.accessoriesType}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    name="accessoriesType"
                     onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Socket:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.socket || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter socket"
-                    name="socket"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Core:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.cores || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter core"
-                    name="cores"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Thread:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.threads || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter thread"
-                    name="threads"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Base Clock (GHz):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.baseClock || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter base clock"
-                    name="baseClock"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Boost Clock (GHz):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.boostClock || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter boost clock"
-                    name="boostClock"
-                  />
-                </div>
-
-                {/* Similar styling for other CPU fields */}
-              </div>
-            )}
-
-            {/* ===== Mainbaord ===== */}
-            {selectedCategory === "8" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  Mainbaord Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Socket:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.socket || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter socket"
-                    name="socket"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Chipset:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.chipset || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter chipset"
-                    name="chipset"
-                  />
+                    required
+                  >
+                    <option value="" disabled>
+                      Please Select
+                    </option>
+                    <option value="MOUSE">Mouse</option>
+                    <option value="KEYBOARD">Keyboard</option>
+                    <option value="CHAIR">Chair</option>
+                    <option value="HEADPHONE">Headphone</option>
+                    <option value="MICROPHONE">Microphone</option>
+                    <option value="SPEAKER">Speaker</option>
+                    <option value="OTHER">Other</option>
+                  </select>
                 </div>
               </div>
             )}
-
-            {/* ===== VGA ===== */}
-            {selectedCategory === "6" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  Graphic Card Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    VRAM (GB):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.vram || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter VRAM"
-                    name="vram"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Power Consumption (Watt):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.power || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter power consumption"
-                    name="power"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* ===== RAM ===== */}
-            {selectedCategory === "7" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  RAM Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Memory Size (GB):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.memory || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter memory size"
-                    name="memory"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Memory Type:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.type || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter memory type"
-                    name="type"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    BUS (MHz):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.busSpeed || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter BUS"
-                    name="busSpeed"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* ===== Drive ===== */}
-            {selectedCategory === "9" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  Storage Drive Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Type:
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <label>
-                      <input
-                        type="radio"
-                        name="type"
-                        value="HDD"
-                        checked={form.type === "HDD"}
-                        onChange={handleOnChange}
-                      />{" "}
-                      HDD
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="type"
-                        value="SSD"
-                        checked={form.type === "SSD"}
-                        onChange={handleOnChange}
-                      />{" "}
-                      SSD
-                    </label>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Format Type:
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <label>
-                      <input
-                        type="radio"
-                        name="format"
-                        value="SATA"
-                        checked={form.format === "SATA"}
-                        onChange={handleOnChange}
-                      />{" "}
-                      SATA
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="format"
-                        value="M_2"
-                        checked={form.format === "M_2"}
-                        onChange={handleOnChange}
-                      />{" "}
-                      M.2
-                    </label>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Capacity:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.size || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter capacity"
-                    name="size"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Speed:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.speed || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter Speed"
-                    name="speed"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* ===== POWER SUPPLY ===== */}
-            {selectedCategory === "4" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  Power Supply Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Wattage (Watt):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.wattage || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter wattage"
-                    name="wattage"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* ===== Case ===== */}
-            {selectedCategory === "5" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  Case Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Size:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.size || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter size"
-                    name="size"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* ===== CPU Cooler ===== */}
-            {selectedCategory === "3" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  CPU Cooler Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Socket Support:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.socket || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter Socket Support"
-                    name="socket"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Radiator Size (mm):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.radiator || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter radiator size"
-                    name="radiator"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Type:
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <label>
-                      <input
-                        type="radio"
-                        name="type"
-                        value="AIR"
-                        checked={form.type === "AIR"}
-                        onChange={handleOnChange}
-                      />{" "}
-                      AIR
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="type"
-                        value="LIQUID"
-                        checked={form.type === "LIQUID"}
-                        onChange={handleOnChange}
-                      />{" "}
-                      LIQUID
-                    </label>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ===== Monitor ===== */}
-            {selectedCategory === "2" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
-                <h2 className="text-lg font-medium text-slate-800 col-span-2">
-                  Monitor Information
-                </h2>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Model:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.model || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter model"
-                    name="model"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Screen Size (''):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.size || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter size"
-                    name="size"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Resolution:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.resolution || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter resolution"
-                    name="resolution"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Refresh Rate (Hz):
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.refreshRate || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter refresh rate"
-                    name="refreshRate"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-slate-700">
-                    Panel Type:
-                  </label>
-                  <input
-                    className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    value={form.panelType || ""}
-                    onChange={handleOnChange}
-                    placeholder="Enter panel type"
-                    name="panelType"
-                  />
-                </div>
-              </div>
-            )}
-
             {/* ===== End of Part section ===== */}
 
             {/* Additional conditional rendering blocks for other categories */}

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import Resize from "react-image-file-resizer";
 import { deleteProductImage, removeFiles, uploadFiles } from "@/API/product-api";
 import useAuthStore from "@/stores/authStore";
-import { Loader, Camera } from "lucide-react";
+import { Loader, Camera, X } from "lucide-react";
 
 const UploadFileEditProduct = ({ form, setForm, setForm2, inputImageRef, imageForm }) => {
   const token = useAuthStore((state) => state.token);
@@ -65,7 +65,7 @@ const UploadFileEditProduct = ({ form, setForm, setForm2, inputImageRef, imageFo
     <div >
       <div className="flex mx-4 gap-4">
         {isLoading && <Loader className="w-16 h-16 animate-spin" />}
-        
+
         {(imageForm || form)?.map((item, index) => (
           <div className="relative" key={index}>
             <img
@@ -73,12 +73,12 @@ const UploadFileEditProduct = ({ form, setForm, setForm2, inputImageRef, imageFo
               src={item.secure_url || item.imageUrl}
               alt="Uploaded"
             />
-            <span
+            <div
               onClick={() => handleDelete(item.public_id)}
-              className="absolute top-0 right-0 bg-red-500 p-1 rounded-md cursor-pointer"
+              className="p-[1px] rounded-md bg-white hover:border hover:border-red-500 hover:bg-red-500 hover:text-red-500 cursor-pointer duration-200 absolute top-0 right-0"
             >
-              X
-            </span>
+              <X className="w-4 h-4 text-slate-600" />
+            </div>
           </div>
         ))}
       </div>

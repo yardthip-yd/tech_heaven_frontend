@@ -13,6 +13,7 @@ import {
   createProductDrive,
   createProductCPUCooler,
   createProductAccessory,
+  createOtherProduct,
 } from "@/API/product-api";
 import { toast } from "react-toastify";
 import useProductStore from "@/stores/productStore";
@@ -71,56 +72,82 @@ const FormProduct = () => {
   }, []);
 
   const handleOnChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    // setForm({
+    //   ...form,
+    //   [e.target.name]: e.target.value,
+    // });
     if (e.target.name === "categoryId") {
-      setSelectedCategory(e.target.value);
+      console.log("Category ID:", +e.target.value);
+      setSelectedCategory(+e.target.value);
+      setForm((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: +e.target.value,
+          accessoriesType: "MOUSE",
+        };
+      });
+    } else {
+      setForm((prev) => {
+        return {
+          ...prev,
+          [e.target.name]: e.target.value,
+        };
+      });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(form);
     const allProducts = {
       image: image,
       form: form,
       selectedCategory: selectedCategory,
     };
+
+    console.log(allProducts);
     try {
       let response;
       switch (selectedCategory) {
-        case "1":
+        case 1:
           response = await createProductCPU(allProducts);
           break;
-        case "2":
+        case 2:
           response = await createProductMonitor(allProducts);
           break;
-        case "3":
+        case 3:
           response = await createProductCPUCooler(allProducts);
           break;
-        case "4":
+        case 4:
           response = await createProductPowerSupply(allProducts);
           break;
-        case "5":
+        case 5:
           response = await createProductCase(allProducts);
           break;
-        case "6":
+        case 6:
           response = await createProductGPU(allProducts);
           break;
-        case "7":
+        case 7:
           response = await createProductMemory(allProducts);
           break;
-        case "8":
+        case 8:
           response = await createProductMotherboard(allProducts);
           break;
-        case "9":
+        case 9:
           response = await createProductDrive(allProducts);
           break;
-        case "10":
+        case 10:
           response = await createProductAccessory(allProducts);
           break;
         default:
+          if (selectedCategory === 0) {
+            toast.error("Please select a category");
+            return;
+          }
+          if (selectedCategory >= 11) {
+            response = await createOtherProduct(allProducts);
+            break;
+          }
           throw new Error("Invalid category selected");
       }
 
@@ -178,6 +205,9 @@ const FormProduct = () => {
       </div>
     );
   }
+
+  console.log(form);
+
   return (
     <>
       <div className="flex flex-row gap-8 mx-auto p-6">
@@ -241,11 +271,14 @@ const FormProduct = () => {
                   <option value={0} disabled>
                     Please Select Category
                   </option>
-                  {categories.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
+                  {categories.map((item) => {
+                    // console.log(item.id);
+                    return (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div className="mb-4">
@@ -261,7 +294,7 @@ const FormProduct = () => {
               {/* selectedCategory หายไป */}
 
               {/*CPU Product*/}
-              {selectedCategory === "1" && (
+              {selectedCategory === 1 && (
                 <div>
                   <InputField
                     label="Model"
@@ -309,7 +342,7 @@ const FormProduct = () => {
               )}
 
               {/*Monitor Product*/}
-              {selectedCategory === "2" && (
+              {selectedCategory === 2 && (
                 <div>
                   <InputField
                     label="Model"
@@ -350,7 +383,7 @@ const FormProduct = () => {
               )}
 
               {/*CPUCooler Product*/}
-              {selectedCategory === "3" && (
+              {selectedCategory === 3 && (
                 <div>
                   <InputField
                     label="Model"
@@ -404,7 +437,7 @@ const FormProduct = () => {
               )}
 
               {/*PowerSupply Product*/}
-              {selectedCategory === "4" && (
+              {selectedCategory === 4 && (
                 <div>
                   <InputField
                     label="Model"
@@ -424,7 +457,7 @@ const FormProduct = () => {
               )}
 
               {/*Case Product*/}
-              {selectedCategory === "5" && (
+              {selectedCategory === 5 && (
                 <div>
                   <InputField
                     label="Model"
@@ -434,7 +467,7 @@ const FormProduct = () => {
                     placeholder="product model"
                   />
                   <InputField
-                    label="Size(CM)"
+                    label="Size"
                     value={form.size}
                     onChange={handleOnChange}
                     name="size"
@@ -444,7 +477,7 @@ const FormProduct = () => {
               )}
 
               {/*GPU Product*/}
-              {selectedCategory === "6" && (
+              {selectedCategory === 6 && (
                 <div>
                   <InputField
                     label="Model"
@@ -471,7 +504,7 @@ const FormProduct = () => {
               )}
 
               {/*Memory Product*/}
-              {selectedCategory === "7" && (
+              {selectedCategory === 7 && (
                 <div>
                   <InputField
                     label="Model"
@@ -505,7 +538,7 @@ const FormProduct = () => {
               )}
 
               {/*Motherboard Product*/}
-              {selectedCategory === "8" && (
+              {selectedCategory === 8 && (
                 <div>
                   <InputField
                     label="Model"
@@ -532,7 +565,7 @@ const FormProduct = () => {
               )}
 
               {/*Drive Product*/}
-              {selectedCategory === "9" && (
+              {selectedCategory === 9 && (
                 <div>
                   <InputField
                     label="Model"
@@ -613,7 +646,7 @@ const FormProduct = () => {
               )}
 
               {/*Accessory Product*/}
-              {selectedCategory === "10" && (
+              {selectedCategory === 10 && (
                 <div className="mb-4">
                   <label className="text-sm font-medium text-slate-700 mb-1">
                     Accessories Type:
@@ -621,7 +654,7 @@ const FormProduct = () => {
                   <select
                     value={form.accessoriesType}
                     className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                    name="form.accessoriesType"
+                    name="accessoriesType"
                     onChange={handleOnChange}
                     required
                   >
@@ -639,6 +672,10 @@ const FormProduct = () => {
                 </div>
               )}
 
+              {/* Other Product*/}
+
+              {selectedCategory >= 11 && <></>}
+
               <Button
                 type="submit"
                 className="w-full text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 p-4 rounded-lg shadow-md transition duration-200 font-medium"
@@ -649,7 +686,7 @@ const FormProduct = () => {
           </CardContent>
         </Card>
 
-        <Card className="w-full lg:w-3/4 h-screen">
+        <Card className="w-full lg:w-3/4 h-[92vh] relative">
           <CardHeader className="pb-4 flex flex-row items-center justify-between">
             <CardTitle className="text-2xl font-bold text-slate-800">
               Product Lists
@@ -666,7 +703,7 @@ const FormProduct = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="overflow-y-auto h-screen">
+            <div className="overflow-y-auto relative h-[84vh]">
               <Table className="w-full">
                 <TableHeader className="h-14 bg-slate-100">
                   <TableRow>
@@ -699,7 +736,7 @@ const FormProduct = () => {
                     </TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="py-2 relative">
                   {filteredProducts.map((item, index) => (
                     <TableRow
                       key={index}
@@ -770,7 +807,7 @@ const FormProduct = () => {
 
         {/* Edit Product Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
-          <DialogContent className="max-w-lg">
+          <DialogContent>
             <DialogHeader>
               <DialogTitle className="text-2xl font-semibold text-slate-800">
                 Edit Product Information

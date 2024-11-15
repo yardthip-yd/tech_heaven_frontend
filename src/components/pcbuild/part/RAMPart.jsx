@@ -4,7 +4,8 @@ import React, { useContext } from "react";
 import { Trash } from "lucide-react";
 
 function RAMPart() {
-  const { setPartContent, RAM, setRAM, setFilter } = useContext(PCBuildContext);
+  const { setPartContent, RAM, setRAM, setFilter, setSearchItem } =
+    useContext(PCBuildContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ function RAMPart() {
       onClick={handleClick}
     >
       <div className="w-6 h-6 flex items-center justify-center rounded-full text-blue-600">
-        <IconRAM className={`${RAM ? "w-4 h-4" : "w-6 h-6"}`}/>
+        <IconRAM className={`${RAM ? "w-4 h-4" : "w-6 h-6"}`} />
       </div>
 
       <div className="flex-grow">
@@ -39,9 +40,7 @@ function RAMPart() {
           {RAM ? RAM.name : "Select RAM"}
         </div>
         {!RAM && (
-          <div className="text-xs text-slate-500">
-            Click to choose your RAM
-          </div>
+          <div className="text-xs text-slate-500">Click to choose your RAM</div>
         )}
       </div>
 
