@@ -10,8 +10,10 @@ const authStore = (set, get) => ({
     try {
       const result = await authApi.register(input);
       console.log("Register in Zustand", result.data.message);
+      return result
     } catch (error) {
       console.log(error);
+      throw (error)
     }
   },
   actionLogin: async (input) => {
