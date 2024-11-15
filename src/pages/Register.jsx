@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import Authvdo from "@/assets/video/auth2.mp4";
 import useAuthStore from "@/stores/authStore";
 import LoginModal from "@/components/auth/LoginModal";
-import { Eye, EyeOff, User, Mail, Calendar, Lock, Phone  } from "lucide-react";
+import { Eye, EyeOff, User, Mail, Calendar, Lock, Phone } from "lucide-react";
 
 const Register = () => {
     // State from Stores
@@ -23,11 +23,16 @@ const Register = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        phone : "",
+        phone: "",
     });
 
     // Fn handleChange update input when user fill information
     const hdlChange = (e) => {
+        if (e.target.name === 'phone') {
+            if (isNaN(Number(e.target.value))) {
+                return
+            }
+        }
         setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
     };
 
@@ -76,36 +81,47 @@ const Register = () => {
                 // return alert("Please fill all informations")
                 return toast.info("Please fill all informations");
             }
+            if (input.dateOfBirth) {
+                // console.log("call register")
+                const today = new Date();
+                const dateOfBirth = new Date(input.dateOfBirth);
 
+                if (dateOfBirth >= today) {
+                    // throw new Error("Date of birth must be in the past.")
+                    return toast.error("Date of birth must be in the past.");
+                }
+            }
             // Check password match with confirm password
-            else if (input.password !== input.confirmPassword) {
+            if (input.password !== input.confirmPassword) {
                 // return alert("Password do not match")
                 return toast.info("Password do not match");
             }
 
+
             // Send information input
-            else {
-                await actionRegister(input);
 
-                // Clear input
-                setInput({
-                    firstName: "",
-                    lastName: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                    dateOfBirth: "",
-                    phone : ""
-                });
 
-                console.log("Register Successful!");
-                toast.success("Register Successful!");
-                setIsLoginModalOpen(true)
-            }
+            const result = await actionRegister(input);
+            console.log(result)
+            // Clear input
+            setInput({
+                firstName: "",
+                lastName: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+                dateOfBirth: "",
+                phone: ""
+            });
+
+            console.log("Register Successful!");
+            toast.success("Register Successful!");
+            setIsLoginModalOpen(true)
+
         } catch (err) {
-            const errMsg = err.response?.data?.error || err.message;
-            console.log("Register not success", errMsg);
-            toast.error("Register not success", errMsg);
+            const errMsg = err.response?.data?.message || err.message;
+            console.log(errMsg);
+            toast.error(errMsg);
         }
     };
 
@@ -180,15 +196,16 @@ const Register = () => {
                     </div>
                     {/* Phone */}
                     <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
+                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
                         <input
                             className="w-full pl-10 pr-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 outline-none"
                             type="text"
-                            placeholder="phone"
+                            placeholder="Phone"
                             name="phone"
                             value={input.phone}
                             maxLength={10}
                             onChange={hdlChange}
+
                         />
                     </div>
 
