@@ -22,8 +22,7 @@ export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddr
   const clearCart = useCartStore((state) => state.clearCart);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // เพิ่ม log เพื่อดูค่า
+
     console.log('Selected Address ID:', selectedAddressId);
     
     if (!selectedAddressId) {
@@ -46,8 +45,7 @@ export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddr
       });
   
       clearTimeout(timeout);
-      
-      // เพิ่ม log เพื่อดูค่า payload
+
       console.log('Payment Payload:', payload);
       
       if (payload.error) {
@@ -55,16 +53,14 @@ export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddr
         console.log("Error:", payload.error.message);
       } else if (payload.paymentIntent.status === "succeeded") {
         setIsLoading(false);
-        
-        // สร้าง orderData ที่จะส่งไป
+
         const orderData = {
           paymentIntent: payload.paymentIntent,
-          addressId: Number(selectedAddressId), // แปลงเป็นตัวเลข
+          addressId: Number(selectedAddressId),
         };
   
         console.log('Order Data:', orderData);
-  
-        // ส่งข้อมูลไปสร้าง order
+
         const result = await actionCreateOrder(token, orderData);
         console.log('Create Order Result:', result);
   
@@ -99,7 +95,7 @@ export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddr
         </div>
 
         <button
-          disabled={isLoading || !stripe || !elements || !selectedAddressId} // เพิ่มเงื่อนไข !selectedAddressId
+          disabled={isLoading || !stripe || !elements || !selectedAddressId}
           className={`w-full py-3 px-6 rounded-lg text-white font-medium text-lg
             ${isLoading || !stripe || !elements || !selectedAddressId
               ? 'bg-slate-400 cursor-not-allowed'

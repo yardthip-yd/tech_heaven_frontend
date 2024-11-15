@@ -7,7 +7,7 @@ export const createOrder = async (token, payload) => {
       "http://localhost:8000/user/create-order",
       {
         paymentIntent: payload.paymentIntent,
-        addressId: Number(payload.addressId), // แปลงเป็นตัวเลข
+        addressId: Number(payload.addressId),
         token,
       },
       {

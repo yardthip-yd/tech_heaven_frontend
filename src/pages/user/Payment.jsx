@@ -279,19 +279,26 @@ const Payment = () => {
                         className="flex-1 p-2 border rounded"
                       >
                         <option value="">Select Address</option>
-                        {address.map((addr) => (
-                          <option key={addr.id} value={addr.id}>
+                        {address.map((addr,index) => (
+                          <option key={index} value={addr.id}>
                             {addr.address}
                           </option>
                         ))}
                       </select>
-                      <Button
-                        onClick={() =>
-                          setAddressData((prev) => ({ ...prev, address: "" }))
-                        }
-                      >
-                        Add New
-                      </Button>
+                      <div className="flex justify-between text-sm">
+                    <Input
+                      value={addressData.address}
+                      onChange={(e) =>
+                        setAddressData((prev) => ({
+                          ...prev,
+                          address: e.target.value,
+                        }))
+                      }
+                      placeholder="กรุณากรอกที่อยู่"
+                      className="flex-1"
+                    />
+                    <Button onClick={handleAddAddress}>Add Address</Button>
+                  </div>
                     </div>
                   </div>
                 ) : (
