@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { SocketContext } from "@/contexts/SocketContext";
 import useAuthStore from "@/stores/authStore";
 import { Send } from "lucide-react";
+import { toast } from "react-toastify";
 
 function ChatFooter() {
   const [sendMessage, setSendMessage] = useState("");
@@ -19,6 +20,7 @@ function ChatFooter() {
   };
 
   const handleSubmit = (e) => {
+    if (!currentUser) return toast.error("Please login to chat!");
     e.preventDefault();
     socket.emit("user-send-message", {
       message: sendMessage,

@@ -45,7 +45,6 @@ const authStore = (set, get) => ({
     }
     try {
       const result = await authApi.getMe();
-      // console.log(result);
       set({
         user: result.data.user,
       });

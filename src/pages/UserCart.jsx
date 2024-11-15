@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "@/stores/cartStore";
 import useAuthStore from "@/stores/authStore";
 import { Trash, Truck, Plus, Minus, ShoppingBag } from "lucide-react";
-// import { createCart } from "@/API/cart-api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 

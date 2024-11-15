@@ -17,11 +17,10 @@ const OrderDetailsDialog = ({ isOpen, onClose, order }) => {
   const token = useAuthStore((state) => state.token);
   
   const [selectedOrderItems, setSelectedOrderItems] = useState([]);
-  
-  // Calculate total amount only after making sure quantity and price are valid
+
   const totalAmount = selectedOrderItems.reduce((total, item) => {
-    const price = parseFloat(item.product?.price) || 0; // Default to 0 if price is invalid
-    const quantity = parseInt(item.quantity, 10) || 0; // Default to 0 if quantity is invalid
+    const price = parseFloat(item.product?.price) || 0;
+    const quantity = parseInt(item.quantity, 10) || 0;
     return total + (price * quantity);
   }, 0);
 
@@ -32,7 +31,6 @@ const OrderDetailsDialog = ({ isOpen, onClose, order }) => {
   }, [token, order.userId, actionGetOrderByUserId]);
 
   useEffect(() => {
-    // Filter the orders to get the selected order by its ID
     if (orders && order) {
       const selectedOrder = orders.find((item) => item.id === order.id);
       if (selectedOrder) {
