@@ -24,8 +24,8 @@ const OrderManage = () => {
 
   const [searchOrder, setSearchOrder] = useState("");
   const [openDetails, setOpenDetails] = useState({});
-  console.log(openDetails);
-  console.log(orders)
+  // console.log(openDetails);
+  // console.log(orders)
 
   useEffect(() => {
     actionGetAllAddress(token);
@@ -60,7 +60,7 @@ const OrderManage = () => {
   const filteredOrders = orders?.filter((order) =>
     order.user.firstName.toLowerCase().includes(searchOrder)
   ) || [];
-
+  console.log(filteredOrders)
   return (
     <div className="p-6 mx-auto">
       <Card>
