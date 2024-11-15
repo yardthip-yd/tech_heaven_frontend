@@ -34,7 +34,7 @@ function ChatButton({ setActive }) {
   }, [chatNotify]);
 
   return (
-    <div className="absolute p-2 pt-3 bottom-16 right-16 flex justify-center items-center hover:cursor-pointer z-20">
+    <div className="absolute p-2 pt-3 bottom-16 right-8 flex justify-center items-center hover:cursor-pointer z-20">
       <div
         className="flex flex-col items-center justify-center"
         onClick={handleClick}
