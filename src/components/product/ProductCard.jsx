@@ -29,8 +29,7 @@ const ProductCard = ({ product }) => {
   }, [user, getCurrentUser]);
 
   const handleAddToCart = () => {
-    console.log(product)
-    addToCart( {...product, quantity :1} );
+    addToCart({ ...product, quantity: 1 });
     toast.success("Added to cart!");
   };
 
@@ -56,33 +55,33 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Card className="border-none shadow-none overflow-hidden rounded-md w-[272px] p-4">
+    <Card className="border-none shadow-none overflow-hidden rounded-md w-[272px] p-4 flex flex-col h-full">
       <CardHeader className="p-0">
         {product.ProductImages?.[0]?.imageUrl ? (
           <img
             src={product.ProductImages[0].imageUrl}
             alt={product.name}
-            className="w-[240px] h-[240px] object-cover rounded-md"
+            className="w-full h-[240px] object-cover rounded-md"
             onClick={handleCardClick}
           />
         ) : (
           <img
             src="https://via.placeholder.com/150"
             alt="No Image Available"
-            className="w-[240px] h-[240px] object-cover rounded-md"
+            className="w-full h-[240px] object-cover rounded-md"
             onClick={handleCardClick}
           />
         )}
       </CardHeader>
-      <CardContent className="h-26 p-0 mt-2" onClick={handleCardClick}>
-        <CardDescription>{product.ProductCategory?.name}</CardDescription>
+      <CardContent className="flex-grow p-0 mt-2 flex flex-col" onClick={handleCardClick}>
+        <CardDescription className="text-slate-600">{product.ProductCategory?.name}</CardDescription>
         <CardTitle className="mt-2 text-lg">
           {truncateText(product.name, 20)}
         </CardTitle>
-        <p className="py-1">{truncateText(product.description, 40)}</p>
+        <p className="py-1 text-slate-800">{truncateText(product.description, 40)}</p>
       </CardContent>
-      <CardFooter className="text-lg font-bold p-0 py-2 flex flex-row items-center justify-between">
-      <div className="text-lg">THB {product.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+      <CardFooter className="text-lg font-bold p-0 py-2 flex items-center justify-between mt-auto">
+        <div className="text-lg">THB {product.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
         <div className="flex space-x-2">
           <button onClick={handleAddToCart}>
             <ShoppingCart className="w-6 h-6 hover:scale-110 transition-transform hover:text-blue-500" />
@@ -92,7 +91,7 @@ const ProductCard = ({ product }) => {
           </button>
         </div>
       </CardFooter>
-      
+
       {/* Login Modal */}
       {isLoginModalOpen && (
         <LoginModal

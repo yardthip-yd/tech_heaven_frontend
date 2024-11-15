@@ -60,8 +60,8 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
   const hdlLogin = async (e) => {
     try {
       e.preventDefault();
-      onLogin();
       setLoading(true);
+      onLogin();
       // Validation
       // Check user fill information or not?
       if (!(input.email.trim() && input.password.trim())) {
@@ -74,13 +74,14 @@ const LoginModal = ({ isOpen, onClose, onLogin }) => {
         const result = await actionLogin(input);
         // console.log("Login Successful!")
         toast.success("Login Successful!");
+        if (onLogin) {
+          onLogin();
+        }
         onClose();
-        navigate(`/`);
       } catch (err) {
-        console.log(err);
-        const errMsg = err.response?.data?.error || err.message;
-        console.log(errMsg);
-        toast.error("Email or Password is invalid");
+        const errorMsg = err.response?.data?.error || "Login failed. Please check your credentials.";
+        toast.error(errorMsg);
+        console.error("Login error:", errorMsg);
       } finally {
         setLoading(false);
       }

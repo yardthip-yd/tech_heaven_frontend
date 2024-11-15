@@ -29,7 +29,7 @@ function PCBuildItem(props) {
         className="flex flex-col items-center bg-slate-300 p-2 rounded-md"
         onClick={() => setModalOpen(true)}
       >
-        <div className="bg-gray-200 w-24 h-24">SAMPLE IMAGE</div>
+        <div className="bg-slate-200 w-24 h-24">SAMPLE IMAGE</div>
         <div className="flex justify-between">
           <div>Total Price:</div>
           <div>฿{item.totalPrice}</div>

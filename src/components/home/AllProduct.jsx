@@ -72,82 +72,77 @@ const AllProduct = () => {
   };
 
   return (
-    <div className="min-h-[420px] w-full max-w-[1600px] flex flex-col mx-auto pt-8">
+<div className="min-h-[420px] w-full max-w-[1600px] flex flex-col mx-auto pt-8 px-4 sm:px-8">
 
-      <div className="max-w-[1440px] mx-auto px-8">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-14"
-        >
-          <div className="inline-flex items-end justify-center gap-2 bg-blue-50 px-4 py-2 rounded-full mb-6">
-            <Sparkles className="w-4 h-4 text-blue-500" />
-            <span className="text-sm font-medium text-blue-600">Explore Our Collection</span>
-          </div>
-
-          <h2 className="text-5xl font-bold font-prompt bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6">
-            ALL PRODUCTS
-          </h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            Discover our curated selection of premium tech products
-          </p>
-        </motion.div>
-
-       {/* View All Button */}
-       <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-end"
-        >
-          <button
-            onClick={() => navigate("/store")}
-            className="group flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4"
-          >
-            <span className="text-blue-600 font-medium">View All Products</span>
-            <ChevronRight className="w-5 h-5 text-blue-600 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
-        </motion.div>
-
-        {/* Products Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8"
-        >
-          {filteredProducts.slice(0, 15).map((product) => (
-            <motion.div
-              key={product.id}
-              variants={itemVariants}
-              className="group flex justify-center"
-            >
-              <div className="w-[272px] bg-white rounded-lg shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex">
-              <div
-                key={`${product.id}`}
-                className="flex-shrink-0 w-[272px] transform transition-all duration-300 hover:scale-105 shadow-lg"
-              >
-                  <ProductCard key={product.id} product={product} />
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Bottom Decoration */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="mt-20 flex justify-center"
-        >
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent rounded-full" />
-        </motion.div>
-      </div>
+<div className="max-w-[1440px] mx-auto">
+  {/* Header Section */}
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8 }}
+    className="text-center mb-8 sm:mb-14"
+  >
+    <div className="inline-flex items-end justify-center gap-2 bg-blue-50 px-3 sm:px-4 py-2 rounded-full mb-4 sm:mb-6">
+      <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
+      <span className="text-xs sm:text-sm font-medium text-blue-600">Explore Our Collection</span>
     </div>
+
+    <h2 className="text-3xl sm:text-5xl font-bold font-prompt bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 sm:mb-6">
+      ALL PRODUCTS
+    </h2>
+    <p className="text-slate-600 text-base sm:text-lg max-w-xl sm:max-w-2xl mx-auto">
+      Discover our curated selection of premium tech products
+    </p>
+  </motion.div>
+
+ {/* View All Button */}
+ <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, delay: 0.2 }}
+    className="flex justify-center sm:justify-end"
+  >
+    <button
+      onClick={() => navigate("/store")}
+      className="group flex items-center gap-2 px-3 sm:px-4 py-2 bg-white rounded-full shadow-md sm:shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 mb-4"
+    >
+      <span className="text-blue-600 text-sm sm:text-base font-medium">View All Products</span>
+      <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 transition-transform duration-300 group-hover:translate-x-1" />
+    </button>
+  </motion.div>
+
+  {/* Products Grid */}
+  <motion.div
+    variants={containerVariants}
+    initial="hidden"
+    whileInView="show"
+    viewport={{ once: true, amount: 0.1 }}
+    className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8"
+  >
+    {filteredProducts.slice(0, 15).map((product) => (
+      <motion.div
+        key={product.id}
+        variants={itemVariants}
+        className="group flex justify-center"
+      >
+        <div className="flex-shrink-0 w-[272px] sm:w-[272px] md:w-[272px] lg:w-[272px] transform transition-all duration-300 hover:scale-105 shadow-lg">
+          <ProductCard key={product.id} product={product} />
+        </div>
+      </motion.div>
+    ))}
+  </motion.div>
+
+  {/* Bottom Decoration */}
+  <motion.div
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    transition={{ duration: 1 }}
+    className="mt-12 sm:mt-20 flex justify-center"
+  >
+    <div className="w-24 sm:w-32 h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent rounded-full" />
+  </motion.div>
+</div>
+</div>
   );
 };
 

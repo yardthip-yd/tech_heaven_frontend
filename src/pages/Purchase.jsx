@@ -50,8 +50,7 @@ const Purchase = () => {
         'completed': 'bg-green-500/10 text-green-700',
         'succeeded': 'bg-green-500/10 text-green-700' // แก้ไขคำผิด
     };
-    
-    return statusColors[status.toLowerCase()] || 'bg-gray-500/10 text-gray-700';
+    return statusColors[status.toLowerCase()] || 'bg-slate-500/10 text-slate-700';
 };
 
   const OrderStats = () => (
@@ -84,7 +83,7 @@ const Purchase = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 overflow-y-auto max-h-[80vh]">
+    <div className=" bg-slate-50 overflow-y-auto max-h-[80vh] mt-12 md:mt-0">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-row items-start mb-8 justify-between">
           <div>

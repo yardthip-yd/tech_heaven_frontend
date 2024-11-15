@@ -15,7 +15,7 @@ function ChatActive({ setActive }) {
   }, [socket]);
 
   return (
-    <Card className="absolute z-30 right-10 bottom-10 border w-[400px] h-[402px] shadow-xl border-slate-100 bg-slate-50 rounded-xl mr-2 flex flex-col justify-between">
+    <Card className="fixed z-30 right-10 bottom-10 border w-[400px] h-[402px] shadow-xl border-slate-100 bg-slate-50 rounded-xl mr-2 flex flex-col justify-between">
       <ChatHeader setActive={setActive} />
       <ChatBody />
       <ChatFooter />

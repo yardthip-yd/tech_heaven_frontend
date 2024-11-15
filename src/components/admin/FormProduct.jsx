@@ -68,7 +68,11 @@ const FormProduct = () => {
 
   useEffect(() => {
     getCategory();
+<<<<<<< HEAD
+    actionListProducts(9999);
+=======
     actionListProducts(999);
+>>>>>>> dev
   }, []);
 
   const handleOnChange = (e) => {
@@ -201,7 +205,7 @@ const FormProduct = () => {
     return (
       <div className="flex items-center justify-center space-x-2">
         <div className="w-8 h-8 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
-        <span className="text-gray-500">Loading...</span>
+        <span className="text-slate-500">Loading...</span>
       </div>
     );
   }
