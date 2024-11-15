@@ -18,8 +18,8 @@ function AdminChatHeader() {
   };
 
   return (
-    <div className="relative flex justify-between items-center p-2 h-[61.25px] bg-blue-50 rounded-t-lg shadow-md">
-      <div className="flex gap-2 items-center">
+    <div className="relative flex justify-between items-center p-2 h-[61.25px] bg-blue-500 rounded-t-lg shadow-md">
+      <div className="flex gap-2 items-center text-white">
         {/* PROFILE */}
         <Avatar
           className="w-10 h-10 rounded-full flex items-center"
@@ -31,7 +31,10 @@ function AdminChatHeader() {
         </div>
       </div>
       {/* BUTTON */}
-      <div className="flex flex-row gap-1 items-center text-blue-500" onClick={hdlBack}>
+      <div
+        className="flex flex-row gap-1 items-center text-white hover:cursor-pointer"
+        onClick={hdlBack}
+      >
         <span className="text-sm">Back</span>
         <ChevronRight className="h-4 w-4" />
       </div>

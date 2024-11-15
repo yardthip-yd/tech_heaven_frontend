@@ -18,7 +18,6 @@ import LoginModal from "@/components/auth/LoginModal";
 import { PCBuildContext } from "@/contexts/PCContext";
 
 const ProductCardBuild = ({ product }) => {
-
   const {
     partContent,
     setPartContent,
@@ -59,7 +58,7 @@ const ProductCardBuild = ({ product }) => {
   }, []);
 
   const handleAddToCart = () => {
-    console.log(product)
+    console.log(product);
     addToCart({ ...product, quantity: 1 });
     toast.success("Added to cart!");
   };
@@ -177,11 +176,16 @@ const ProductCardBuild = ({ product }) => {
         <CardTitle className="mt-2 text-lg">
           {truncateText(product.name, 20)}
         </CardTitle>
-        <p className="py-1">{truncateText(product.description, 40)}</p>
+        <p className="py-1">{truncateText(product.description, 25)}</p>
       </CardContent>
       <div className="flex flex-col">
         <div className="text-lg font-bold p-0 py-4 flex flex-row items-center justify-between">
-          <div className="text-lg">THB {product.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</div>
+          <div className="text-lg">
+            THB{" "}
+            {product.price.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            })}
+          </div>
           <div className="flex space-x-2">
             <button onClick={handleAddToCart}>
               <ShoppingCart className="w-6 h-6 hover:scale-110 transition-transform hover:text-blue-500" />
@@ -213,4 +217,3 @@ const ProductCardBuild = ({ product }) => {
 };
 
 export default ProductCardBuild;
-
