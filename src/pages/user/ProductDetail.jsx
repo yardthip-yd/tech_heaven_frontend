@@ -51,13 +51,16 @@ const ProductDetail = () => {
 
   const getProductSameCategory = async (id, productInfo) => {
     const resp =
-      id >= 10
+      id == 10
         ? await getProductByCategory(id, {
             accessoriesType: productInfo.Accessory[0].accessoriesType,
           })
         : await getProductByCategory(id);
-    // console.log(resp.data);
-    setRelatedProducts(resp.data.products);
+    console.log(resp.data);
+    const filteredRelatedProducts = resp.data.products.filter(
+      (item) => item.id !== productInfo.id
+    );
+    setRelatedProducts(filteredRelatedProducts);
   };
 
   useEffect(() => {
