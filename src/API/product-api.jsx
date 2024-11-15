@@ -41,6 +41,9 @@ export const createProductAccessory = async (form) => {
   return await axios.post("http://localhost:8000/product/accessory", form);
 };
 
+export const createOtherProduct = async (form) => {
+  return await axios.post("/product/other", form);
+};
 // ------------------------------------------------------------------------//
 
 // โชว์ข้อมูลตามจำนวนที่กำหนด
