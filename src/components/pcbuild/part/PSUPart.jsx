@@ -4,7 +4,8 @@ import React, { useContext } from "react";
 import { Trash } from "lucide-react";
 
 function PSUPart() {
-  const { setPartContent, PSU, setPSU, setFilter } = useContext(PCBuildContext);
+  const { setPartContent, PSU, setPSU, setFilter, setSearchItem } =
+    useContext(PCBuildContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -25,7 +26,7 @@ function PSUPart() {
       onClick={handleClick}
     >
       <div className="w-6 h-6 flex items-center justify-center rounded-full text-blue-600">
-        <IconPSU className={`${PSU ? "w-4 h-4" : "w-6 h-6"}`}/>
+        <IconPSU className={`${PSU ? "w-4 h-4" : "w-6 h-6"}`} />
       </div>
 
       <div className="flex-grow">
