@@ -7,21 +7,29 @@ import {
 import { Loader2 } from "lucide-react";
 import useOrderStore from "@/stores/orderStore";
 import useAuthStore from "@/stores/authStore";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import useCartStore from "@/stores/cartStore";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function CheckoutForm({ dpmCheckerLink }) {
+export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddressError }) {
   const actionCreateOrder = useOrderStore((state) => state.actionCreateOrder);
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const token = useAuthStore((state) => state.token);
   const [isLoading, setIsLoading] = useState(false);
-  // const clearCart = useCartStore((state) => state.clearCart);
+  const clearCart = useCartStore((state) => state.clearCart);
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log('Selected Address ID:', selectedAddressId);
+    
+    if (!selectedAddressId) {
+      toast.error("กรุณาเลือกที่อยู่จัดส่งก่อนชำระเงิน");
+      return;
+    }
+  
     if (!stripe || !elements) return;
     
     setIsLoading(true);
@@ -29,29 +37,44 @@ export default function CheckoutForm({ dpmCheckerLink }) {
       setIsLoading(false);
       toast.error("Payment process timed out. Please try again.");
     }, 30000);
-
+  
     try {
       const payload = await stripe.confirmPayment({
         elements,
         redirect: "if_required",
       });
-
+  
       clearTimeout(timeout);
+
+      console.log('Payment Payload:', payload);
       
       if (payload.error) {
         toast.error(payload.error.message);
         console.log("Error:", payload.error.message);
       } else if (payload.paymentIntent.status === "succeeded") {
         setIsLoading(false);
-        await actionCreateOrder(token, payload);
-        localStorage.removeItem("cartItems"); 
-        // clearCart(); 
-        navigate("/user/purchase");
+
+        const orderData = {
+          paymentIntent: payload.paymentIntent,
+          addressId: Number(selectedAddressId),
+        };
+  
+        console.log('Order Data:', orderData);
+
+        const result = await actionCreateOrder(token, orderData);
+        console.log('Create Order Result:', result);
+  
+        if (result) {
+          localStorage.removeItem("cartItems"); 
+          clearCart(); 
+          navigate("/user/purchase");
+          toast.success("ชำระเงินสำเร็จ");
+        }
       }
     } catch (err) {
       clearTimeout(timeout);
-      toast.error("There was an error processing the payment.");
-      console.log("Error in Order Creation:", err);
+      console.error('Error details:', err);
+      toast.error(err.message || "เกิดข้อผิดพลาดในการสร้างคำสั่งซื้อ");
     }
     
     setIsLoading(false);
@@ -59,7 +82,6 @@ export default function CheckoutForm({ dpmCheckerLink }) {
 
   return (
     <div className="mx-auto ">
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       <form 
         id="payment-form" 
         onSubmit={handleSubmit}
@@ -73,9 +95,9 @@ export default function CheckoutForm({ dpmCheckerLink }) {
         </div>
 
         <button
-          disabled={isLoading || !stripe || !elements}
+          disabled={isLoading || !stripe || !elements || !selectedAddressId}
           className={`w-full py-3 px-6 rounded-lg text-white font-medium text-lg
-            ${isLoading || !stripe || !elements 
+            ${isLoading || !stripe || !elements || !selectedAddressId
               ? 'bg-slate-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 active:bg-blue-800'
             } transition-colors duration-200 flex items-center justify-center`}
