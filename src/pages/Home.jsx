@@ -12,7 +12,7 @@ const Home = () => {
     <div className='mx-auto'>
       <Hero3D />
       {/* <HeroBanner /> */}
-      {/* <PromotionSection /> */}
+      <PromotionSection />
       {/* <BestSaller /> */}
       <NewArrival />
       <AllProduct />

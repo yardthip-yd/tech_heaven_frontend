@@ -37,6 +37,7 @@ const MainNav = () => {
     { to: "/", text: "HOME" },
     { to: "/store", text: "STORE" },
     { to: "/pcbuild", text: "CUSTOMIZE YOUR SPEC" },
+    { to: "/aicreate-spec", text: "AI GENERATE SPEC" },
     { to: "/booking", text: "BOOKING" },
   ];
 

@@ -36,6 +36,7 @@ import OrderSuccess from "@/components/order/OrderSuccess";
 import PCBuild from "@/pages/PCBuild";
 import Promotion from "@/pages/admin/Promotion";
 import Purchase from "@/pages/Purchase";
+import AiCreateSpec from "@/pages/AiCreateSpec";
 
 // Import Store
 
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
       { path: "/product/:id", element: <ProductDetail /> },
       { path: "/booking", element: <Booking /> },
       { path: "/pcbuild", element: <PCBuild /> },
+      { path: "/aicreate-spec", element: <AiCreateSpec /> },
       { path: "*", element: <Navigate to="/" /> },
     ],
   },
