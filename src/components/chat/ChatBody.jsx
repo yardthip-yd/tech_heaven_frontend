@@ -51,12 +51,23 @@ function ChatBody() {
 
   const formatDate = (date) => {
     if (moment(date).isSame(new Date(), "day")) return "Today";
-    if (moment(date).isSame(moment().subtract(1, "day"), "day")) return "Yesterday";
-    if (moment(date).isSame(new Date(), "year")) return moment(date).format("MMM D");
+    if (moment(date).isSame(moment().subtract(1, "day"), "day"))
+      return "Yesterday";
+    if (moment(date).isSame(new Date(), "year"))
+      return moment(date).format("MMM D");
     return moment(date).format("MMM D, YYYY");
   };
 
   let lastDisplayedDate = null;
+
+  //if no current user, return message "Please login to chat"
+  if (!currentUser) {
+    return (
+      <div className="flex flex-col gap-2 py-2 px-3 scrollbar-hide">
+        <p className="text-center text-slate-500">Please login to chat</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex flex-col overflow-y-auto gap-2 py-2 px-3 scrollbar-hide">

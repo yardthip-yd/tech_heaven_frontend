@@ -9,21 +9,28 @@ import { create } from "zustand";
 
 const useOrderStore = create((set, get) => ({
   orders: [],
-  actionCreateOrder: async (token, payload) => {
+  actionCreateOrder: async (token, orderData) => {
     try {
-      const result = await createOrder(token, payload);
-      if (result && result.data && result.data.created) {
-        set((state) => ({
-          orders: [...state.orders, result.data.created],
-        }));
-        return result.data.created;
-      } else {
-        console.warn("Unexpected result structure:", result);
-        return undefined;
+      console.log('Creating order with data:', orderData);
+      
+      // ตรวจสอบข้อมูลที่จำเป็น
+      if (!orderData.addressId) {
+        throw new Error('Address ID is required');
       }
-    } catch (err) {
-      console.error("Error creating order:", err.response?.data || err.message);
-      throw err;
+
+      const response = await createOrder(token, orderData);
+
+      console.log('Order creation response:', response);
+
+      if (response.data) {
+        set((state) => ({
+          orders: [...state.orders, response.data]
+        }));
+        return response.data;
+      }
+    } catch (error) {
+      console.error('Order creation error:', error);
+      throw error;
     }
   },
 

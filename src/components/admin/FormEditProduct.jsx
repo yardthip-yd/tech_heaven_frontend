@@ -37,7 +37,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
   const getProduct = async () => {
     try {
       const resp = await actionReadProducts(productId);
-      setSelectedCategory(String(resp.categoryId));
+      setSelectedCategory(resp.categoryId);
 
       const formattedImages = resp.ProductImages.map((img) => ({
         public_id: img.public_id,
@@ -55,8 +55,8 @@ const FormEditProduct = ({ closeDialog, productId }) => {
       };
 
       // ใช้ switch-case เพื่อจัดการกับ categoryId
-      switch (String(resp.categoryId)) {
-        case "1": // CPU
+      switch (resp.categoryId) {
+        case 1: // CPU
           formBody.model = resp.CPU[0].model;
           formBody.socket = resp.CPU[0].socket;
           formBody.cores = resp.CPU[0].cores;
@@ -64,54 +64,63 @@ const FormEditProduct = ({ closeDialog, productId }) => {
           formBody.baseClock = resp.CPU[0].baseClock;
           formBody.boostClock = resp.CPU[0].boostClock;
           break;
-        case "2": // Monitor
+        case 2: // Monitor
           formBody.model = resp.Monitor[0].model;
           formBody.size = resp.Monitor[0].size;
           formBody.resolution = resp.Monitor[0].resolution;
           formBody.refreshRate = resp.Monitor[0].refreshRate;
           formBody.panelType = resp.Monitor[0].panelType;
           break;
-        case "3": // CPU Cooler
+        case 3: // CPU Cooler
           formBody.model = resp.CPUCooler[0].model;
           formBody.socket = resp.CPUCooler[0].socket;
           formBody.radiator = resp.CPUCooler[0].radiator;
           formBody.type = resp.CPUCooler[0].type;
           break;
-        case "4": // Power Supply
+        case 4: // Power Supply
           formBody.model = resp.PowerSupply[0].model;
           formBody.wattage = resp.PowerSupply[0].wattage;
           break;
-        case "5": // Case
+        case 5: // Case
           formBody.model = resp.Case[0].model;
           formBody.size = resp.Case[0].size;
           break;
-        case "6": // GPU
+        case 6: // GPU
           formBody.model = resp.GPU[0].model;
           formBody.vram = resp.GPU[0].vram;
           formBody.power = resp.GPU[0].power;
           break;
-        case "7": // Memory
+        case 7: // Memory
           formBody.model = resp.Memory[0].model;
           formBody.memory = resp.Memory[0].memory;
           formBody.busSpeed = resp.Memory[0].busSpeed;
           formBody.type = resp.Memory[0].type;
           break;
-        case "8": // Motherboard
+        case 8: // Motherboard
           formBody.model = resp.Motherboard[0].model;
           formBody.socket = resp.Motherboard[0].socket;
           formBody.chipset = resp.Motherboard[0].chipset;
           break;
-        case "9": // Drive
+        case 9: // Drive
           formBody.model = resp.Drive[0].model;
           formBody.size = resp.Drive[0].size;
           formBody.type = resp.Drive[0].type;
           formBody.format = resp.Drive[0].format;
           formBody.speed = resp.Drive[0].speed;
           break;
-        case "10": // Accessory
+        case 10: // Accessory
           formBody.accessoriesType = resp.Accessory[0].accessoriesType;
           break;
         default:
+          if (selectedCategory === 0) {
+            // console.log("Loading...");
+            break;
+          }
+          if (selectedCategory >= 11) {
+            // console.log("Other category");
+            break;
+          }
+
           throw new Error("Invalid categoryId");
       }
 
@@ -127,7 +136,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
       [e.target.name]: e.target.value,
     });
     if (e.target.name === "categoryId") {
-      setSelectedCategory(e.target.value);
+      setSelectedCategory(+e.target.value);
     }
   };
 
@@ -161,6 +170,8 @@ const FormEditProduct = ({ closeDialog, productId }) => {
       toast.error("Something went wrong, please try again.");
     }
   };
+
+  // console.log("selectedCategory", selectedCategory);
 
   return (
     <div>
@@ -238,7 +249,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
               </div>
               <div>
                 {/* ===== CPU ===== */}
-                {selectedCategory === "1" && (
+                {selectedCategory === 1 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       CPU Information
@@ -327,7 +338,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== Mainbaord ===== */}
-                {selectedCategory === "8" && (
+                {selectedCategory === 8 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       Mainbaord Information
@@ -375,7 +386,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== VGA ===== */}
-                {selectedCategory === "6" && (
+                {selectedCategory === 6 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       Graphic Card Information
@@ -423,7 +434,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== RAM ===== */}
-                {selectedCategory === "7" && (
+                {selectedCategory === 7 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       RAM Information
@@ -484,7 +495,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== Drive ===== */}
-                {selectedCategory === "9" && (
+                {selectedCategory === 9 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       Storage Drive Information
@@ -588,7 +599,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== POWER SUPPLY ===== */}
-                {selectedCategory === "4" && (
+                {selectedCategory === 4 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       Power Supply Information
@@ -623,7 +634,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== Case ===== */}
-                {selectedCategory === "5" && (
+                {selectedCategory === 5 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       Case Information
@@ -658,7 +669,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== CPU Cooler ===== */}
-                {selectedCategory === "3" && (
+                {selectedCategory === 3 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       CPU Cooler Information
@@ -734,7 +745,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
                 )}
 
                 {/* ===== Monitor ===== */}
-                {selectedCategory === "2" && (
+                {selectedCategory === 2 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                     <h2 className="text-lg font-medium text-slate-800 col-span-2">
                       Monitor Information
@@ -809,7 +820,7 @@ const FormEditProduct = ({ closeDialog, productId }) => {
               </div>
             </div>
             {/* ===== Accessories ===== */}
-            {selectedCategory === "10" && (
+            {selectedCategory === 10 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-slate-50 rounded-lg">
                 <h2 className="text-lg font-medium text-slate-800 col-span-2">
                   Accessory Information

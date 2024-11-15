@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import useOrderStore from "@/stores/orderStore";
 import useAuthStore from "@/stores/authStore";
@@ -36,6 +35,9 @@ const Purchase = () => {
   }, []);
 
   const getStatusColor = (status) => {
+    // เช็คว่า status มีค่าหรือไม่
+    if (!status) return 'bg-gray-500/10 text-gray-700';
+    
     const statusColors = {
         'pending': 'bg-yellow-500/10 text-yellow-700',
         'processing': 'bg-blue-500/10 text-blue-700',
@@ -46,7 +48,7 @@ const Purchase = () => {
         'returned': 'bg-rose-500/10 text-rose-700',
         'exchanged': 'bg-violet-500/10 text-violet-700',
         'completed': 'bg-green-500/10 text-green-700',
-        'succeded': 'bg-green-500/10 text-green-700'
+        'succeeded': 'bg-green-500/10 text-green-700' // แก้ไขคำผิด
     };
     return statusColors[status.toLowerCase()] || 'bg-slate-500/10 text-slate-700';
 };
@@ -135,7 +137,7 @@ const Purchase = () => {
                         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                       )
                       .map((order, index) => (
-                        <TableRow key={order.id} className="hover:bg-slate-50">
+                        <TableRow key={index} className="hover:bg-slate-50">
                           <TableCell className="font-medium text-center">
                             {index + 1}
                           </TableCell>

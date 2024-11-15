@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import useAuthStore from "@/stores/authStore";
 import { SocketContext } from "@/contexts/SocketContext";
 import ChatAvatar from "@/assets/image/icon-customer-service.png";
+import { toast } from "react-toastify";
 
 function ChatButton({ setActive }) {
   const { socket, chatNotify, setChatNotify, chatId } = useContext(SocketContext);
@@ -9,6 +10,7 @@ function ChatButton({ setActive }) {
   const currentUser = useAuthStore((state) => state.user);
 
   const handleClick = () => {
+    if (!currentUser) return toast.error("Please login to chat");
     setActive(true);
     if (currentUser.role !== "ADMIN") {
       if (chatNotify.length > 0) {

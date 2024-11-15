@@ -10,18 +10,18 @@ import {
 
 function PCBuildItem(props) {
   const { item } = props;
-  // console.log(item);
-  const CPU = item.cpu.product;
-  const mainboard = item.motherboard.product;
-  const VGA = item.gpu.product;
-  const RAM = item.memory.product;
-  const SSD = item.ssd.product;
-  const HDD = item.drive.product;
-  const PSU = item.powerSupply.product;
-  const PCCase = item.case.product;
-  const cooler = item.cpuCooler.product;
-  const monitor = item.monitor.product;
-  const totalPrice = item.totalPrice;
+  console.log(item);
+  const CPU = item?.cpu?.product;
+  const mainboard = item?.motherboard?.product;
+  const VGA = item?.gpu?.product;
+  const RAM = item?.memory?.product;
+  const SSD = item?.ssd?.product;
+  const HDD = item?.drive?.product;
+  const PSU = item?.powerSupply?.product;
+  const PCCase = item?.case?.product;
+  const cooler = item?.cpuCooler?.product;
+  const monitor = item?.monitor?.product;
+  const totalPrice = item?.totalPrice;
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <>

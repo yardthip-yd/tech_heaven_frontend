@@ -36,15 +36,25 @@ const ProductDetail = () => {
 
   const getProductDetail = async () => {
     const resp = await readProducts(id);
+    // console.log(resp.data);
     setProductData(resp.data);
     setProductCategory(resp.data.categoryId);
     setSelectedImage(resp.data.ProductImages[0]?.imageUrl || "");
-    getProductSameCategory(resp.data.categoryId);
+    getProductSameCategory(resp.data.categoryId, resp.data);
   };
 
-  const getProductSameCategory = async (id) => {
-    const resp = await getProductByCategory(id);
-    setRelatedProducts(resp.data.products);
+  const getProductSameCategory = async (id, productInfo) => {
+    const resp =
+      id == 10
+        ? await getProductByCategory(id, {
+            accessoriesType: productInfo.Accessory[0].accessoriesType,
+          })
+        : await getProductByCategory(id);
+    console.log(resp.data);
+    const filteredRelatedProducts = resp.data.products.filter(
+      (item) => item.id !== productInfo.id
+    );
+    setRelatedProducts(filteredRelatedProducts);
   };
 
   useEffect(() => {

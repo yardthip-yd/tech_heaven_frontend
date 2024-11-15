@@ -13,6 +13,7 @@ import {
   createProductDrive,
   createProductCPUCooler,
   createProductAccessory,
+  createOtherProduct,
 } from "@/API/product-api";
 import { toast } from "react-toastify";
 import useProductStore from "@/stores/productStore";
@@ -67,7 +68,11 @@ const FormProduct = () => {
 
   useEffect(() => {
     getCategory();
+<<<<<<< HEAD
     actionListProducts(9999);
+=======
+    actionListProducts(999);
+>>>>>>> dev
   }, []);
 
   const handleOnChange = (e) => {
@@ -76,11 +81,12 @@ const FormProduct = () => {
     //   [e.target.name]: e.target.value,
     // });
     if (e.target.name === "categoryId") {
-      setSelectedCategory(e.target.value);
+      console.log("Category ID:", +e.target.value);
+      setSelectedCategory(+e.target.value);
       setForm((prev) => {
         return {
           ...prev,
-          [e.target.name]: e.target.value,
+          [e.target.name]: +e.target.value,
           accessoriesType: "MOUSE",
         };
       });
@@ -107,37 +113,45 @@ const FormProduct = () => {
     try {
       let response;
       switch (selectedCategory) {
-        case "1":
+        case 1:
           response = await createProductCPU(allProducts);
           break;
-        case "2":
+        case 2:
           response = await createProductMonitor(allProducts);
           break;
-        case "3":
+        case 3:
           response = await createProductCPUCooler(allProducts);
           break;
-        case "4":
+        case 4:
           response = await createProductPowerSupply(allProducts);
           break;
-        case "5":
+        case 5:
           response = await createProductCase(allProducts);
           break;
-        case "6":
+        case 6:
           response = await createProductGPU(allProducts);
           break;
-        case "7":
+        case 7:
           response = await createProductMemory(allProducts);
           break;
-        case "8":
+        case 8:
           response = await createProductMotherboard(allProducts);
           break;
-        case "9":
+        case 9:
           response = await createProductDrive(allProducts);
           break;
-        case "10":
+        case 10:
           response = await createProductAccessory(allProducts);
           break;
         default:
+          if (selectedCategory === 0) {
+            toast.error("Please select a category");
+            return;
+          }
+          if (selectedCategory >= 11) {
+            response = await createOtherProduct(allProducts);
+            break;
+          }
           throw new Error("Invalid category selected");
       }
 
@@ -261,11 +275,14 @@ const FormProduct = () => {
                   <option value={0} disabled>
                     Please Select Category
                   </option>
-                  {categories.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
+                  {categories.map((item) => {
+                    // console.log(item.id);
+                    return (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div className="mb-4">
@@ -281,7 +298,7 @@ const FormProduct = () => {
               {/* selectedCategory หายไป */}
 
               {/*CPU Product*/}
-              {selectedCategory === "1" && (
+              {selectedCategory === 1 && (
                 <div>
                   <InputField
                     label="Model"
@@ -329,7 +346,7 @@ const FormProduct = () => {
               )}
 
               {/*Monitor Product*/}
-              {selectedCategory === "2" && (
+              {selectedCategory === 2 && (
                 <div>
                   <InputField
                     label="Model"
@@ -370,7 +387,7 @@ const FormProduct = () => {
               )}
 
               {/*CPUCooler Product*/}
-              {selectedCategory === "3" && (
+              {selectedCategory === 3 && (
                 <div>
                   <InputField
                     label="Model"
@@ -424,7 +441,7 @@ const FormProduct = () => {
               )}
 
               {/*PowerSupply Product*/}
-              {selectedCategory === "4" && (
+              {selectedCategory === 4 && (
                 <div>
                   <InputField
                     label="Model"
@@ -444,7 +461,7 @@ const FormProduct = () => {
               )}
 
               {/*Case Product*/}
-              {selectedCategory === "5" && (
+              {selectedCategory === 5 && (
                 <div>
                   <InputField
                     label="Model"
@@ -464,7 +481,7 @@ const FormProduct = () => {
               )}
 
               {/*GPU Product*/}
-              {selectedCategory === "6" && (
+              {selectedCategory === 6 && (
                 <div>
                   <InputField
                     label="Model"
@@ -491,7 +508,7 @@ const FormProduct = () => {
               )}
 
               {/*Memory Product*/}
-              {selectedCategory === "7" && (
+              {selectedCategory === 7 && (
                 <div>
                   <InputField
                     label="Model"
@@ -525,7 +542,7 @@ const FormProduct = () => {
               )}
 
               {/*Motherboard Product*/}
-              {selectedCategory === "8" && (
+              {selectedCategory === 8 && (
                 <div>
                   <InputField
                     label="Model"
@@ -552,7 +569,7 @@ const FormProduct = () => {
               )}
 
               {/*Drive Product*/}
-              {selectedCategory === "9" && (
+              {selectedCategory === 9 && (
                 <div>
                   <InputField
                     label="Model"
@@ -633,7 +650,7 @@ const FormProduct = () => {
               )}
 
               {/*Accessory Product*/}
-              {selectedCategory === "10" && (
+              {selectedCategory === 10 && (
                 <div className="mb-4">
                   <label className="text-sm font-medium text-slate-700 mb-1">
                     Accessories Type:
@@ -658,6 +675,10 @@ const FormProduct = () => {
                   </select>
                 </div>
               )}
+
+              {/* Other Product*/}
+
+              {selectedCategory >= 11 && <></>}
 
               <Button
                 type="submit"
