@@ -68,7 +68,7 @@ const FormProduct = () => {
 
   useEffect(() => {
     getCategory();
-    actionListProducts(100);
+    actionListProducts(999);
   }, []);
 
   const handleOnChange = (e) => {

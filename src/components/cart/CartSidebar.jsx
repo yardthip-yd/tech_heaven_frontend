@@ -87,7 +87,7 @@ const CartSidebar = () => {
               <div className="divide-y">
                 {cartItems?.map(
                   (item, index) => (
-                    console.log("item", item),
+                    
                     (
                       <div key={index} className="py-4 group">
                         <div className="flex gap-4">
