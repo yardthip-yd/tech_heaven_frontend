@@ -51,6 +51,7 @@ const OrderDetailsDialog = ({ isOpen, onClose, order }) => {
           <p><strong>Status:</strong> {order.status}</p>
           <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
           <p><strong>Total Amount:</strong> THB {totalAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</p>
+          <p><strong>Shipping Address:</strong> {order.orderAddress.address}</p>
           
           <h3 className="text-lg font-semibold">Items Purchased:</h3>
           <ul className="list-disc list-inside space-y-2">
