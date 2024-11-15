@@ -102,19 +102,11 @@
     @apply bg-background text-foreground;
   }
 
-  /* ซ่อน scrollbar ทั้งใน Chrome, Edge และ Safari */
-  body,
-  .no-scrollbar {
-    overflow: hidden;
-  }
-
-  /* ซ่อน scrollbar เฉพาะใน no-scrollbar */
+  /* ซ่อน scrollbar เฉพาะใน .no-scrollbar เท่านั้น */
   .no-scrollbar {
     overflow: auto;
-    -ms-overflow-style: none;
-    /* สำหรับ Internet Explorer */
-    scrollbar-width: none;
-    /* สำหรับ Firefox */
+    -ms-overflow-style: none; /* สำหรับ Internet Explorer */
+    scrollbar-width: none; /* สำหรับ Firefox */
   }
 
   /* ซ่อน scrollbar เฉพาะใน Chrome, Edge */

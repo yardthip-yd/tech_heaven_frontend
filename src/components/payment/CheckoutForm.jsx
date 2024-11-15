@@ -23,7 +23,7 @@ export default function CheckoutForm({ dpmCheckerLink }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
-    
+
     setIsLoading(true);
     const timeout = setTimeout(() => {
       setIsLoading(false);
@@ -37,14 +37,14 @@ export default function CheckoutForm({ dpmCheckerLink }) {
       });
 
       clearTimeout(timeout);
-      
+
       if (payload.error) {
         toast.error(payload.error.message);
         console.log("Error:", payload.error.message);
       } else if (payload.paymentIntent.status === "succeeded") {
         setIsLoading(false);
         await actionCreateOrder(token, payload);
-        localStorage.removeItem("cartItems"); 
+        localStorage.removeItem("cartItems");
         // clearCart(); 
         navigate("/user/purchase");
       }
@@ -53,15 +53,15 @@ export default function CheckoutForm({ dpmCheckerLink }) {
       toast.error("There was an error processing the payment.");
       console.log("Error in Order Creation:", err);
     }
-    
+
     setIsLoading(false);
   };
 
   return (
     <div className="mx-auto ">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
-      <form 
-        id="payment-form" 
+      <form
+        id="payment-form"
         onSubmit={handleSubmit}
         className="space-y-6"
       >
@@ -74,19 +74,19 @@ export default function CheckoutForm({ dpmCheckerLink }) {
 
         <button
           disabled={isLoading || !stripe || !elements}
-          className={`w-full py-3 px-6 rounded-lg text-white font-medium text-lg
-            ${isLoading || !stripe || !elements 
+          className={`w-full py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-white font-medium text-base sm:text-lg
+    ${isLoading || !stripe || !elements
               ? 'bg-slate-400 cursor-not-allowed'
               : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 active:bg-blue-800'
             } transition-colors duration-200 flex items-center justify-center`}
         >
           {isLoading ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              Processing...
+              <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin mr-1 sm:mr-2" />
+              <span className="text-sm sm:text-base">Processing...</span>
             </>
           ) : (
-            'Pay Now'
+            <span className="text-sm sm:text-base">Pay Now</span>
           )}
         </button>
       </form>

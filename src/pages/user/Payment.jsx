@@ -94,11 +94,11 @@ const Payment = () => {
   }
 
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-8 overflow-y-auto max-h-[80vh]">
+    <div className="bg-gradient-to-b from-slate-50 to-slate-100 p-4 md:p-8 overflow-y-auto max-h-[80vh] mt-12 md:mt-0">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       <div className="max-w-4xl mx-auto space-y-6 h-full">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
+        <div className="flex flex-col items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-slate-900">Checkout</h1>
           <Button
             variant="ghost"
             onClick={() => navigate("/store")}
@@ -119,8 +119,8 @@ const Payment = () => {
           <CardContent>
             {cartItems.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12">
-                <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
-                <p className="text-gray-500 text-lg mb-4">Your cart is empty</p>
+                <ShoppingBag className="w-16 h-16 text-slate-300 mb-4" />
+                <p className="text-slate-500 text-lg mb-4">Your cart is empty</p>
                 <Button variant="default" onClick={() => navigate("/store")}>
                   Start Shopping
                 </Button>
@@ -128,7 +128,7 @@ const Payment = () => {
             ) : (
               <div className="space-y-4">
                 {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-gray-100 hover:shadow-md transition-shadow">
+                  <div key={item.id} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-slate-100 hover:shadow-md transition-shadow">
                     {/* <span>{console.log(item)}</span> */}
                     <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 overflow-hidden rounded-lg">
                       <img
@@ -138,15 +138,15 @@ const Payment = () => {
                       />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-lg text-gray-900 mb-1">
+                      <h3 className="font-semibold text-lg text-slate-900 mb-1">
                         {item.name}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-3">{item.description}</p>
+                      <p className="text-slate-600 text-sm mb-3">{item.description}</p>
                       <div className="flex justify-between items-center">
                         <p className="text-lg font-medium text-blue-600">
                           THB {(item?.price * item?.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                         </p>
-                        <span className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
+                        <span className="px-3 py-1 bg-slate-100 rounded-full text-sm text-slate-700">
                           Qty: {item?.quantity}
                         </span>
                       </div>
@@ -170,16 +170,16 @@ const Payment = () => {
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Subtotal</span>
+                  <span className="text-slate-600">Subtotal</span>
                   <span className="font-medium">THB {totalPriceBeforeDiscount}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Discount</span>
+                  <span className="text-slate-600">Discount</span>
                   <span className="font-medium text-red-600"> {discount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Shipping</span>
-                  <span className="text-gray-600">Calculated at checkout</span>
+                  <span className="text-slate-600">Shipping</span>
+                  <span className="text-slate-600">Calculated at checkout</span>
                 </div>
                 <div className="pt-3 border-t">
                   <div className="flex justify-between items-center">

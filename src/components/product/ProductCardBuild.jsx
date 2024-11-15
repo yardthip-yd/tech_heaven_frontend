@@ -193,7 +193,7 @@ const ProductCardBuild = ({ product }) => {
         </div>
 
         <button
-          className="bg-black text-white w-full p-2 rounded-md hover:bg-gray-800 transition-colors"
+          className="bg-black text-white w-full p-2 rounded-md hover:bg-slate-800 transition-colors"
           onClick={handleAddtoSpec}
         >
           Add to Build

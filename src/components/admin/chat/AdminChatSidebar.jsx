@@ -41,7 +41,7 @@ function AdminChatSidebar({ setActive }) {
   }, [newChatNotify]);
 
   return (
-    <Card className="absolute z-30 right-10 bottom-10 border min-w-[300px] shadow-xl border-slate-100 bg-slate-50">
+    <Card className="fixed z-30 right-10 bottom-10 border min-w-[300px] shadow-xl border-slate-100 bg-slate-50">
       <div className="flex justify-between items-center flex-row border-b border-slate-100 shadow-md p-[14px] bg-blue-50">
         <CardTitle className="flex flex-row items-center gap-2 pl-2">
           <MessagesSquare className="w-6 h-6 "/>

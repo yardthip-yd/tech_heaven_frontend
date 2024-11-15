@@ -8,7 +8,7 @@ import MainNav from "@/components/MainNav";
 function AdminLayout() {
   return (
     <div className="h-screen w-screen">
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col min-h-screen w-screen overflow-hidden relative no-scrollbar">
         {/* Navbar*/}
         <MainNav />
 
@@ -19,7 +19,7 @@ function AdminLayout() {
             <AdminSidebar />
 
             {/* Content area */}
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-auto flex-grow mt-12">
               <Outlet />
             </div>
           </div>
