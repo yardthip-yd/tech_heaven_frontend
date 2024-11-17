@@ -1,16 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, CalendarDays } from "lucide-react";
 import FormBooking from "../../components/booking/FormBooking";
 import BookingList from "../../components/booking/Bookinglist";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogTrigger  } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
+import useAuthStore from "@/stores/authStore";
+import { toast } from "react-toastify";
+import useBookingStore from "@/stores/bookingStore";
+
 
 const Booking = () => {
+  const user = useAuthStore(state => state.user)
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const token = useAuthStore(state => state.token)
+  const actionGetBookingByUserId = useBookingStore(state => state.actionGetBookingByUserId)
+  console.log(user)
   const handleFormSubmit = () => {
     setIsDialogOpen(false);
   };
+  useEffect(()=>{
+    // console.log(user,token)
+    if(user){
+      actionGetBookingByUserId(token,user.id)
+    }
+  },[user,token])
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -24,20 +37,27 @@ const Booking = () => {
             </div>
             <p className="mt-2 text-slate-600">Manage your reservations and appointments</p>
           </div>
+          <button
+            onClick={() => {
+              if (!user) {
+                return toast.error("Please login to create Booking")
+              } else {
 
+                setIsDialogOpen(true)
+              }
+            }}
+            className="inline-flex items-center px-4 py-3 bg-black text-white rounded-full transition-colors duration-200 shadow-sm"
+          >
+            <Plus className="w-5 h-5 mr-2" />
+            Create Booking
+          </button>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <button
-                onClick={() => setIsDialogOpen(true)}
-                className="inline-flex items-center px-4 py-3 bg-black text-white rounded-full transition-colors duration-200 shadow-sm"
-              >
-                <Plus className="w-5 h-5 mr-2" />
-                Create Booking
-              </button>
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-lg">
               <DialogTitle className="text-2xl font-semibold text-center">
+
                 Create a New Booking
               </DialogTitle>
               <div>

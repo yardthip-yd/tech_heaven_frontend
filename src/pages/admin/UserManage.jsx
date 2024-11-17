@@ -150,14 +150,14 @@ function UserManage() {
                         >
                           {user.isActive ? "Deactivate" : "Activate"}
                         </Button>
-                        <Button
+                        {/* <Button
                           variant="outline"
                           size="sm"
                           className="bg-slate-100 hover:bg-slate-300"
                           onClick={() => hdlRemoveMember(user.id)}
                         >
                           Delete
-                        </Button>
+                        </Button> */}
                       </div>
                     </TableCell>
                   </TableRow>

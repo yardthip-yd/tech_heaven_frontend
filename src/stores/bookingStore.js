@@ -54,6 +54,9 @@ const useBookingStore = create((set, get) => ({
     } catch (err) {
       console.log(err);
     }
+  },
+  clearBooking : () => {
+    set((state) => ({booking : []}))
   }
 }));
 

@@ -13,15 +13,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Avatar from "../Avatar";
 import { SocketContext } from "@/contexts/SocketContext";
+import useBookingStore from "@/stores/bookingStore";
 
 const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
   const { setAdminActiveChat } = useContext(SocketContext);
   const actionLogout = useAuthStore((state) => state.actionLogout);
   const user = useAuthStore((state) => state.user);
   const navigate = useNavigate();
-
+  const clearBooking = useBookingStore(state => state.clearBooking)
   const hdlLogout = () => {
     setAdminActiveChat(null);
+    clearBooking()
     actionLogout();
     setIsLoggedIn(false);
     navigate(`/`);
@@ -29,6 +31,7 @@ const UserDropdown = ({ setIsLoggedIn, isLoggedIn, isAdmin, setIsAdmin }) => {
 
   useEffect(() => {
     setIsAdmin(user?.role === "ADMIN");
+    
   }, [user, setIsAdmin]);
 
   const goToDashboard = () => navigate("/admin");

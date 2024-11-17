@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShoppingBag, Package, CreditCard, Tag, Truck } from "lucide-react";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAddressStore from "@/stores/addressStore";
 import useCartStore from "@/stores/cartStore";
@@ -144,7 +144,7 @@ const Payment = () => {
       actionGetAllAddress(token);
       setSelectedAddress(null);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
   const handleAddressSelect = (e) => {
@@ -153,12 +153,9 @@ const Payment = () => {
     setSelectedAddress(addressId);
   };
 
-  if (error) {
-    toast.error(error);
-  }
   return (
     <div className="bg-gradient-to-b from-slate-50 to-slate-100 p-4 md:p-8 overflow-y-auto max-h-[80vh] mt-12 md:mt-0">
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      {/* <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} /> */}
       <div className="max-w-4xl mx-auto space-y-6 h-full">
         <div className="flex flex-col items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-slate-900">Checkout</h1>
