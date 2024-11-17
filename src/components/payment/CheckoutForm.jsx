@@ -9,7 +9,7 @@ import useOrderStore from "@/stores/orderStore";
 import useAuthStore from "@/stores/authStore";
 import useCartStore from "@/stores/cartStore";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast,ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddressError }) {
@@ -20,10 +20,12 @@ export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddr
   const token = useAuthStore((state) => state.token);
   const [isLoading, setIsLoading] = useState(false);
   const clearCart = useCartStore((state) => state.clearCart);
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log('Selected Address ID:', selectedAddressId);
+    // console.log('Selected Address ID:', selectedAddressId);
     
     if (!selectedAddressId) {
       toast.error("กรุณาเลือกที่อยู่จัดส่งก่อนชำระเงิน");
@@ -43,14 +45,15 @@ export default function CheckoutForm({ dpmCheckerLink, selectedAddressId, onAddr
         elements,
         redirect: "if_required",
       });
-  
       clearTimeout(timeout);
+      console.log(payload)
       
       if (payload.error) {
         toast.error(payload.error.message);
         console.log("Error:", payload.error.message);
       } else if (payload.paymentIntent.status === "succeeded") {
         setIsLoading(false);
+        payload.addressId = selectedAddressId
         await actionCreateOrder(token, payload);
         localStorage.removeItem("cartItems"); 
         // clearCart(); 
