@@ -4,7 +4,7 @@ import useCategoryStore from "@/stores/category";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import useProductStore from "@/stores/productStore";
-import UploadFileEditProduct from "./UploadfileEditProduct";
+import UploadFileEditProduct from "./UploadFileEditProduct";
 
 const FormEditProduct = ({ closeDialog, productId }) => {
   const navigate = useNavigate();
