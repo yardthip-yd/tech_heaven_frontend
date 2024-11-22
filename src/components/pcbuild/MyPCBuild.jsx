@@ -20,9 +20,9 @@ function MyPCBuild() {
 
   return (
     <div className="flex flex-col">
-              <h2 className="text-3xl font-bold bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                CUTOMIZE YOUR SPEC
-              </h2>
+      <h2 className="text-3xl font-bold bg-gradient-to-r from-black via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+        CUSTOMIZE YOUR SPEC
+      </h2>
       <div className="flex">
         {buildList.map((item) => (
           <PCBuildItem key={item.id} item={item} />
